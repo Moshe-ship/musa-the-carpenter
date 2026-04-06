@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#fafaf7">
+    <title>Musa the Carpenter</title>
+    <meta name="description" content="AI Engineer, Digital Marketer, Founder — building tools for the Arabic-speaking world.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        :root{--g:#2d6a4f;--bg:#fafaf7;--t:#0a0a0a;--m:#8a8a8a}
+
+        body{
+            font-family:'IBM Plex Mono',monospace;
+            background:var(--bg);color:var(--t);
+            height:100vh;height:100dvh;overflow:hidden;
+            display:flex;align-items:center;justify-content:center;
+            background-image:
+                linear-gradient(rgba(0,0,0,.03) 1px,transparent 1px),
+                linear-gradient(90deg,rgba(0,0,0,.03) 1px,transparent 1px);
+            background-size:48px 48px;
+        }
+        body::after{
+            content:'';position:fixed;inset:0;
+            background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.005) 3px,rgba(0,0,0,.005) 6px);
+            pointer-events:none;z-index:999;
+        }
+
+        /* ── Office Container ── */
+        .office{
+            position:relative;
+            width:min(96vw, calc(68vh * 16/9));
+            aspect-ratio:16/9;
+            background:rgba(45,106,79,.008);
+            border:1px solid rgba(45,106,79,.06);
+        }
+
+        /* ── Header ── */
+        .hdr{position:absolute;top:2.5%;left:2.5%;z-index:50}
+        .hdr h1{font-size:clamp(.65rem,1.3vw,1rem);font-weight:600;letter-spacing:.3em;text-transform:uppercase}
+        .hdr p{font-size:clamp(.35rem,.55vw,.45rem);font-weight:300;letter-spacing:.15em;color:var(--g);text-transform:uppercase;margin-top:1px}
+
+        /* ── Footer ── */
+        .ftr{position:absolute;bottom:2%;left:2.5%;font-size:clamp(.32rem,.5vw,.42rem);color:var(--m);letter-spacing:.08em;z-index:50}
+        .ftr a{color:var(--g);text-decoration:none}
+
+        /* ── Desks ── */
+        .dk{
+            position:absolute;width:5.8%;height:7.5%;
+            background:#c9b896;border:1px solid #b0a07a;z-index:1;
+        }
+        .dk::after{
+            content:'';position:absolute;
+            width:38%;height:28%;background:#252525;border:1px solid #1a1a1a;
+            top:12%;left:50%;transform:translateX(-50%);
+        }
+        .dk.s::after{top:auto;bottom:12%}
+
+        /* ── Floor Zones ── */
+        .zone{
+            position:absolute;
+            background:rgba(45,106,79,.025);
+            border:1px dashed rgba(45,106,79,.08);
+            z-index:0;
+        }
+        .zone span{
+            position:absolute;top:3px;left:6px;
+            font-size:clamp(.28rem,.42vw,.36rem);font-weight:400;letter-spacing:.12em;
+            text-transform:uppercase;color:rgba(45,106,79,.3);
+        }
+
+        /* ── Meeting Rooms ── */
+        .rm{
+            position:absolute;
+            border:2px solid rgba(45,106,79,.3);
+            background:rgba(45,106,79,.035);z-index:0;
+        }
+        .rm>span{
+            position:absolute;top:5px;left:8px;
+            font-size:clamp(.32rem,.52vw,.42rem);font-weight:500;letter-spacing:.14em;
+            text-transform:uppercase;color:rgba(45,106,79,.5);
+        }
+        .ct{
+            position:absolute;
+            background:#c4b094;border:1px solid #a89878;border-radius:3px;
+            left:50%;top:50%;transform:translate(-50%,-50%);
+            width:50%;height:26%;
+        }
+        /* Chairs around table */
+        .ct::before{
+            content:'';position:absolute;
+            width:8px;height:8px;border-radius:50%;
+            background:rgba(80,80,80,.3);
+            top:-12px;left:20%;
+            box-shadow:0 0 0 0 transparent,
+                        calc(60% + 4px) 0 0 rgba(80,80,80,.3),
+                        0 calc(100% + 16px) 0 rgba(80,80,80,.3),
+                        calc(60% + 4px) calc(100% + 16px) 0 rgba(80,80,80,.3);
+        }
+
+        /* ── Coffee / Break Room ── */
+        .cf-zone{
+            position:absolute;
+            background:rgba(127,85,57,.04);
+            border:1px dashed rgba(127,85,57,.12);
+            z-index:0;
+        }
+        .cf-zone>span{
+            position:absolute;top:4px;left:6px;
+            font-size:clamp(.3rem,.48vw,.38rem);font-weight:500;letter-spacing:.12em;
+            text-transform:uppercase;color:rgba(127,85,57,.4);white-space:nowrap;
+        }
+        .cf{
+            position:absolute;width:5%;height:6.5%;
+            background:#5c3d28;border:1px solid #4a3020;z-index:1;
+        }
+        /* coffee cup icon */
+        .cf::before{
+            content:'';position:absolute;
+            width:35%;height:40%;background:var(--bg);
+            border-radius:1px;top:30%;left:32%;
+        }
+
+        /* ── Plants ── */
+        .pl{
+            position:absolute;width:7px;height:7px;
+            background:#52b788;border-radius:50%;z-index:1;
+            box-shadow:2px -3px 0 #40916c,-2px -2px 0 #74c69d;
+        }
+
+        /* ── Character (person wrapper) ── */
+        .p{
+            position:absolute;
+            display:flex;flex-direction:column;align-items:center;
+            cursor:pointer;z-index:10;
+            transform:translate(-50%,-85%);
+            -webkit-tap-highlight-color:transparent;
+            padding:3px 5px;
+            opacity:0;transition:opacity .5s;
+        }
+        .p:hover{z-index:90!important}
+
+        /* ── Minecraft Sprite ── */
+        .mc{
+            display:flex;flex-direction:column;align-items:center;
+            transition:transform .15s;
+        }
+        .mc-h{width:18px;height:4px;background:var(--h,#1a1a1a);z-index:3}
+        .mc-d{
+            width:18px;height:16px;background:var(--s,#d4a373);
+            position:relative;z-index:2;
+        }
+        .mc-d::after{
+            content:'';position:absolute;
+            width:3px;height:3px;background:#111;
+            top:5px;left:3px;box-shadow:8px 0 0 #111;
+        }
+        .mc-b{
+            width:18px;height:14px;background:var(--o,#2d6a4f);
+            position:relative;z-index:1;
+        }
+        .mc-b::before{
+            content:'';position:absolute;
+            top:1px;left:-5px;width:5px;height:11px;
+            background:var(--o,#2d6a4f);
+            box-shadow:23px 0 0 var(--o,#2d6a4f);
+            transform-origin:top center;
+        }
+        .mc-l{display:flex;gap:3px}
+        .mc-l i{
+            display:block;width:7px;height:11px;
+            background:var(--p,#1b4332);
+            transform-origin:top center;
+        }
+
+        /* Walk animation */
+        .p.w .mc-l i:first-child{animation:lL .42s ease-in-out infinite}
+        .p.w .mc-l i:last-child{animation:lR .42s ease-in-out infinite}
+        .p.w .mc-b::before{animation:aS .42s ease-in-out infinite}
+        .p:not(.w) .mc-l i,.p:not(.w) .mc-b::before{animation:none}
+
+        /* Hover jump */
+        .p:hover .mc{animation:hop .35s ease}
+
+        /* ── Nametag (always visible) ── */
+        .tg{
+            margin-top:2px;
+            font-size:clamp(.28rem,.45vw,.36rem);font-weight:500;letter-spacing:.06em;
+            text-transform:uppercase;color:var(--m);
+            white-space:nowrap;pointer-events:none;
+            text-align:center;transition:color .2s;
+        }
+        .p:hover .tg{color:var(--g)}
+
+        /* Badge */
+        .bg{
+            position:absolute;top:-2px;right:-6px;
+            background:var(--g);color:var(--bg);
+            font-size:.3rem;font-weight:600;padding:0 3px;
+            z-index:20;pointer-events:none;
+        }
+
+        /* ── Detail Panel ── */
+        .ov{
+            position:fixed;inset:0;background:rgba(10,10,10,.06);
+            z-index:100;opacity:0;pointer-events:none;transition:opacity .3s;
+        }
+        .ov.open{opacity:1;pointer-events:all}
+
+        .pnl{
+            position:fixed;top:0;right:0;
+            width:min(360px,80vw);height:100vh;height:100dvh;
+            background:var(--bg);border-left:1px solid rgba(0,0,0,.05);
+            padding:2rem 1.5rem;z-index:101;
+            transform:translateX(100%);
+            transition:transform .4s cubic-bezier(.22,1,.36,1);
+            display:flex;flex-direction:column;overflow-y:auto;
+        }
+        .pnl.open{transform:translateX(0)}
+
+        .pnl-x{position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1rem;color:var(--m);cursor:pointer;font-family:inherit}
+        .pnl-x:hover{color:var(--g)}
+        .pnl-dept{font-size:.46rem;font-weight:300;letter-spacing:.18em;text-transform:uppercase;color:var(--g);margin-bottom:.3rem}
+        .pnl-name{font-size:1rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.7rem}
+        .pnl-desc{font-size:.62rem;font-weight:300;line-height:1.7;margin-bottom:.8rem}
+        .pnl-meta{font-size:.5rem;color:var(--m);letter-spacing:.05em;margin-bottom:.2rem}
+        .pnl-meta span{color:var(--t)}
+        .pnl-tools{font-size:.5rem;font-weight:300;line-height:1.8;color:var(--m);margin-top:.4rem}
+        .pnl-tools b{color:var(--t);font-weight:500}
+        .pnl-link{
+            margin-top:auto;display:inline-block;
+            font-size:.52rem;font-weight:500;letter-spacing:.1em;
+            text-transform:uppercase;color:var(--g);text-decoration:none;
+            border:1.5px solid var(--g);padding:.4rem .8rem;transition:all .2s;
+        }
+        .pnl-link:hover{background:var(--g);color:var(--bg)}
+        .pnl-link.hide{display:none}
+
+        /* ── Keyframes ── */
+        @keyframes lL{0%,100%{transform:rotateZ(0)}50%{transform:rotateZ(22deg)}}
+        @keyframes lR{0%,100%{transform:rotateZ(0)}50%{transform:rotateZ(-22deg)}}
+        @keyframes aS{0%,100%{transform:rotateZ(0)}50%{transform:rotateZ(8deg)}}
+        @keyframes hop{
+            0%{transform:translateY(0)}
+            30%{transform:translateY(-12px) scaleY(1.04)}
+            60%{transform:translateY(0) scaleY(.96)}
+            80%{transform:translateY(-3px)}
+            100%{transform:translateY(0)}
+        }
+
+        /* ── Responsive ── */
+
+        /* Tablet landscape */
+        @media(max-width:1024px){
+            .dk{width:5.2%;height:6.5%}
+        }
+
+        /* Tablet portrait / large phone landscape */
+        @media(max-width:768px){
+            .office{width:min(98vw, calc(72vh * 16/9))}
+            .hdr h1{font-size:.6rem}
+            .hdr p{font-size:.3rem}
+            .ftr{font-size:.3rem}
+            .mc-h{width:15px;height:3px}
+            .mc-d{width:15px;height:13px}
+            .mc-d::after{width:2px;height:2px;top:4px;left:3px;box-shadow:7px 0 0 #111}
+            .mc-b{width:15px;height:12px}
+            .mc-b::before{width:4px;height:10px;left:-4px;box-shadow:19px 0 0 var(--o)}
+            .mc-l{gap:2px}
+            .mc-l i{width:6px;height:9px}
+            .dk{width:5%;height:6%}
+            .tg{font-size:.3rem}
+            .bg{font-size:.25rem}
+        }
+
+        /* Phone portrait */
+        @media(max-width:480px){
+            .office{width:98vw;aspect-ratio:9/16}
+            .hdr{top:1.5%;left:3%}
+            .hdr h1{font-size:.55rem;letter-spacing:.2em}
+            .hdr p{font-size:.28rem}
+            .ftr{bottom:1%;font-size:.28rem}
+            .mc-h{width:12px;height:3px}
+            .mc-d{width:12px;height:11px}
+            .mc-d::after{width:2px;height:2px;top:3px;left:2px;box-shadow:6px 0 0 #111}
+            .mc-b{width:12px;height:10px}
+            .mc-b::before{width:3px;height:8px;left:-3px;box-shadow:15px 0 0 var(--o)}
+            .mc-l{gap:2px}
+            .mc-l i{width:5px;height:8px}
+            .dk{width:7%;height:4%}
+            .dk::after{width:35%;height:25%}
+            .cf{width:6.5%;height:3.5%}
+            .rm span{font-size:.22rem}
+            .pl{width:5px;height:5px;box-shadow:2px -2px 0 #40916c,-1px -2px 0 #74c69d}
+            .tg{font-size:.28rem}
+            .bg{font-size:.22rem;padding:0 2px}
+            .p{padding:6px 8px} /* bigger tap target */
+        }
+
+        /* Very small phones */
+        @media(max-width:360px){
+            .hdr h1{font-size:.48rem}
+            .mc-h{width:10px;height:2px}
+            .mc-d{width:10px;height:9px}
+            .mc-b{width:10px;height:8px}
+            .mc-b::before{width:3px;height:6px;left:-3px;box-shadow:13px 0 0 var(--o)}
+            .mc-l i{width:4px;height:6px}
+        }
+
+        /* Short landscape phones */
+        @media(max-height:500px){
+            .office{width:min(98vw, calc(90vh * 16/9))}
+        }
+
+        /* Prevent text selection on tap */
+        .p{-webkit-user-select:none;user-select:none}
+
+        /* Touch hover states */
+        @media(hover:none){
+            .p:active .mc{animation:hop .35s ease}
+        }
+    </style>
+</head>
+<body>
+
+<div class="office" id="ofc">
+
+    <!-- Header -->
+    <div class="hdr"><h1>Musa the Carpenter</h1><p>AI Engineer &middot; Digital Marketer &middot; Founder</p></div>
+
+    <!-- Footer -->
+    <div class="ftr"><a href="https://x.com/Mosescreates">@Mosescreates</a> &middot; <a href="https://github.com/Moshe-ship">GitHub</a> &middot; <a href="https://majana.blog">Majana.Blog</a></div>
+
+    <!-- Hint -->
+    <div style="position:absolute;bottom:2%;right:2.5%;font-size:clamp(.3rem,.45vw,.38rem);color:var(--m);letter-spacing:.08em;z-index:50;opacity:.6">Click any character to learn more</div>
+
+    <!-- ── Floor Zones ── -->
+    <div class="zone" style="left:3%;top:14%;width:21%;height:28%"><span>Team Alpha</span></div>
+    <div class="zone" style="left:3%;top:52%;width:21%;height:28%"><span>Team Beta</span></div>
+    <div class="zone" style="left:30%;top:36%;width:20%;height:28%"><span>Open Desks</span></div>
+    <div class="zone" style="left:30%;top:68%;width:20%;height:18%"></div>
+
+    <!-- ── Desks ── -->
+    <!-- Cluster A -->
+    <div class="dk" style="left:6%;top:18%"></div>
+    <div class="dk" style="left:14%;top:18%"></div>
+    <div class="dk s" style="left:6%;top:30%"></div>
+    <div class="dk s" style="left:14%;top:30%"></div>
+
+    <!-- Cluster B -->
+    <div class="dk" style="left:6%;top:56%"></div>
+    <div class="dk" style="left:14%;top:56%"></div>
+    <div class="dk s" style="left:6%;top:68%"></div>
+    <div class="dk s" style="left:14%;top:68%"></div>
+
+    <!-- Center Desks -->
+    <div class="dk" style="left:33%;top:40%"></div>
+    <div class="dk" style="left:42%;top:40%"></div>
+    <div class="dk s" style="left:33%;top:52%"></div>
+    <div class="dk s" style="left:42%;top:52%"></div>
+    <div class="dk" style="left:33%;top:72%"></div>
+
+    <!-- ── Meeting Rooms ── -->
+    <div class="rm" style="left:64%;top:6%;width:32%;height:36%">
+        <span>Conference A</span><div class="ct"></div>
+    </div>
+    <div class="rm" style="left:64%;top:56%;width:32%;height:38%">
+        <span>Conference B</span><div class="ct"></div>
+    </div>
+
+    <!-- ── Break Room ── -->
+    <div class="cf-zone" style="left:46%;top:8%;width:14%;height:16%">
+        <span>Break Room</span>
+    </div>
+    <div class="cf" style="left:50%;top:14%"></div>
+
+    <!-- Plants -->
+    <div class="pl" style="left:27%;top:10%"></div>
+    <div class="pl" style="left:58%;top:48%"></div>
+    <div class="pl" style="left:27%;top:90%"></div>
+    <div class="pl" style="left:97%;top:48%"></div>
+
+    <!-- ── 15 Characters ── -->
+    <div class="p" id="c0"  data-p="pmax"><div class="mc" style="--o:#2d6a4f;--p:#1b4332;--s:#d4a373;--h:#2c2c2c"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Performance MAX</div></div>
+    <div class="p" id="c1"  data-p="mkhlab"><div class="mc" style="--o:#1b4332;--p:#0d2818;--s:#c69c72;--h:#1a1a1a;position:relative"><span class="bg">20&#9733;</span><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Mkhlab</div></div>
+    <div class="p" id="c2"  data-p="tarminal"><div class="mc" style="--o:#1a1a1a;--p:#111;--s:#f0d5a8;--h:#4a3728"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Tarminal</div></div>
+    <div class="p" id="c3"  data-p="nashir"><div class="mc" style="--o:#264653;--p:#1a2f38;--s:#d4a373;--h:#2c2c2c"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Nashir</div></div>
+    <div class="p" id="c4"  data-p="aamil"><div class="mc" style="--o:#606c38;--p:#3a4220;--s:#c69c72;--h:#1a1a1a"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Aamil</div></div>
+    <div class="p" id="c5"  data-p="yalla"><div class="mc" style="--o:#d4760a;--p:#9e5808;--s:#f0d5a8;--h:#4a3728"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Yalla Ads</div></div>
+    <div class="p" id="c6"  data-p="faris"><div class="mc" style="--o:#9b2226;--p:#6a171a;--s:#d4a373;--h:#2c2c2c"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Faris AI</div></div>
+    <div class="p" id="c7"  data-p="maraah"><div class="mc" style="--o:#588157;--p:#3a5a3a;--s:#a47148;--h:#1a1a1a"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Maraah</div></div>
+    <div class="p" id="c8"  data-p="tiltbrew"><div class="mc" style="--o:#7f5539;--p:#5c3d28;--s:#f0d5a8;--h:#4a3728"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">TiltBrew</div></div>
+    <div class="p" id="c9"  data-p="athan"><div class="mc" style="--o:#997b2f;--p:#6e5820;--s:#c69c72;--h:#2c2c2c"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Athan</div></div>
+    <div class="p" id="c10" data-p="majana"><div class="mc" style="--o:#5a189a;--p:#3a0f66;--s:#d4a373;--h:#4a3728"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Majana</div></div>
+    <div class="p" id="c11" data-p="woodpecker"><div class="mc" style="--o:#6f4e37;--p:#4a3425;--s:#a47148;--h:#2c2c2c"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Woodpecker</div></div>
+    <div class="p" id="c12" data-p="alyce"><div class="mc" style="--o:#8e5572;--p:#6a3f55;--s:#f0d5a8;--h:#4a3728"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Alyce</div></div>
+    <div class="p" id="c13" data-p="amaan"><div class="mc" style="--o:#2a6f97;--p:#1d4e6b;--s:#c69c72;--h:#1a1a1a"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Amaan</div></div>
+    <div class="p" id="c14" data-p="nlp"><div class="mc" style="--o:#40916c;--p:#2d6a4f;--s:#d4a373;--h:#2c2c2c;position:relative"><span class="bg">&times;13</span><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">NLP Suite</div></div>
+
+</div>
+
+<!-- Panel -->
+<div class="ov" id="ov"></div>
+<aside class="pnl" id="pnl">
+    <button class="pnl-x" id="px">&times;</button>
+    <div class="pnl-dept" id="pd"></div>
+    <h2 class="pnl-name" id="pn"></h2>
+    <p class="pnl-desc" id="pc"></p>
+    <p class="pnl-meta" id="ps"></p>
+    <p class="pnl-meta" id="pt"></p>
+    <div class="pnl-tools" id="ptl"></div>
+    <a class="pnl-link" id="pl" href="#" target="_blank" rel="noopener">Visit</a>
+</aside>
+
+<script>
+/* ── Project Data ── */
+var D={
+pmax:{n:'Performance MAX',d:'Dept. of Growth',c:'Full-service digital marketing agency. Google Ads, SEO, local search. 950+ accounts managed, $23M+ in ad spend.',s:'Astro 6, GitHub Actions, Hostinger',t:'Live',l:'https://performancemaxagency.com'},
+mkhlab:{n:'Mkhlab',d:'Dept. of Language',c:'First Arabic OpenClaw plugin. 31 skills — Islamic tools, NLP, media, education. WhatsApp + Telegram channels. 9 CLI tools on PyPI. 20 GitHub stars.',s:'TypeScript, OpenClaw, Python',t:'Phase 5 complete',l:'https://github.com/Moshe-ship/mkhlab'},
+tarminal:{n:'Tarminal',d:'Dept. of Interface',c:'First macOS terminal with proper Arabic RTL. BiDi overlay via Core Text, connected letters, iTerm2-style tabs, search, drag-and-drop.',s:'Swift, SwiftUI, SwiftTerm, Core Text',t:'Phase 3 complete',l:'https://github.com/Moshe-ship/Tarminal'},
+nashir:{n:'Nashir',d:'Dept. of Broadcast',c:'SaaS social media platform + AI content pipeline. Scans news, drafts Saudi dialect threads, generates dark-theme graphics for @Mosescreates.',s:'Next.js 15, FastAPI, PostgreSQL, Claude',t:'MVP live',l:''},
+aamil:{n:'Aamil',d:'Dept. of Intelligence',c:'Offline Arabic-English AI assistant iOS app. Custom fine-tuned LoRA models on Apple Silicon. Best model at 82% accuracy.',s:'Swift, SwiftUI, Core ML, MLX, LoRA',t:'Training complete',l:''},
+yalla:{n:'Yalla Ads',d:'Dept. of Reach',c:'Arabic-first digital marketing agency for the Middle East. Full RTL. Google Ads, social media, lead gen. Shami + Khaleeji dialect.',s:'Astro 6, Arabic RTL, Hostinger',t:'Built',l:'https://yalla-ads.com'},
+faris:{n:'Faris AI',d:'Dept. of Outreach',c:'AI-powered sales outreach platform for Saudi Arabia. Multi-tenant SaaS with Arabic-first UX.',s:'React, Vite, FastAPI, PostgreSQL',t:'Early stage',l:'https://github.com/Moshe-ship/faris-ai-saas'},
+maraah:{n:'Maraah',d:'Dept. of Land',c:'Livestock management app for farmers. Herd tracking, health records, breeding schedules. Built for Arabic-speaking agricultural communities.',s:'React Native, Supabase',t:'Phase 2.3',l:''},
+tiltbrew:{n:'TiltBrew',d:'Dept. of Play',c:'Tilt your MacBook. Spill the coffee. 100% of revenue goes to children in Gaza.',s:'Swift, macOS',t:'Published',l:'https://github.com/Moshe-ship/TiltBrew'},
+athan:{n:'Athan',d:'Dept. of Faith',c:'Quran recitation YouTube channel + prayer times mobile app with compass, notifications, and adhan playback.',s:'Python, Pillow, React Native, Expo',t:'In progress',l:''},
+majana:{n:'Majana',d:'Dept. of Thought',c:'Arabic AI marketing blog. Origin of Majana LLC. Active since 2020, spun into startup 2026.',s:'WordPress, Python',t:'Active since 2020',l:'https://majana.blog'},
+woodpecker:{n:'Woodpecker Carpentry',d:'Dept. of Craft',c:'Custom woodwork, furniture, and builds. The analog counterpart to all the digital work.',s:'Wood, tools, hands',t:'Active',l:''},
+alyce:{n:'Learn English with Alyce',d:'Dept. of Learning',c:'English learning platform — web + mobile. Lessons, progress tracking, payments. For Arabic speakers.',s:'Next.js, React Native, Supabase, Stripe',t:'In progress',l:''},
+amaan:{n:'Amaan',d:'Dept. of Trust',c:'Secure messaging app with Arabic i18n, onboarding, and real-time chat.',s:'React Native, TypeScript',t:'In progress',l:''},
+nlp:{n:'Arabic NLP Suite',d:'Dept. of Words',c:'13 open-source Arabic NLP tools on PyPI. Token analysis, benchmarks, moderation, RTL testing, data generation. 45+ combined GitHub stars.',s:'Python, PyPI, CLI',t:'All published',l:'https://github.com/Moshe-ship',
+tools:[
+{n:'artok',a:'عرتوك',d:'Token Tax Calculator',x:13},
+{n:'samt',a:'صمت',d:'Audio/TTS Quality Checker',x:11},
+{n:'mukhtasar',a:'مختصر',d:'Text Summarizer',x:8},
+{n:'bidi-guard',a:'',d:'BiDi Security Scanner',x:4},
+{n:'qalam',a:'قلم',d:'Code Doc Generator',x:3},
+{n:'majal',a:'مجال',d:'Dataset Inspector',x:2},
+{n:'arabench',a:'عربنش',d:'LLM Benchmark',x:1},
+{n:'sarih',a:'صريح',d:'Content Moderator',x:1},
+{n:'safha',a:'صفحة',d:'Web Scraper for ML',x:1},
+{n:'raqeeb',a:'رقيب',d:'RTL Testing CLI',x:1},
+{n:'naql',a:'نقل',d:'Model Converter',x:1},
+{n:'khalas',a:'خلص',d:'Prompt Optimizer',x:1},
+{n:'jadwal',a:'جدول',d:'Synthetic Data Gen',x:1}
+]}
+};
+
+/* ── Waypoints: [x%, y%, stayMs] ── */
+var W=[
+// 0  PMAX — desk worker, visits meeting 1 + coffee
+[[9,28,6000],[25,24,500],[52,20,2500],[30,20,500],[75,20,4000],[45,24,500],[9,28,5500]],
+// 1  Mkhlab — hyperactive, visits everywhere
+[[18,28,3000],[28,25,400],[75,18,3200],[55,40,400],[75,72,3200],[40,55,400],[18,28,3500]],
+// 2  Tarminal — deep focus, rare coffee
+[[9,40,13000],[22,35,500],[52,20,2200],[22,35,500],[9,40,14000]],
+// 3  Nashir — meeting 1 regular
+[[18,40,5000],[32,30,500],[75,22,4200],[32,30,500],[18,40,5500]],
+// 4  Aamil — desk + coffee runs
+[[36,52,6500],[42,35,500],[52,20,2500],[42,35,500],[36,52,7000]],
+// 5  Yalla — roamer, meetings + center
+[[75,18,3500],[55,30,600],[45,50,900],[58,60,400],[75,72,3500],[55,45,600],[35,25,800]],
+// 6  Faris — both meetings, fast
+[[45,52,4000],[55,38,400],[75,20,3500],[58,48,500],[75,72,3500],[55,48,400],[45,52,4500]],
+// 7  Maraah — calm, desk + rare coffee
+[[9,66,9000],[22,50,500],[52,20,2800],[22,50,500],[9,66,10000]],
+// 8  TiltBrew — coffee addict loop
+[[52,22,5000],[42,40,500],[75,72,2200],[42,55,500],[18,66,1800],[32,40,500],[52,22,4500]],
+// 9  Athan — desk + meeting 2
+[[18,66,6500],[32,65,500],[75,72,4200],[32,65,500],[18,66,7000]],
+// 10 Majana — desk + coffee + wander
+[[18,78,5500],[28,55,500],[52,20,2200],[40,48,800],[18,78,6000]],
+// 11 Woodpecker — barely moves
+[[9,78,16000],[13,78,1500],[9,78,16000]],
+// 12 Alyce — meeting hopper
+[[75,20,4200],[52,35,600],[42,48,1200],[58,60,400],[75,72,4200],[52,48,600]],
+// 13 Amaan — desk + meeting 2 + coffee
+[[36,82,5500],[42,65,500],[75,72,3200],[52,45,400],[52,20,2200],[40,60,500],[36,82,5500]],
+// 14 NLP — center roamer
+[[40,48,3200],[52,32,500],[75,22,2800],[55,48,400],[75,72,2800],[40,62,400]]
+];
+
+/* Speeds (% per second) */
+var SP=[1.8, 2.8, 1.0, 1.8, 1.8, 2.8, 2.5, 1.2, 2.0, 1.3, 1.8, 0.6, 2.2, 1.8, 2.0];
+
+/* ── Easing ── */
+function ease(t){return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2}
+
+/* ── Walker ── */
+function Walker(el,wp,spd){
+    this.el=el;this.mc=el.querySelector('.mc');
+    this.wp=wp;this.spd=spd;
+    this.i=0;this.p=0;
+    this.x=wp[0][0];this.y=wp[0][1];
+    this.fx=this.x;this.fy=this.y;
+    this.wt=wp[0][2]||2000;
+}
+Walker.prototype.tick=function(dt){
+    if(this.wt>0){
+        this.wt-=dt;
+        this.el.classList.remove('w');
+        if(this.wt<=0){
+            this.fx=this.x;this.fy=this.y;
+            this.i=(this.i+1)%this.wp.length;
+            this.p=0;
+        }
+        this.draw();return;
+    }
+    var tx=this.wp[this.i][0],ty=this.wp[this.i][1];
+    var dx=tx-this.fx,dy=ty-this.fy;
+    var dist=Math.sqrt(dx*dx+dy*dy);
+    if(dist<.2){
+        this.x=tx;this.y=ty;
+        this.wt=this.wp[this.i][2]||2000;
+        this.el.classList.remove('w');
+        this.draw();return;
+    }
+    var tt=(dist/this.spd)*1000;
+    this.p+=dt/tt;
+    if(this.p>=1){
+        this.x=tx;this.y=ty;
+        this.wt=this.wp[this.i][2]||2000;
+        this.el.classList.remove('w');
+    }else{
+        var t=ease(this.p);
+        this.x=this.fx+dx*t;
+        this.y=this.fy+dy*t;
+        this.el.classList.add('w');
+        if(Math.abs(dx)>.4)this.mc.style.transform=dx<0?'scaleX(-1)':'';
+    }
+    this.draw();
+};
+Walker.prototype.draw=function(){
+    this.el.style.left=this.x+'%';
+    this.el.style.top=this.y+'%';
+    this.el.style.zIndex=Math.floor(this.y)+10;
+};
+
+/* ── Init Walkers ── */
+var walkers=[];
+for(var i=0;i<15;i++){
+    var el=document.getElementById('c'+i);
+    var wk=new Walker(el,W[i],SP[i]);
+    wk.draw();
+    walkers.push(wk);
+    // Staggered fade-in
+    (function(e,delay){
+        setTimeout(function(){e.style.opacity=1},delay);
+    })(el,300+i*100);
+}
+
+/* ── Animation Loop ── */
+var last=performance.now();
+function loop(now){
+    var dt=Math.min(now-last,100);
+    last=now;
+    for(var j=0;j<walkers.length;j++)walkers[j].tick(dt);
+    requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+/* ── Panel ── */
+var pnl=document.getElementById('pnl'),ov=document.getElementById('ov');
+var pd=document.getElementById('pd'),pn=document.getElementById('pn');
+var pc=document.getElementById('pc'),ps=document.getElementById('ps');
+var pt=document.getElementById('pt'),ptl=document.getElementById('ptl');
+var pl=document.getElementById('pl');
+
+function openP(k){
+    var p=D[k];if(!p)return;
+    pd.textContent=p.d;pn.textContent=p.n;pc.textContent=p.c;
+    ps.innerHTML='Stack: <span>'+p.s+'</span>';
+    pt.innerHTML='Status: <span>'+p.t+'</span>';
+    if(p.tools){
+        ptl.style.display='block';
+        ptl.innerHTML='<br>'+p.tools.map(function(t){
+            return '<b>'+t.n+(t.a?' '+t.a:'')+'</b> — '+t.d+' ('+t.x+'&#9733;)';
+        }).join('<br>');
+    }else ptl.style.display='none';
+    if(p.l){pl.href=p.l;pl.classList.remove('hide')}
+    else pl.classList.add('hide');
+    pnl.classList.add('open');ov.classList.add('open');
+}
+function closeP(){pnl.classList.remove('open');ov.classList.remove('open')}
+
+document.querySelectorAll('.p').forEach(function(el){
+    el.addEventListener('click',function(){openP(el.dataset.p)});
+});
+document.getElementById('px').addEventListener('click',closeP);
+ov.addEventListener('click',closeP);
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeP()});
+
+/* ── Touch support ── */
+document.querySelectorAll('.p').forEach(function(el){
+    el.addEventListener('touchend',function(e){
+        e.preventDefault();
+        openP(el.dataset.p);
+    },{passive:false});
+});
+
+/* ── Mobile: swap to portrait layout ── */
+function checkLayout(){
+    var vw=window.innerWidth,vh=window.innerHeight;
+    var ofc=document.getElementById('ofc');
+    if(vw<=480 && vh>vw){
+        // Portrait phone: use 9:16 ratio, remap furniture positions handled by CSS
+        ofc.style.aspectRatio='9/16';
+    }else{
+        ofc.style.aspectRatio='16/9';
+    }
+}
+checkLayout();
+window.addEventListener('resize',checkLayout);
+window.addEventListener('orientationchange',function(){setTimeout(checkLayout,100)});
+</script>
+
+</body>
+</html>
