@@ -125,6 +125,59 @@
             border-radius:1px;top:30%;left:32%;
         }
 
+        /* ── Gaming Lounge ── */
+        .game-zone{
+            position:absolute;
+            background:rgba(90,24,154,.03);
+            border:1.5px solid rgba(90,24,154,.18);
+            z-index:0;
+        }
+        .game-zone>span{
+            position:absolute;top:4px;left:6px;
+            font-size:clamp(.28rem,.45vw,.36rem);font-weight:500;letter-spacing:.12em;
+            text-transform:uppercase;color:rgba(90,24,154,.45);
+        }
+        .tv{
+            position:absolute;width:55%;height:22%;
+            background:#1a1a1a;border:2px solid #333;border-radius:2px;
+            left:22%;top:15%;
+        }
+        .tv::after{
+            content:'';position:absolute;
+            width:40%;height:3px;background:#333;
+            bottom:-6px;left:30%;border-radius:1px;
+        }
+        .couch{
+            position:absolute;width:65%;height:20%;
+            background:#4a4050;border:1px solid #3a3040;border-radius:3px;
+            left:17%;bottom:12%;
+        }
+
+        /* ── Billiard Room ── */
+        .bil-zone{
+            position:absolute;
+            background:rgba(26,107,60,.035);
+            border:1.5px solid rgba(26,107,60,.2);
+            z-index:0;
+        }
+        .bil-zone>span{
+            position:absolute;top:4px;left:6px;
+            font-size:clamp(.28rem,.45vw,.36rem);font-weight:500;letter-spacing:.12em;
+            text-transform:uppercase;color:rgba(26,107,60,.45);
+        }
+        .pool{
+            position:absolute;
+            background:#1a6b3c;border:3px solid #6b3410;border-radius:3px;
+            left:50%;top:50%;transform:translate(-50%,-50%);
+            width:60%;height:55%;
+        }
+        .pool::before{
+            content:'';position:absolute;
+            width:4px;height:4px;background:#111;border-radius:50%;
+            top:-2px;left:-2px;
+            box-shadow:calc(100% - 1px) 0 0 #111,0 calc(100% - 1px) 0 #111,calc(100% - 1px) calc(100% - 1px) 0 #111;
+        }
+
         /* ── Plants ── */
         .pl{
             position:absolute;width:7px;height:7px;
@@ -378,9 +431,22 @@
     </div>
     <div class="cf" style="left:50%;top:14%"></div>
 
+    <!-- ── Gaming Lounge ── -->
+    <div class="game-zone" style="left:46%;top:76%;width:16%;height:18%">
+        <span>Gaming Lounge</span>
+        <div class="tv"></div>
+        <div class="couch"></div>
+    </div>
+
+    <!-- ── Billiard Room ── -->
+    <div class="bil-zone" style="left:64%;top:43%;width:20%;height:12%">
+        <span>Billiard Room</span>
+        <div class="pool"></div>
+    </div>
+
     <!-- Plants -->
     <div class="pl" style="left:27%;top:10%"></div>
-    <div class="pl" style="left:58%;top:48%"></div>
+    <div class="pl" style="left:58%;top:96%"></div>
     <div class="pl" style="left:27%;top:90%"></div>
     <div class="pl" style="left:97%;top:48%"></div>
 
@@ -400,6 +466,9 @@
     <div class="p" id="c12" data-p="alyce"><div class="mc" style="--o:#8e5572;--p:#6a3f55;--s:#f0d5a8;--h:#4a3728"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Alyce</div></div>
     <div class="p" id="c13" data-p="amaan"><div class="mc" style="--o:#2a6f97;--p:#1d4e6b;--s:#c69c72;--h:#1a1a1a"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Amaan</div></div>
     <div class="p" id="c14" data-p="nlp"><div class="mc" style="--o:#40916c;--p:#2d6a4f;--s:#d4a373;--h:#2c2c2c;position:relative"><span class="bg">&times;13</span><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">NLP Suite</div></div>
+    <div class="p" id="c15" data-p="toolproof"><div class="mc" style="--o:#3a86a8;--p:#28607a;--s:#d4a373;--h:#2c2c2c"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">ToolProof</div></div>
+    <div class="p" id="c16" data-p="aae"><div class="mc" style="--o:#bc6c25;--p:#8a4f1a;--s:#f0d5a8;--h:#1a1a1a"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Arabic Eval</div></div>
+    <div class="p" id="c17" data-p="agentbiz"><div class="mc" style="--o:#023047;--p:#011627;--s:#c69c72;--h:#4a3728"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Agent Biz</div></div>
 
 </div>
 
@@ -433,6 +502,9 @@ majana:{n:'Majana',d:'Dept. of Thought',c:'Arabic AI marketing blog. Origin of M
 woodpecker:{n:'Woodpecker Carpentry',d:'Dept. of Craft',c:'Custom woodwork, furniture, and builds. The analog counterpart to all the digital work.',s:'Wood, tools, hands',t:'Active',l:''},
 alyce:{n:'Learn English with Alyce',d:'Dept. of Learning',c:'English learning platform — web + mobile. Lessons, progress tracking, payments. For Arabic speakers.',s:'Next.js, React Native, Supabase, Stripe',t:'In progress',l:''},
 amaan:{n:'Amaan',d:'Dept. of Trust',c:'Secure messaging app with Arabic i18n, onboarding, and real-time chat.',s:'React Native, TypeScript',t:'In progress',l:''},
+toolproof:{n:'ToolProof',d:'Dept. of Verification',c:'Agent tool verification — catches hallucinated tool calls with signed receipts. Proxy between agent and tools, SHA-256 HMAC receipts, trust scoring. Zero competition.',s:'Python, rich, httpx, click',t:'v0.1.0 built',l:''},
+aae:{n:'Arabic Agent Eval',d:'Dept. of Measurement',c:'First Arabic function-calling benchmark. 51 items, 6 categories, 5 dialects, 22 Arabic-context functions. No other Arabic tool-calling benchmark exists.',s:'Python, CLI (aae), 11 providers',t:'v0.1.0 built',l:''},
+agentbiz:{n:'AI Agent Business',d:'Dept. of Commerce',c:'Managed AI agent service with Tarek under Majana LLC. Mac Studio M4 Max + Hostinger + AnythingLLM + WhatsApp. Pricing $99-$1,500/mo. Saudi market focus.',s:'vLLM-MLX, AnythingLLM, n8n, Evolution API',t:'Planning — hardware ordered',l:''},
 nlp:{n:'Arabic NLP Suite',d:'Dept. of Words',c:'13 open-source Arabic NLP tools on PyPI. Token analysis, benchmarks, moderation, RTL testing, data generation. 45+ combined GitHub stars.',s:'Python, PyPI, CLI',t:'All published',l:'https://github.com/Moshe-ship',
 tools:[
 {n:'artok',a:'عرتوك',d:'Token Tax Calculator',x:13},
@@ -469,8 +541,8 @@ var W=[
 [[45,52,4000],[55,38,400],[75,20,3500],[58,48,500],[75,72,3500],[55,48,400],[45,52,4500]],
 // 7  Maraah — calm, desk + rare coffee
 [[9,66,9000],[22,50,500],[52,20,2800],[22,50,500],[9,66,10000]],
-// 8  TiltBrew — coffee addict loop
-[[52,22,5000],[42,40,500],[75,72,2200],[42,55,500],[18,66,1800],[32,40,500],[52,22,4500]],
+// 8  TiltBrew — coffee + gaming addict
+[[52,22,4000],[42,40,500],[52,86,3000],[42,55,500],[75,72,2000],[32,40,500],[18,66,1500],[32,40,500],[52,22,3500]],
 // 9  Athan — desk + meeting 2
 [[18,66,6500],[32,65,500],[75,72,4200],[32,65,500],[18,66,7000]],
 // 10 Majana — desk + coffee + wander
@@ -482,11 +554,17 @@ var W=[
 // 13 Amaan — desk + meeting 2 + coffee
 [[36,82,5500],[42,65,500],[75,72,3200],[52,45,400],[52,20,2200],[40,60,500],[36,82,5500]],
 // 14 NLP — center roamer
-[[40,48,3200],[52,32,500],[75,22,2800],[55,48,400],[75,72,2800],[40,62,400]]
+[[40,48,3200],[52,32,500],[75,22,2800],[55,48,400],[75,72,2800],[40,62,400]],
+// 15 ToolProof — desk + meetings + billiard
+[[36,82,5500],[42,48,500],[75,22,3500],[75,48,2500],[52,22,2000],[42,48,500],[36,82,6000]],
+// 16 Arabic Agent Eval — roamer, benchmarks everywhere + gaming
+[[42,48,3000],[55,32,500],[75,22,3000],[52,60,500],[52,86,2500],[42,48,500],[75,72,3000],[75,48,1500]],
+// 17 Agent Business — meetings + billiard (networking)
+[[75,22,4000],[52,22,2000],[75,48,3000],[52,60,500],[75,72,4000],[52,86,1500],[52,48,500]]
 ];
 
 /* Speeds (% per second) */
-var SP=[1.8, 2.8, 1.0, 1.8, 1.8, 2.8, 2.5, 1.2, 2.0, 1.3, 1.8, 0.6, 2.2, 1.8, 2.0];
+var SP=[1.8, 2.8, 1.0, 1.8, 1.8, 2.8, 2.5, 1.2, 2.0, 1.3, 1.8, 0.6, 2.2, 1.8, 2.0, 1.8, 2.2, 2.0];
 
 /* ── Easing ── */
 function ease(t){return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2}
@@ -543,7 +621,7 @@ Walker.prototype.draw=function(){
 
 /* ── Init Walkers ── */
 var walkers=[];
-for(var i=0;i<15;i++){
+for(var i=0;i<18;i++){
     var el=document.getElementById('c'+i);
     var wk=new Walker(el,W[i],SP[i]);
     wk.draw();
