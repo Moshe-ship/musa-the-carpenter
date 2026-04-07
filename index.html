@@ -9,24 +9,26 @@
     <title>Musa the Carpenter</title>
     <meta name="description" content="AI Engineer, Digital Marketer, Founder — building tools for the Arabic-speaking world.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-        :root{--g:#2d6a4f;--bg:#fafaf7;--t:#0a0a0a;--m:#8a8a8a}
+        :root{--g:#1b5e3b;--gl:rgba(27,94,59,.12);--bg:#f8f8f5;--t:#0a0a0a;--m:#999;--glass:rgba(255,255,255,.55);--blur:blur(18px)}
 
         body{
-            font-family:'IBM Plex Mono',monospace;
+            font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
             background:var(--bg);color:var(--t);
             height:100vh;height:100dvh;overflow:hidden;
             display:flex;align-items:center;justify-content:center;
             background-image:
-                linear-gradient(rgba(0,0,0,.03) 1px,transparent 1px),
-                linear-gradient(90deg,rgba(0,0,0,.03) 1px,transparent 1px);
-            background-size:48px 48px;
+                radial-gradient(ellipse at 30% 20%,rgba(27,94,59,.03),transparent 60%),
+                radial-gradient(ellipse at 80% 80%,rgba(90,24,154,.02),transparent 50%),
+                linear-gradient(rgba(0,0,0,.025) 1px,transparent 1px),
+                linear-gradient(90deg,rgba(0,0,0,.025) 1px,transparent 1px);
+            background-size:100% 100%,100% 100%,48px 48px,48px 48px;
         }
         body::after{
             content:'';position:fixed;inset:0;
-            background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.005) 3px,rgba(0,0,0,.005) 6px);
+            background:repeating-linear-gradient(0deg,transparent,transparent 4px,rgba(0,0,0,.003) 4px,rgba(0,0,0,.003) 8px);
             pointer-events:none;z-index:999;
         }
 
@@ -35,58 +37,85 @@
             position:relative;
             width:min(96vw, calc(68vh * 16/9));
             aspect-ratio:16/9;
-            background:rgba(45,106,79,.008);
-            border:1px solid rgba(45,106,79,.06);
+            background:rgba(255,255,255,.35);
+            backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);
+            border:1px solid rgba(255,255,255,.5);
+            border-radius:16px;
+            box-shadow:
+                0 1px 2px rgba(0,0,0,.04),
+                0 8px 32px rgba(0,0,0,.06),
+                0 32px 64px rgba(0,0,0,.04);
+            overflow:hidden;
         }
 
         /* ── Header ── */
-        .hdr{position:absolute;top:2.5%;left:2.5%;z-index:50}
-        .hdr h1{font-size:clamp(.65rem,1.3vw,1rem);font-weight:600;letter-spacing:.3em;text-transform:uppercase}
-        .hdr p{font-size:clamp(.35rem,.55vw,.45rem);font-weight:300;letter-spacing:.15em;color:var(--g);text-transform:uppercase;margin-top:1px}
+        .hdr{position:absolute;top:2.5%;left:2.8%;z-index:50}
+        .hdr h1{
+            font-size:clamp(.7rem,1.4vw,1.1rem);font-weight:600;
+            letter-spacing:.12em;text-transform:uppercase;
+            background:linear-gradient(135deg,var(--t),#333);
+            -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+        }
+        .hdr p{font-size:clamp(.35rem,.55vw,.45rem);font-weight:400;letter-spacing:.08em;color:var(--g);margin-top:2px}
 
         /* ── Footer ── */
-        .ftr{position:absolute;bottom:2%;left:2.5%;font-size:clamp(.32rem,.5vw,.42rem);color:var(--m);letter-spacing:.08em;z-index:50}
-        .ftr a{color:var(--g);text-decoration:none}
+        .ftr{position:absolute;bottom:2%;left:2.8%;font-size:clamp(.32rem,.5vw,.42rem);color:var(--m);letter-spacing:.06em;z-index:50}
+        .ftr a{color:var(--g);text-decoration:none;transition:opacity .2s}
+        .ftr a:hover{opacity:.7}
 
         /* ── Desks ── */
         .dk{
             position:absolute;width:5.8%;height:7.5%;
-            background:#c9b896;border:1px solid #b0a07a;z-index:1;
+            background:linear-gradient(135deg,#d4c4a0,#c0b08a);
+            border:1px solid rgba(160,140,110,.5);
+            border-radius:3px;
+            box-shadow:0 1px 3px rgba(0,0,0,.08);
+            z-index:1;
         }
         .dk::after{
             content:'';position:absolute;
-            width:38%;height:28%;background:#252525;border:1px solid #1a1a1a;
+            width:38%;height:28%;
+            background:linear-gradient(135deg,#2a2a2a,#1a1a1a);
+            border:1px solid #111;border-radius:1px;
             top:12%;left:50%;transform:translateX(-50%);
+            box-shadow:0 0 4px rgba(45,106,79,.15);
         }
         .dk.s::after{top:auto;bottom:12%}
 
         /* ── Floor Zones ── */
         .zone{
             position:absolute;
-            background:rgba(45,106,79,.025);
-            border:1px dashed rgba(45,106,79,.08);
+            background:var(--glass);
+            backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
+            border:1px solid rgba(255,255,255,.6);
+            border-radius:10px;
             z-index:0;
         }
         .zone span{
-            position:absolute;top:3px;left:6px;
-            font-size:clamp(.28rem,.42vw,.36rem);font-weight:400;letter-spacing:.12em;
-            text-transform:uppercase;color:rgba(45,106,79,.3);
+            position:absolute;top:5px;left:8px;
+            font-size:clamp(.28rem,.42vw,.36rem);font-weight:500;letter-spacing:.1em;
+            text-transform:uppercase;color:rgba(27,94,59,.35);
         }
 
         /* ── Meeting Rooms ── */
         .rm{
             position:absolute;
-            border:2px solid rgba(45,106,79,.3);
-            background:rgba(45,106,79,.035);z-index:0;
+            border:1.5px solid rgba(27,94,59,.2);
+            background:rgba(27,94,59,.03);
+            backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+            border-radius:10px;z-index:0;
         }
         .rm>span{
-            position:absolute;top:5px;left:8px;
-            font-size:clamp(.32rem,.52vw,.42rem);font-weight:500;letter-spacing:.14em;
-            text-transform:uppercase;color:rgba(45,106,79,.5);
+            position:absolute;top:6px;left:9px;
+            font-size:clamp(.3rem,.48vw,.38rem);font-weight:500;letter-spacing:.1em;
+            text-transform:uppercase;color:rgba(27,94,59,.45);
         }
         .ct{
             position:absolute;
-            background:#c4b094;border:1px solid #a89878;border-radius:3px;
+            background:linear-gradient(135deg,#ccc0a0,#b8a888);
+            border:1px solid rgba(160,140,110,.4);
+            border-radius:6px;
+            box-shadow:0 2px 6px rgba(0,0,0,.06);
             left:50%;top:50%;transform:translate(-50%,-50%);
             width:50%;height:26%;
         }
@@ -105,37 +134,44 @@
         /* ── Coffee / Break Room ── */
         .cf-zone{
             position:absolute;
-            background:rgba(127,85,57,.04);
-            border:1px dashed rgba(127,85,57,.12);
+            background:rgba(127,85,57,.03);
+            backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+            border:1px solid rgba(127,85,57,.1);
+            border-radius:10px;
             z-index:0;
         }
         .cf-zone>span{
-            position:absolute;top:4px;left:6px;
-            font-size:clamp(.3rem,.48vw,.38rem);font-weight:500;letter-spacing:.12em;
+            position:absolute;top:5px;left:7px;
+            font-size:clamp(.28rem,.45vw,.36rem);font-weight:500;letter-spacing:.1em;
             text-transform:uppercase;color:rgba(127,85,57,.4);white-space:nowrap;
         }
         .cf{
             position:absolute;width:5%;height:6.5%;
-            background:#5c3d28;border:1px solid #4a3020;z-index:1;
+            background:linear-gradient(135deg,#6b4530,#4a2e1c);
+            border:1px solid rgba(74,48,32,.6);
+            border-radius:3px;
+            box-shadow:0 2px 6px rgba(0,0,0,.1);
+            z-index:1;
         }
-        /* coffee cup icon */
         .cf::before{
             content:'';position:absolute;
-            width:35%;height:40%;background:var(--bg);
+            width:35%;height:40%;background:rgba(255,255,255,.25);
             border-radius:1px;top:30%;left:32%;
         }
 
         /* ── Gaming Lounge ── */
         .game-zone{
             position:absolute;
-            background:rgba(90,24,154,.03);
-            border:1.5px solid rgba(90,24,154,.18);
+            background:rgba(90,24,154,.025);
+            backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+            border:1.5px solid rgba(90,24,154,.12);
+            border-radius:10px;
             z-index:0;
         }
         .game-zone>span{
-            position:absolute;top:4px;left:6px;
-            font-size:clamp(.28rem,.45vw,.36rem);font-weight:500;letter-spacing:.12em;
-            text-transform:uppercase;color:rgba(90,24,154,.45);
+            position:absolute;top:5px;left:7px;
+            font-size:clamp(.28rem,.45vw,.36rem);font-weight:500;letter-spacing:.1em;
+            text-transform:uppercase;color:rgba(90,24,154,.4);
         }
         .tv{
             position:absolute;width:55%;height:22%;
@@ -156,18 +192,22 @@
         /* ── Billiard Room ── */
         .bil-zone{
             position:absolute;
-            background:rgba(26,107,60,.035);
-            border:1.5px solid rgba(26,107,60,.2);
+            background:rgba(26,107,60,.025);
+            backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+            border:1.5px solid rgba(26,107,60,.12);
+            border-radius:10px;
             z-index:0;
         }
         .bil-zone>span{
-            position:absolute;top:4px;left:6px;
-            font-size:clamp(.28rem,.45vw,.36rem);font-weight:500;letter-spacing:.12em;
-            text-transform:uppercase;color:rgba(26,107,60,.45);
+            position:absolute;top:5px;left:7px;
+            font-size:clamp(.28rem,.45vw,.36rem);font-weight:500;letter-spacing:.1em;
+            text-transform:uppercase;color:rgba(26,107,60,.4);
         }
         .pool{
             position:absolute;
-            background:#1a6b3c;border:3px solid #6b3410;border-radius:3px;
+            background:linear-gradient(135deg,#1d7a44,#166b38);
+            border:3px solid #7a4a1a;border-radius:5px;
+            box-shadow:0 2px 8px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.08);
             left:50%;top:50%;transform:translate(-50%,-50%);
             width:60%;height:55%;
         }
@@ -241,19 +281,26 @@
 
         /* ── Nametag (always visible) ── */
         .tg{
-            margin-top:2px;
-            font-size:clamp(.28rem,.45vw,.36rem);font-weight:500;letter-spacing:.06em;
+            margin-top:3px;
+            font-family:'IBM Plex Mono',monospace;
+            font-size:clamp(.26rem,.42vw,.34rem);font-weight:500;letter-spacing:.04em;
             text-transform:uppercase;color:var(--m);
+            background:rgba(255,255,255,.5);
+            backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+            padding:1px 5px;border-radius:6px;
             white-space:nowrap;pointer-events:none;
-            text-align:center;transition:color .2s;
+            text-align:center;transition:all .25s;
         }
-        .p:hover .tg{color:var(--g)}
+        .p:hover .tg{color:var(--g);background:rgba(27,94,59,.08)}
 
         /* Badge */
         .bg{
-            position:absolute;top:-2px;right:-6px;
-            background:var(--g);color:var(--bg);
-            font-size:.3rem;font-weight:600;padding:0 3px;
+            position:absolute;top:-3px;right:-8px;
+            background:var(--g);color:#fff;
+            font-family:'IBM Plex Mono',monospace;
+            font-size:.28rem;font-weight:600;padding:1px 4px;
+            border-radius:4px;
+            box-shadow:0 1px 4px rgba(27,94,59,.3);
             z-index:20;pointer-events:none;
         }
 
@@ -266,31 +313,48 @@
 
         .pnl{
             position:fixed;top:0;right:0;
-            width:min(360px,80vw);height:100vh;height:100dvh;
-            background:var(--bg);border-left:1px solid rgba(0,0,0,.05);
-            padding:2rem 1.5rem;z-index:101;
+            width:min(380px,82vw);height:100vh;height:100dvh;
+            background:rgba(248,248,245,.85);
+            backdrop-filter:blur(40px) saturate(1.5);
+            -webkit-backdrop-filter:blur(40px) saturate(1.5);
+            border-left:1px solid rgba(255,255,255,.4);
+            padding:2.2rem 1.8rem;z-index:101;
             transform:translateX(100%);
-            transition:transform .4s cubic-bezier(.22,1,.36,1);
+            transition:transform .5s cubic-bezier(.22,1,.36,1);
             display:flex;flex-direction:column;overflow-y:auto;
+            box-shadow:-8px 0 32px rgba(0,0,0,.06);
         }
         .pnl.open{transform:translateX(0)}
 
         .pnl-x{position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1rem;color:var(--m);cursor:pointer;font-family:inherit}
         .pnl-x:hover{color:var(--g)}
-        .pnl-dept{font-size:.46rem;font-weight:300;letter-spacing:.18em;text-transform:uppercase;color:var(--g);margin-bottom:.3rem}
-        .pnl-name{font-size:1rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.7rem}
-        .pnl-desc{font-size:.62rem;font-weight:300;line-height:1.7;margin-bottom:.8rem}
-        .pnl-meta{font-size:.5rem;color:var(--m);letter-spacing:.05em;margin-bottom:.2rem}
+        .pnl-dept{
+            font-family:'IBM Plex Mono',monospace;
+            font-size:.44rem;font-weight:400;letter-spacing:.14em;
+            text-transform:uppercase;color:var(--g);margin-bottom:.4rem;
+        }
+        .pnl-name{font-size:1.1rem;font-weight:600;letter-spacing:.04em;margin-bottom:.8rem}
+        .pnl-desc{font-size:.65rem;font-weight:300;line-height:1.8;margin-bottom:1rem;color:#333}
+        .pnl-meta{
+            font-family:'IBM Plex Mono',monospace;
+            font-size:.48rem;color:var(--m);letter-spacing:.03em;margin-bottom:.25rem;
+        }
         .pnl-meta span{color:var(--t)}
-        .pnl-tools{font-size:.5rem;font-weight:300;line-height:1.8;color:var(--m);margin-top:.4rem}
+        .pnl-tools{
+            font-family:'IBM Plex Mono',monospace;
+            font-size:.48rem;font-weight:300;line-height:1.8;color:var(--m);margin-top:.5rem;
+        }
         .pnl-tools b{color:var(--t);font-weight:500}
         .pnl-link{
             margin-top:auto;display:inline-block;
-            font-size:.52rem;font-weight:500;letter-spacing:.1em;
-            text-transform:uppercase;color:var(--g);text-decoration:none;
-            border:1.5px solid var(--g);padding:.4rem .8rem;transition:all .2s;
+            font-size:.52rem;font-weight:600;letter-spacing:.06em;
+            text-transform:uppercase;color:#fff;text-decoration:none;
+            background:var(--g);
+            padding:.55rem 1.1rem;border-radius:8px;
+            transition:all .25s;
+            box-shadow:0 2px 8px rgba(27,94,59,.25);
         }
-        .pnl-link:hover{background:var(--g);color:var(--bg)}
+        .pnl-link:hover{background:#174d30;box-shadow:0 4px 16px rgba(27,94,59,.35);transform:translateY(-1px)}
         .pnl-link.hide{display:none}
 
         /* ── Keyframes ── */
