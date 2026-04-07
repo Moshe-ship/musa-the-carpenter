@@ -455,62 +455,62 @@
     <!-- Hint -->
     <div style="position:absolute;bottom:2%;right:2.5%;font-size:clamp(.3rem,.45vw,.38rem);color:var(--m);letter-spacing:.08em;z-index:50;opacity:.6">Click any character to learn more</div>
 
-    <!-- ── Floor Zones ── -->
-    <div class="zone" style="left:3%;top:14%;width:21%;height:28%"><span>Team Alpha</span></div>
-    <div class="zone" style="left:3%;top:52%;width:21%;height:28%"><span>Team Beta</span></div>
-    <div class="zone" style="left:30%;top:36%;width:20%;height:28%"><span>Open Desks</span></div>
-    <div class="zone" style="left:30%;top:68%;width:20%;height:18%"></div>
+    <!-- ── Floor Zones (no overlaps) ── -->
+    <!-- Left: 3-24%  |  Center: 28-52%  |  Right: 56-97%  |  Bottom: 28-97%, 72-96% -->
+    <div class="zone" style="left:3%;top:14%;width:22%;height:26%"><span>Team Alpha</span></div>
+    <div class="zone" style="left:3%;top:44%;width:22%;height:26%"><span>Team Beta</span></div>
+    <div class="zone" style="left:28%;top:28%;width:22%;height:38%"><span>Open Desks</span></div>
 
     <!-- ── Desks ── -->
-    <!-- Cluster A -->
+    <!-- Cluster A (inside Team Alpha: 3-25%, 14-40%) -->
     <div class="dk" style="left:6%;top:18%"></div>
-    <div class="dk" style="left:14%;top:18%"></div>
-    <div class="dk s" style="left:6%;top:30%"></div>
-    <div class="dk s" style="left:14%;top:30%"></div>
+    <div class="dk" style="left:15%;top:18%"></div>
+    <div class="dk s" style="left:6%;top:28%"></div>
+    <div class="dk s" style="left:15%;top:28%"></div>
 
-    <!-- Cluster B -->
-    <div class="dk" style="left:6%;top:56%"></div>
-    <div class="dk" style="left:14%;top:56%"></div>
-    <div class="dk s" style="left:6%;top:68%"></div>
-    <div class="dk s" style="left:14%;top:68%"></div>
+    <!-- Cluster B (inside Team Beta: 3-25%, 44-70%) -->
+    <div class="dk" style="left:6%;top:48%"></div>
+    <div class="dk" style="left:15%;top:48%"></div>
+    <div class="dk s" style="left:6%;top:58%"></div>
+    <div class="dk s" style="left:15%;top:58%"></div>
 
-    <!-- Center Desks -->
-    <div class="dk" style="left:33%;top:40%"></div>
-    <div class="dk" style="left:42%;top:40%"></div>
-    <div class="dk s" style="left:33%;top:52%"></div>
-    <div class="dk s" style="left:42%;top:52%"></div>
-    <div class="dk" style="left:33%;top:72%"></div>
+    <!-- Center Desks (inside Open Desks: 28-50%, 28-66%) -->
+    <div class="dk" style="left:31%;top:32%"></div>
+    <div class="dk" style="left:41%;top:32%"></div>
+    <div class="dk s" style="left:31%;top:44%"></div>
+    <div class="dk s" style="left:41%;top:44%"></div>
+    <div class="dk" style="left:31%;top:56%"></div>
 
-    <!-- ── Meeting Rooms ── -->
-    <div class="rm" style="left:64%;top:6%;width:32%;height:32%">
+    <!-- ── Meeting Rooms (right side, 56-97%) ── -->
+    <div class="rm" style="left:56%;top:6%;width:40%;height:28%">
         <span>Conference A</span><div class="ct"></div>
     </div>
-    <div class="rm" style="left:64%;top:40%;width:32%;height:22%">
+    <div class="rm" style="left:56%;top:38%;width:40%;height:22%">
         <span>Conference B</span><div class="ct"></div>
     </div>
 
-    <!-- ── Break Room ── -->
-    <div class="cf-zone" style="left:46%;top:8%;width:14%;height:16%">
+    <!-- ── Break Room (center-top, above open desks) ── -->
+    <div class="cf-zone" style="left:28%;top:8%;width:16%;height:16%">
         <span>Break Room</span>
     </div>
-    <div class="cf" style="left:50%;top:14%"></div>
+    <div class="cf" style="left:33%;top:13%"></div>
 
-    <!-- ── Recreation Wing (bottom-right, side by side) ── -->
-    <div class="game-zone" style="left:44%;top:76%;width:24%;height:20%">
+    <!-- ── Recreation Wing (bottom, full width, side by side) ── -->
+    <div class="game-zone" style="left:28%;top:74%;width:22%;height:22%">
         <span>Gaming Lounge</span>
         <div class="tv"></div>
         <div class="couch"></div>
     </div>
-    <div class="bil-zone" style="left:70%;top:76%;width:26%;height:20%">
+    <div class="bil-zone" style="left:54%;top:74%;width:22%;height:22%">
         <span>Billiard Room</span>
         <div class="pool"></div>
     </div>
 
-    <!-- Plants -->
-    <div class="pl" style="left:27%;top:10%"></div>
-    <div class="pl" style="left:62%;top:66%"></div>
-    <div class="pl" style="left:27%;top:90%"></div>
-    <div class="pl" style="left:97%;top:70%"></div>
+    <!-- Plants (corners, no overlap) -->
+    <div class="pl" style="left:26%;top:6%"></div>
+    <div class="pl" style="left:53%;top:50%"></div>
+    <div class="pl" style="left:3%;top:72%"></div>
+    <div class="pl" style="left:78%;top:72%"></div>
 
     <!-- ── 15 Characters ── -->
     <div class="p" id="c0"  data-p="pmax"><div class="mc" style="--o:#2d6a4f;--p:#1b4332;--s:#d4a373;--h:#2c2c2c"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Performance MAX</div></div>
@@ -532,6 +532,7 @@
     <div class="p" id="c16" data-p="aae"><div class="mc" style="--o:#bc6c25;--p:#8a4f1a;--s:#f0d5a8;--h:#1a1a1a"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Arabic Eval</div></div>
     <div class="p" id="c17" data-p="agentbiz"><div class="mc" style="--o:#023047;--p:#011627;--s:#c69c72;--h:#4a3728"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Agent Biz</div></div>
     <div class="p" id="c18" data-p="hurmoz"><div class="mc" style="--o:#7209b7;--p:#4a0578;--s:#d4a373;--h:#1a1a1a;position:relative"><span class="bg">63</span><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Hurmoz</div></div>
+    <div class="p" id="c19" data-p="wasl"><div class="mc" style="--o:#0077b6;--p:#005a8c;--s:#f0d5a8;--h:#2c2c2c;position:relative"><span class="bg">30</span><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Wasl</div></div>
 
 </div>
 
@@ -569,6 +570,7 @@ toolproof:{n:'ToolProof',d:'Dept. of Verification',c:'Agent tool verification �
 aae:{n:'Arabic Agent Eval',d:'Dept. of Measurement',c:'First Arabic function-calling benchmark. 51 items, 6 categories, 5 dialects, 22 Arabic-context functions. No other Arabic tool-calling benchmark exists.',s:'Python, CLI (aae), 11 providers',t:'v0.1.0 built',l:''},
 agentbiz:{n:'AI Agent Business',d:'Dept. of Commerce',c:'Managed AI agent service with Tarek under Majana LLC. Mac Studio M4 Max + Hostinger + AnythingLLM + WhatsApp. Pricing $99-$1,500/mo. Saudi market focus.',s:'vLLM-MLX, AnythingLLM, n8n, Evolution API',t:'Planning — hardware ordered',l:''},
 hurmoz:{n:'Hurmoz',d:'Dept. of Skills',c:'63 Arabic AI skills for Hermes Agent — the first and largest Arabic skills collection for any AI agent platform. Islamic tools, NLP, media, education, dev tools.',s:'Shell, YAML, Hermes v0.7.0',t:'Live on GitHub',l:'https://github.com/Moshe-ship/hurmoz'},
+wasl:{n:'Wasl',d:'Dept. of Protocol',c:'The first comprehensive Arabic MCP server. 30 tools — prayer times, Quran, Hadith, translation, dialect detection, zakat, weather, Tadawul stocks, NLP, news. Works with every MCP client.',s:'Python, MCP Protocol, 30 tools',t:'Live on GitHub — 2 stars',l:'https://github.com/Moshe-ship/wasl'},
 nlp:{n:'Arabic NLP Suite',d:'Dept. of Words',c:'13 open-source Arabic NLP tools on PyPI. Token analysis, benchmarks, moderation, RTL testing, data generation. 45+ combined GitHub stars.',s:'Python, PyPI, CLI',t:'All published',l:'https://github.com/Moshe-ship',
 tools:[
 {n:'artok',a:'عرتوك',d:'Token Tax Calculator',x:13},
@@ -588,49 +590,54 @@ tools:[
 };
 
 /* ── Waypoints: [x%, y%, stayMs] ── */
+/* Layout: Alpha 3-25%x14-40% | Beta 3-25%x44-70% | OpenDesks 28-50%x28-66% */
+/* ConfA 56-96%x6-34% | ConfB 56-96%x38-60% | Coffee 28-44%x8-24% */
+/* Gaming 28-50%x74-96% | Billiard 54-76%x74-96% */
 var W=[
-// 0  PMAX — desk worker, visits meeting 1 + coffee
-[[9,28,6000],[25,24,500],[52,20,2500],[30,20,500],[75,20,4000],[45,24,500],[9,28,5500]],
-// 1  Mkhlab — hyperactive, visits everywhere
-[[18,28,3000],[28,25,400],[75,18,3200],[55,40,400],[75,72,3200],[40,55,400],[18,28,3500]],
+// 0  PMAX — Alpha desk → coffee → conf A → back
+[[9,26,6000],[26,20,500],[35,18,2500],[26,20,500],[72,18,4000],[40,26,500],[9,26,5500]],
+// 1  Mkhlab — hyperactive, everywhere
+[[17,26,3000],[26,30,400],[72,18,3200],[50,45,400],[72,50,3200],[38,55,400],[17,26,3500]],
 // 2  Tarminal — deep focus, rare coffee
-[[9,40,13000],[22,35,500],[52,20,2200],[22,35,500],[9,40,14000]],
-// 3  Nashir — meeting 1 regular
-[[18,40,5000],[32,30,500],[75,22,4200],[32,30,500],[18,40,5500]],
-// 4  Aamil — desk + coffee runs
-[[36,52,6500],[42,35,500],[52,20,2500],[42,35,500],[36,52,7000]],
+[[9,38,13000],[22,30,500],[35,18,2200],[22,30,500],[9,38,14000]],
+// 3  Nashir — Alpha desk → conf A often
+[[17,38,5000],[26,30,500],[72,20,4200],[26,30,500],[17,38,5500]],
+// 4  Aamil — open desk → coffee
+[[34,54,6500],[36,40,500],[35,18,2500],[36,40,500],[34,54,7000]],
 // 5  Yalla — roamer, meetings + center
-[[75,18,3500],[55,30,600],[45,50,900],[58,55,400],[75,55,3500],[55,45,600],[35,25,800]],
+[[72,18,3500],[50,28,600],[40,45,900],[52,50,400],[72,50,3500],[50,40,600],[34,28,800]],
 // 6  Faris — both meetings, fast
-[[45,52,4000],[55,38,400],[75,20,3500],[58,48,500],[75,55,3500],[55,48,400],[45,52,4500]],
-// 7  Maraah — calm, desk + rare coffee
-[[9,66,9000],[22,50,500],[52,20,2800],[22,50,500],[9,66,10000]],
+[[44,54,4000],[50,40,400],[72,18,3500],[52,45,500],[72,50,3500],[50,45,400],[44,54,4500]],
+// 7  Maraah — Beta desk → rare coffee
+[[9,58,9000],[22,50,500],[35,18,2800],[22,50,500],[9,58,10000]],
 // 8  TiltBrew — coffee + gaming addict
-[[52,22,4000],[42,40,500],[52,86,3000],[42,55,500],[75,72,2000],[32,40,500],[18,66,1500],[32,40,500],[52,22,3500]],
-// 9  Athan — desk + meeting 2
-[[18,66,6500],[32,60,500],[75,55,4200],[32,60,500],[18,66,7000]],
-// 10 Majana — desk + coffee + wander
-[[18,78,5500],[28,55,500],[52,20,2200],[40,48,800],[18,78,6000]],
+[[35,18,4000],[36,40,500],[38,86,3000],[40,60,500],[64,86,2000],[26,50,500],[17,58,1500],[26,30,500],[35,18,3500]],
+// 9  Athan — Beta desk → conf B
+[[17,58,6500],[26,52,500],[72,50,4200],[26,52,500],[17,58,7000]],
+// 10 Majana — Beta desk → coffee → wander
+[[17,68,5500],[26,50,500],[35,18,2200],[38,45,800],[17,68,6000]],
 // 11 Woodpecker — barely moves
-[[9,78,16000],[13,78,1500],[9,78,16000]],
+[[9,68,16000],[13,68,1500],[9,68,16000]],
 // 12 Alyce — meeting hopper
-[[75,20,4200],[52,35,600],[42,48,1200],[58,55,400],[75,55,4200],[52,48,600]],
-// 13 Amaan — desk + meeting 2 + coffee
-[[36,82,5500],[42,60,500],[75,55,3200],[52,45,400],[52,20,2200],[40,60,500],[36,82,5500]],
+[[72,18,4200],[50,30,600],[38,45,1200],[52,48,400],[72,50,4200],[50,40,600]],
+// 13 Amaan — open desk → conf B → coffee
+[[34,66,5500],[40,55,500],[72,50,3200],[50,40,400],[35,18,2200],[38,55,500],[34,66,5500]],
 // 14 NLP — center roamer
-[[40,48,3200],[52,32,500],[75,22,2800],[55,48,400],[75,72,2800],[40,62,400]],
-// 15 ToolProof — desk + meetings + billiard
-[[36,82,5500],[42,48,500],[75,22,3500],[75,48,2500],[52,22,2000],[42,48,500],[36,82,6000]],
-// 16 Arabic Agent Eval — roamer, benchmarks everywhere + gaming
-[[42,48,3000],[55,32,500],[75,22,3000],[52,60,500],[52,86,2500],[42,48,500],[75,72,3000],[75,48,1500]],
-// 17 Agent Business — meetings + billiard (networking)
-[[75,20,4000],[52,22,2000],[75,50,3000],[52,60,500],[75,56,4000],[82,86,1500],[52,48,500]],
-// 18 Hurmoz — visits gaming lounge, meetings, everywhere (63 skills energy)
-[[18,28,3500],[30,30,400],[75,20,3000],[55,48,400],[55,86,2500],[80,86,2000],[40,55,400],[18,28,4000]]
+[[38,45,3200],[48,34,500],[72,18,2800],[50,45,400],[72,50,2800],[38,55,400]],
+// 15 ToolProof — open desk → meetings → billiard
+[[34,66,5500],[40,50,500],[72,18,3500],[64,86,2500],[35,18,2000],[40,50,500],[34,66,6000]],
+// 16 Arabic Eval — roamer + gaming
+[[38,45,3000],[50,34,500],[72,18,3000],[50,55,500],[38,86,2500],[38,45,500],[72,50,3000],[64,86,1500]],
+// 17 Agent Business — meetings + billiard
+[[72,18,4000],[35,18,2000],[72,50,3000],[50,60,500],[64,86,4000],[38,86,1500],[50,45,500]],
+// 18 Hurmoz — gaming, meetings, everywhere
+[[17,26,3500],[26,30,400],[72,18,3000],[50,45,400],[38,86,2500],[64,86,2000],[38,50,400],[17,26,4000]],
+// 19 Wasl — conf A regular, billiard breaks
+[[72,20,4500],[50,30,500],[35,18,2000],[50,45,500],[64,86,3000],[50,50,500],[72,20,5000]]
 ];
 
 /* Speeds (% per second) */
-var SP=[1.8, 2.8, 1.0, 1.8, 1.8, 2.8, 2.5, 1.2, 2.0, 1.3, 1.8, 0.6, 2.2, 1.8, 2.0, 1.8, 2.2, 2.0, 2.6];
+var SP=[1.8, 2.8, 1.0, 1.8, 1.8, 2.8, 2.5, 1.2, 2.0, 1.3, 1.8, 0.6, 2.2, 1.8, 2.0, 1.8, 2.2, 2.0, 2.6, 2.0];
 
 /* ── Easing ── */
 function ease(t){return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2}
@@ -687,7 +694,7 @@ Walker.prototype.draw=function(){
 
 /* ── Init Walkers ── */
 var walkers=[];
-for(var i=0;i<19;i++){
+for(var i=0;i<20;i++){
     var el=document.getElementById('c'+i);
     var wk=new Walker(el,W[i],SP[i]);
     wk.draw();
