@@ -138,6 +138,39 @@
         }
         .dock button.active{background:var(--g);color:#fff;box-shadow:0 2px 8px rgba(27,94,59,.22)}
         .dock button b{font-family:var(--arabic);font-weight:500;letter-spacing:0;margin-left:4px}
+        .atlas{
+            position:absolute;left:50%;bottom:8%;transform:translateX(-50%);z-index:69;
+            width:min(64%,760px);display:flex;gap:5px;overflow-x:auto;overscroll-behavior:contain;
+            padding:4px 5px;background:rgba(255,255,255,.46);border:1px solid rgba(255,255,255,.65);
+            border-radius:10px;box-shadow:0 5px 18px rgba(0,0,0,.045);
+            backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);scrollbar-width:none;
+        }
+        .atlas::-webkit-scrollbar{display:none}
+        .atlas button{
+            flex:0 0 auto;border:0;background:rgba(255,255,255,.54);color:#59665e;cursor:pointer;
+            font-family:'IBM Plex Mono',monospace;font-size:clamp(.28rem,.43vw,.36rem);
+            letter-spacing:.05em;text-transform:uppercase;padding:5px 7px;border-radius:7px;
+            border:1px solid rgba(255,255,255,.55);
+        }
+        .atlas button.active{background:#111;color:#fff;border-color:#111}
+        .camctl{
+            position:absolute;left:50%;top:10%;transform:translateX(-50%);z-index:72;
+            display:flex;align-items:center;gap:6px;opacity:0;pointer-events:none;
+            padding:5px;background:rgba(20,24,22,.72);border:1px solid rgba(255,255,255,.18);
+            border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.12);
+            backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+            transition:opacity .25s,transform .25s;
+        }
+        .office.zoomed .camctl{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0)}
+        .camctl button{
+            border:0;background:rgba(255,255,255,.1);color:#fff;cursor:pointer;
+            font-family:'IBM Plex Mono',monospace;font-size:clamp(.32rem,.46vw,.4rem);
+            letter-spacing:.07em;text-transform:uppercase;padding:5px 8px;border-radius:8px;
+        }
+        .camctl button:hover{background:rgba(255,255,255,.18)}
+        .camctl span{font-family:'IBM Plex Mono',monospace;font-size:clamp(.28rem,.4vw,.34rem);letter-spacing:.08em;text-transform:uppercase;color:#cbd6cf}
+        .office.zoomed .world{cursor:grab}
+        .office.dragging .world{cursor:grabbing;transition:none}
 
         .mission{
             position:absolute;right:2.5%;top:10%;z-index:65;width:24%;
@@ -322,6 +355,31 @@
             font-size:clamp(.28rem,.45vw,.36rem);font-weight:500;letter-spacing:.1em;
             text-transform:uppercase;color:rgba(26,107,60,.4);
         }
+        .heritage-zone{
+            position:absolute;
+            background:rgba(30,30,30,.025);
+            backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+            border:1.5px solid rgba(40,40,40,.12);
+            border-radius:10px;z-index:0;
+        }
+        .heritage-zone>span{
+            position:absolute;top:5px;left:7px;
+            font-size:clamp(.28rem,.45vw,.36rem);font-weight:500;letter-spacing:.1em;
+            text-transform:uppercase;color:rgba(20,20,20,.42);
+        }
+        .heritage-zone>span b{display:block;font-family:var(--arabic);direction:rtl;letter-spacing:0;text-transform:none;font-weight:500;color:rgba(27,94,59,.42)}
+        .jazari-model{
+            position:absolute;left:50%;top:53%;width:60%;height:48%;transform:translate(-50%,-50%) rotateX(58deg) rotateZ(-18deg);
+            transform-style:preserve-3d;filter:drop-shadow(0 18px 18px rgba(0,0,0,.16));
+        }
+        .jazari-model i{position:absolute;display:block;transform-style:preserve-3d}
+        .jazari-body{left:12%;bottom:8%;width:54%;height:32%;background:linear-gradient(135deg,#b99860,#7e5b33);border:2px solid rgba(70,42,18,.5);border-radius:42% 50% 32% 35%;box-shadow:inset -12px -8px 0 rgba(0,0,0,.16)}
+        .jazari-body::before{content:'';position:absolute;right:-18%;bottom:22%;width:28%;height:15%;background:#8a6639;border-radius:0 80% 45% 0;transform:rotate(-12deg)}
+        .jazari-tower{left:39%;bottom:35%;width:17%;height:46%;background:linear-gradient(135deg,#d7c08b,#9b7742);border:2px solid rgba(70,42,18,.45);box-shadow:inset -8px -5px 0 rgba(0,0,0,.12)}
+        .jazari-dome{left:34%;bottom:76%;width:28%;height:17%;background:radial-gradient(circle at 50% 15%,#f2dd9b,#9b7742 72%);border-radius:50% 50% 10% 10%;border:2px solid rgba(70,42,18,.42)}
+        .jazari-wheel{right:10%;bottom:36%;width:28%;height:28%;border:5px solid #1a1a1a;border-radius:50%;box-shadow:inset 0 0 0 5px rgba(255,255,255,.18);animation:wheelTurn 7s linear infinite}
+        .jazari-wheel::after{content:'';position:absolute;left:50%;top:-6px;width:4px;height:calc(100% + 12px);background:#1a1a1a;transform:translateX(-50%);box-shadow:0 0 0 0 #111}
+        .jazari-water{left:22%;bottom:0;width:68%;height:8%;background:linear-gradient(90deg,rgba(27,94,59,.34),rgba(27,94,59,.08));border-radius:50%;animation:waterPulse 2.6s ease-in-out infinite}
         .pool{
             position:absolute;
             background:linear-gradient(135deg,#1d7a44,#166b38);
@@ -530,6 +588,14 @@
         }
         .pnl-link:hover{background:#174d30;box-shadow:0 4px 16px rgba(27,94,59,.35);transform:translateY(-1px)}
         .pnl-link.hide{display:none}
+        .pnl-links{display:flex;flex-wrap:wrap;gap:6px;margin:.35rem 0 .8rem}
+        .pnl-links a{
+            display:inline-block;font-size:.46rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+            color:#fff;text-decoration:none;background:#111;padding:.48rem .72rem;border-radius:8px;
+            box-shadow:0 2px 8px rgba(0,0,0,.16);
+        }
+        .pnl-links a.site{background:var(--g)}
+        .pnl-links a:hover{transform:translateY(-1px)}
 
         .hint{
             position:absolute;bottom:2%;right:2.5%;z-index:50;opacity:.72;
@@ -587,6 +653,8 @@
             0%,100%{opacity:.45;transform:translate(-50%,-54%) scaleY(.86)}
             50%{opacity:1;transform:translate(-50%,-54%) scaleY(1.08)}
         }
+        @keyframes wheelTurn{to{transform:rotate(360deg)}}
+        @keyframes waterPulse{0%,100%{opacity:.6;transform:scaleX(.92)}50%{opacity:1;transform:scaleX(1.04)}}
 
         /* ── Responsive ── */
 
@@ -682,7 +750,7 @@
     <div class="hdr"><h1>Musa the Carpenter</h1><p>AI Engineer &middot; Digital Marketer &middot; Founder</p><p class="ar">صانع أنظمة عربية، وكلاء محليين، ومنتجات حقيقية</p></div>
 
     <div class="hud" aria-label="Portfolio summary">
-        <span>31 systems</span>
+        <span>32 systems</span>
         <span>Source-checked May 13, 2026</span>
         <span>Arabic-first copy</span>
     </div>
@@ -705,6 +773,13 @@
         <button data-filter="apps">Apps <b>تطبيقات</b></button>
         <button data-filter="craft">Craft <b>حرفة</b></button>
     </nav>
+    <div class="atlas" id="atlas" aria-label="Project atlas"></div>
+    <div class="camctl" id="camctl" aria-label="Camera controls">
+        <button type="button" id="prevP">Prev</button>
+        <button type="button" id="resetCam">Map</button>
+        <button type="button" id="nextP">Next</button>
+        <span>Drag / scroll</span>
+    </div>
 
     <!-- Footer -->
     <div class="ftr"><a href="https://x.com/Mosescreates">@Mosescreates</a> &middot; <a href="https://github.com/Moshe-ship">GitHub</a> &middot; <a href="https://majana.blog">Majana.Blog</a></div>
@@ -765,6 +840,12 @@
         <span>Billiard Room<b>غرفة البلياردو</b></span>
         <div class="pool"></div>
     </div>
+    <div class="heritage-zone" style="left:78%;top:74%;width:18%;height:22%">
+        <span>Heritage Lab<b>مختبر الجزري</b></span>
+        <div class="jazari-model" aria-hidden="true">
+            <i class="jazari-body"></i><i class="jazari-tower"></i><i class="jazari-dome"></i><i class="jazari-wheel"></i><i class="jazari-water"></i>
+        </div>
+    </div>
 
     <!-- Plants (corners, no overlap) -->
     <div class="pl" style="left:26%;top:6%"></div>
@@ -804,6 +885,7 @@
     <div class="p" id="c28" data-p="hermesfleet"><div class="mc" style="--o:#2b2d42;--p:#1a1b2e;--s:#c69c72;--h:#1a1a1a"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Hermes Fleet</div></div>
     <div class="p" id="c29" data-p="tarek"><div class="mc" style="--o:#a85d32;--p:#7a3f1f;--s:#b87a4d;--h:#3a2512"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Tarek · Co-builder</div></div>
     <div class="p" id="c30" data-p="orin"><div class="mc" style="--o:#111827;--p:#030712;--s:#c69c72;--h:#1a1a1a;position:relative"><span class="bg">AI</span><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Orin Stack</div></div>
+    <div class="p" id="c31" data-p="aljazari"><div class="mc" style="--o:#7a5c2e;--p:#3f2a12;--s:#c69c72;--h:#1a1a1a;position:relative"><span class="bg">3D</span><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Al-Jazari Clock</div></div>
     </div>
 
 </div>
@@ -819,6 +901,7 @@
     <p class="pnl-desc" id="pc"></p>
     <p class="pnl-desc ar" id="pac"></p>
     <div class="pnl-impact" id="pi"></div>
+    <div class="pnl-links" id="plinks"></div>
     <p class="pnl-meta" id="ps"></p>
     <p class="pnl-meta" id="pt"></p>
     <div class="pnl-tools" id="ptl"></div>
@@ -876,7 +959,19 @@ diwan:{n:'Diwan',d:'Dept. of Deliberation',c:'Multi-agent deliberation concept f
 pmaxlocalops:{n:'PMAX Local Ops',d:'Dept. of Local SEO',c:'Local SEO operating system direction: audits, rank grids, schema, drift checks, action queues, and client-ready reporting.',s:'Python, local SEO evidence, reports',t:'Active agency ops',l:'',src:'PMAX memory'},
 hermesfleet:{n:'Hermes Fleet',d:'Dept. of Ops',c:'PMAX agent fleet at public-safe level: channel agents, memory, routing, coding support, and local fallback without exposing private endpoints.',s:'Hermes profiles, memory, channels, routing',t:'Operational',l:'',src:'memory runbook'},
 tarek:{n:'Tarek',d:'Dept. of Partnership',c:'Co-builder role for PMAX operating work: turning audits, evidence, and action queues into client-facing progress.',s:'PMAX ops, local SEO, client reporting',t:'Active collaborator',l:'',src:'PMAX memory'},
-orin:{n:'Orin Stack',d:'Dept. of Local AI',c:'Personal local inference layer: Orin model servers, Hermes personal profiles, pmem memory, and private workflows for research and building.',s:'Jetson Orin, llama.cpp, Hermes, pmem',t:'Operational',l:'',src:'personal runbook'}
+orin:{n:'Orin Stack',d:'Dept. of Local AI',c:'Personal local inference layer: Orin model servers, Hermes personal profiles, pmem memory, and private workflows for research and building.',s:'Jetson Orin, llama.cpp, Hermes, pmem',t:'Operational',l:'',src:'personal runbook'},
+aljazari:{n:'Al-Jazari Elephant Clock',d:'Dept. of Heritage Engineering',c:'Browser-based kinematic simulator of al-Jazari’s 1206 elephant water-clock, with Three.js rendering, orbit controls, cutaway mode, numbered parts, and event timing.',s:'Three.js, TypeScript, Vite, kinematic model',t:'v0.1 simulator in progress',l:'https://github.com/mousaabumazin/jazari-elephant-clock',src:'local README + simulator source'}
+};
+
+var LINKS={
+pmax:[['Website','https://performancemaxagency.com','site']],
+yalla:[['Website','https://yalla-ads.com','site']],
+majana:[['Majana.blog','https://majana.blog','site']],
+lisan:[['Landing page','https://moshe-ship.github.io/lisan-site/','site'],['GitHub','https://github.com/Moshe-ship/Lisan','repo']],
+localbiz:[['Website','https://localbiz.app','site']],
+mukhtasar:[['Landing page','https://moshe-ship.github.io/mukhtasar/','site']],
+nlp:[['artok','https://moshe-ship.github.io/artok/','site'],['samt','https://moshe-ship.github.io/samt/','site'],['sarih','https://moshe-ship.github.io/sarih/','site'],['Arabic NLP repos','https://github.com/Moshe-ship','repo']],
+aljazari:[['3D simulator repo','https://github.com/mousaabumazin/jazari-elephant-clock','repo']]
 };
 
 var COPY={
@@ -887,10 +982,10 @@ nashir:{a:'ناشر',kind:'Content Engine',en:'Content workspace for collecting 
 aamil:{a:'عامل',kind:'Islamic Assistant',en:'Islamic assistant work with local models, camera understanding, tools, and Saudi guides.',ar:'مساعد إسلامي بنماذج محلية وفهم بالكاميرا وأدوات وأدلة سعودية.'},
 yalla:{a:'يلا آدز',kind:'Arabic Marketing',en:'Arabic RTL marketing brand for Middle East campaigns and lead generation.',ar:'علامة تسويق عربية بواجهة RTL لحملات الشرق الأوسط وجلب العملاء.'},
 faris:{a:'فارس',kind:'Sales SaaS',en:'Arabic-first sales outreach platform for Saudi teams and multi-tenant workflows.',ar:'منصة تواصل مبيعات عربية للفرق السعودية وسير عمل متعدد العملاء.'},
-maraah:{a:'مرعى',kind:'Farm App',en:'Livestock management app for herd records, health, breeding, and farm operations.',ar:'تطبيق لإدارة المواشي: سجلات القطيع، الصحة، التزاوج، وتشغيل المزرعة.'},
+maraah:{a:'مراح',kind:'Farm App',en:'Livestock management app for herd records, health, breeding, and farm operations.',ar:'تطبيق لإدارة المواشي: سجلات القطيع، الصحة، التزاوج، وتشغيل المزرعة.'},
 tiltbrew:{a:'تلت برو',kind:'macOS Game',en:'A tiny Mac game: tilt the laptop, spill the coffee, donate the proceeds.',ar:'لعبة ماك صغيرة: حرّك الجهاز، اسكب القهوة، واذهب الريع للتبرع.'},
 athan:{a:'أذان',kind:'Faith App',en:'Prayer app work with Qibla, notifications, calculation methods, and adhan audio.',ar:'تطبيق صلاة فيه قبلة وتنبيهات وطرق حساب وأصوات أذان.'},
-majana:{a:'مجانة',kind:'AI Media',en:'Arabic AI marketing blog and company base for experiments, writing, and services.',ar:'مدونة وتسويق عربي بالذكاء الاصطناعي، وقاعدة للشركة والتجارب والخدمات.'},
+majana:{a:'مجنة',kind:'AI Media',en:'Arabic AI marketing blog and company base for experiments, writing, and services.',ar:'مدونة وتسويق عربي بالذكاء الاصطناعي، وقاعدة للشركة والتجارب والخدمات.'},
 woodpecker:{a:'وودبيكر',kind:'Craft',en:'Custom carpentry and shop work; the physical craft side of the portfolio.',ar:'نجارة وتفصيل وعمل ورشة حقيقي؛ الجانب الحرفي من المنظومة.'},
 alyce:{a:'أليس',kind:'Learning App',en:'English learning platform for Arabic speakers across web, mobile, progress, and payments.',ar:'منصة تعلم إنجليزي للعرب على الويب والجوال مع تقدم ودفع ودروس.'},
 khwarizmi:{a:'الخوارزمي',kind:'Agent Primitives',en:'Reasoning primitives for restoring context, normalizing contradictions, and routing cases.',ar:'لبنات للوكلاء: ترميم السياق، كشف التعارض، وتصنيف المسألة قبل التنفيذ.'},
@@ -910,7 +1005,8 @@ diwan:{a:'ديوان',kind:'Deliberation OS',en:'Multi-agent deliberation system
 pmaxlocalops:{a:'عمليات PMAX المحلية',kind:'Local SEO Engine',en:'Self-hosted local SEO engine: audits, rank grids, schema, drift, actions, and reports.',ar:'محرك سيو محلي ذاتي: تدقيق، خرائط ترتيب، سكيمة، مراقبة تغير، إجراءات، وتقارير.'},
 hermesfleet:{a:'أسطول هرمس',kind:'Agent Fleet',en:'Agent fleet view: channels, memory, routing, coding support, and local fallback.',ar:'صورة عامة لأسطول الوكلاء: قنوات، ذاكرة، توجيه، دعم برمجي، واحتياط محلي.'},
 tarek:{a:'طارق',kind:'Co-builder',en:'Co-builder sprite for the PMAX local-ops work: evidence, actions, and client-ready reporting.',ar:'شخصية الشريك في بناء عمليات PMAX المحلية: أدلة، إجراءات، وتقارير جاهزة للعملاء.'},
-orin:{a:'منظومة أورن',kind:'Local AI',en:'Personal local AI layer: Orin model servers, Hermes profiles, pmem memory, and private workflows.',ar:'طبقة ذكاء محلي شخصية: خوادم نماذج أورن، ملفات هرمس، ذاكرة pmem، وسير عمل خاص.'}
+orin:{a:'منظومة أورن',kind:'Local AI',en:'Personal local AI layer: Orin model servers, Hermes profiles, pmem memory, and private workflows.',ar:'طبقة ذكاء محلي شخصية: خوادم نماذج أورن، ملفات هرمس، ذاكرة pmem، وسير عمل خاص.'},
+aljazari:{a:'ساعة الفيل للجزري',kind:'3D Heritage Sim',en:'A live 3D/kinematic reconstruction of the 1206 elephant water-clock: orbit view, cutaway internals, numbered parts, and event timing.',ar:'إعادة بناء ثلاثية الأبعاد وحركية لساعة الفيل سنة 1206: دوران، مقطع داخلي، أجزاء مرقمة، وتوقيت الأحداث.'}
 };
 
 var CATS={
@@ -919,7 +1015,8 @@ yalla:['agency','arabic'],faris:['agency','apps','arabic'],maraah:['apps','arabi
 majana:['agency','arabic'],woodpecker:['craft'],alyce:['apps','arabic'],khwarizmi:['arabic','ai'],nlp:['arabic','ai'],
 toolproof:['ai','arabic'],aae:['arabic','ai'],caseeval:['ai'],hurmoz:['arabic','ai'],wasl:['arabic','ai'],
 lisan:['arabic','apps'],mtg:['arabic','ai'],gurucode:['ai'],localbiz:['agency'],nashirwiki:['agency','ai'],
-speedyway:['agency'],diwan:['ai','arabic'],pmaxlocalops:['agency','ai'],hermesfleet:['agency','ai'],tarek:['agency'],orin:['ai']
+speedyway:['agency'],diwan:['ai','arabic'],pmaxlocalops:['agency','ai'],hermesfleet:['agency','ai'],tarek:['agency'],orin:['ai'],
+aljazari:['arabic','apps','craft']
 };
 
 var IMPACT={
@@ -1009,13 +1106,13 @@ var W=[
 ];
 
 /* Speeds (% per second) */
-var SP=[1.8, 2.8, 1.0, 1.8, 1.8, 2.8, 2.5, 1.2, 2.0, 1.3, 1.8, 0.6, 2.2, 1.8, 2.0, 1.8, 2.2, 2.0, 2.6, 2.0, 1.5, 2.0, 1.8, 1.6, 1.2, 2.5, 1.4, 2.2, 2.8, 2.0, 1.9];
+var SP=[1.8, 2.8, 1.0, 1.8, 1.8, 2.8, 2.5, 1.2, 2.0, 1.3, 1.8, 0.6, 2.2, 1.8, 2.0, 1.8, 2.2, 2.0, 2.6, 2.0, 1.5, 2.0, 1.8, 1.6, 1.2, 2.5, 1.4, 2.2, 2.8, 2.0, 1.9, 1.4];
 
 var HOME=[
 [8,24],[17,24],[8,35],[17,35],[32,38],[61,20],[64,20],[8,54],
 [35,19],[17,54],[17,65],[8,65],[67,20],[32,64],[41,64],[32,54],
 [41,54],[64,49],[34,85],[64,86],[39,86],[67,49],[70,20],[41,38],
-[23,35],[23,25],[72,49],[50,54],[50,38],[53,54],[72,86]
+[23,35],[23,25],[72,49],[50,54],[50,38],[53,54],[72,86],[88,86]
 ];
 
 function homePath(x,y,i){
@@ -1151,10 +1248,14 @@ var pnl=document.getElementById('pnl'),ov=document.getElementById('ov');
 var pd=document.getElementById('pd'),pn=document.getElementById('pn'),pa=document.getElementById('pa');
 var pc=document.getElementById('pc'),pac=document.getElementById('pac'),ps=document.getElementById('ps');
 var pt=document.getElementById('pt'),ptl=document.getElementById('ptl');
-var pl=document.getElementById('pl'),pch=document.getElementById('pch'),pi=document.getElementById('pi'),pv=document.getElementById('pv');
+var pl=document.getElementById('pl'),plinks=document.getElementById('plinks'),pch=document.getElementById('pch'),pi=document.getElementById('pi'),pv=document.getElementById('pv');
+var atlas=document.getElementById('atlas'),resetCam=document.getElementById('resetCam'),nextP=document.getElementById('nextP'),prevP=document.getElementById('prevP');
 var mn=document.getElementById('mn'),ma=document.getElementById('ma');
 var me=document.getElementById('me'),mar=document.getElementById('mar'),msrc=document.getElementById('msrc');
 var activeFilter='all';
+var activeProject='';
+var projectOrder=[].map.call(document.querySelectorAll('.p'),function(el){return el.dataset.p});
+var cameraState={tx:0,ty:0,z:1};
 
 function projectImpact(k){
     var cats=CATS[k]||[];
@@ -1188,30 +1289,38 @@ function updateFilterMission(cat,count){
 }
 
 function clamp(n,min,max){return Math.max(min,Math.min(max,n))}
-function setCamera(x,y,z){
+function applyCamera(tx,ty,z){
     if(!world)return;
     if(!z||z<=1.02){
         world.style.transform='';
-        ofc.classList.remove('zoomed');
+        cameraState={tx:0,ty:0,z:1};
+        ofc.classList.remove('zoomed','dragging');
         return;
     }
+    var rect=ofc.getBoundingClientRect();
+    var minX=rect.width-(rect.width*z),minY=rect.height-(rect.height*z);
+    tx=clamp(tx,minX-rect.width*.22,rect.width*.34);
+    ty=clamp(ty,minY-rect.height*.16,rect.height*.24);
+    cameraState={tx:tx,ty:ty,z:z};
+    world.style.transform='translate('+tx+'px,'+ty+'px) scale('+z+')';
+    ofc.classList.add('zoomed');
+}
+function setCamera(x,y,z){
+    if(!world)return;
+    if(!z||z<=1.02){applyCamera(0,0,1);return}
     x=clamp(x,7,93);y=clamp(y,8,91);
     var mobile=window.innerWidth<=480;
     z=mobile?Math.min(z,1.18):z;
     var rect=ofc.getBoundingClientRect();
-    var targetX=rect.width*(mobile?.5:.44);
-    var targetY=rect.height*(mobile?.46:.52);
+    var targetX=rect.width*(mobile ? .5 : .44);
+    var targetY=rect.height*(mobile ? .46 : .52);
     var tx=targetX-(x/100*rect.width*z);
     var ty=targetY-(y/100*rect.height*z);
-    var minX=rect.width-(rect.width*z),minY=rect.height-(rect.height*z);
-    tx=clamp(tx,minX,rect.width*.34);
-    ty=clamp(ty,minY,rect.height*.24);
-    world.style.transform='translate('+tx+'px,'+ty+'px) scale('+z+')';
     if(camret){
         camret.style.left=(targetX/rect.width*100)+'%';
         camret.style.top=(targetY/rect.height*100)+'%';
     }
-    ofc.classList.add('zoomed');
+    applyCamera(tx,ty,z);
 }
 function projectPoint(k){
     for(var i=0;i<walkers.length;i++){
@@ -1228,15 +1337,13 @@ function focusProject(k){
     emitBurst(p.x,p.y,5);
 }
 function focusFilter(cat,count){
-    if(cat==='all'){setCamera(50,50,1);return}
+    setCamera(50,50,1);
+    if(cat==='all')return;
     var pts=[];
     Object.keys(CATS).forEach(function(k){if((CATS[k]||[]).includes(cat))pts.push(projectPoint(k))});
-    if(!pts.length){setCamera(50,50,1);return}
+    if(!pts.length)return;
     var x=pts.reduce(function(a,p){return a+p.x},0)/pts.length;
     var y=pts.reduce(function(a,p){return a+p.y},0)/pts.length;
-    var spread=pts.reduce(function(a,p){return Math.max(a,Math.abs(p.x-x)+Math.abs(p.y-y))},0);
-    var z=count<=1?1.82:(spread>42?1.18:(spread>28?1.28:1.42));
-    setCamera(x,y,z);
     emitBurst(x,y,Math.min(10,Math.max(4,count)));
 }
 function emitBurst(x,y,n){
@@ -1272,10 +1379,11 @@ function openP(k){
             return '<b>'+t.n+(t.a?' '+t.a:'')+'</b> — '+t.d;
         }).join('<br>');
     }else ptl.style.display='none';
-    if(p.l){pl.href=p.l;pl.classList.remove('hide')}
-    else pl.classList.add('hide');
+    renderLinks(k,p);
     document.querySelectorAll('.p.active').forEach(function(el){el.classList.remove('active')});
     document.querySelectorAll('.p[data-p="'+k+'"]').forEach(function(el){el.classList.add('active')});
+    document.querySelectorAll('.atlas button').forEach(function(btn){btn.classList.toggle('active',btn.dataset.p===k)});
+    activeProject=k;
     updateMission(k);
     focusProject(k);
     ofc.classList.add('panel-open');
@@ -1283,6 +1391,19 @@ function openP(k){
     if(location.hash.slice(1)!==k)history.replaceState(null,'','#'+k);
 }
 function closeP(){pnl.classList.remove('open');ov.classList.remove('open');ofc.classList.remove('panel-open');document.querySelectorAll('.p.active').forEach(function(el){el.classList.remove('active')});if(location.hash)history.replaceState(null,'',location.pathname)}
+
+function renderLinks(k,p){
+    var links=(LINKS[k]||[]).slice();
+    if(p.l && !links.some(function(x){return x[1]===p.l})){
+        links.push([p.l.indexOf('github.com')>-1?'GitHub':'Website',p.l,p.l.indexOf('github.com')>-1?'repo':'site']);
+    }
+    if(plinks){
+        plinks.innerHTML=links.map(function(x){
+            return '<a class="'+(x[2]||'repo')+'" href="'+x[1]+'" target="_blank" rel="noopener">'+x[0]+'</a>';
+        }).join('');
+    }
+    pl.classList.add('hide');
+}
 
 document.querySelectorAll('.p').forEach(function(el){
     var c=COPY[el.dataset.p]||{};
@@ -1299,6 +1420,31 @@ document.querySelectorAll('.p').forEach(function(el){
     el.addEventListener('mousemove',function(e){movePreview(e)});
     el.addEventListener('mouseleave',function(){el.classList.remove('focused');hidePreview()});
 });
+
+function buildAtlas(){
+    if(!atlas)return;
+    atlas.innerHTML=projectOrder.map(function(k){
+        var label=(D[k]&&D[k].n)||k;
+        return '<button type="button" data-p="'+k+'">'+label+'</button>';
+    }).join('');
+    atlas.querySelectorAll('button').forEach(function(btn){
+        btn.addEventListener('click',function(){openP(btn.dataset.p)});
+    });
+}
+function visibleProjects(){
+    return projectOrder.filter(function(k){
+        return activeFilter==='all'||(CATS[k]||[]).includes(activeFilter);
+    });
+}
+function navProject(dir){
+    var list=visibleProjects();
+    if(!list.length)return;
+    var idx=Math.max(0,list.indexOf(activeProject));
+    if(!activeProject||idx<0)idx=0;
+    else idx=(idx+dir+list.length)%list.length;
+    openP(list[idx]);
+}
+buildAtlas();
 
 function showPreview(el,e){
     var k=el.dataset.p,p=D[k],c=COPY[k]||{};if(!p)return;
@@ -1325,15 +1471,50 @@ function setFilter(cat){
         if(match && cat!=='all')count++;
         el.classList.toggle('dim',!match);
     });
+    document.querySelectorAll('.atlas button').forEach(function(btn){
+        var match=cat==='all'||(CATS[btn.dataset.p]||[]).includes(cat);
+        btn.style.display=match?'':'none';
+        btn.classList.toggle('active',btn.dataset.p===activeProject);
+    });
     updateFilterMission(cat,count);
     focusFilter(cat,count);
 }
 document.querySelectorAll('.dock button').forEach(function(btn){
     btn.addEventListener('click',function(){setFilter(btn.dataset.filter)});
 });
+if(resetCam)resetCam.addEventListener('click',function(){setCamera(50,50,1);closeP()});
+if(nextP)nextP.addEventListener('click',function(){navProject(1)});
+if(prevP)prevP.addEventListener('click',function(){navProject(-1)});
 document.getElementById('px').addEventListener('click',closeP);
 ov.addEventListener('click',closeP);
-document.addEventListener('keydown',function(e){if(e.key==='Escape')closeP()});
+document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){setCamera(50,50,1);closeP()}
+    if(e.key==='ArrowRight')navProject(1);
+    if(e.key==='ArrowLeft')navProject(-1);
+});
+
+var dragCam=null;
+world.addEventListener('pointerdown',function(e){
+    if(cameraState.z<=1.02||e.target.closest('.p'))return;
+    dragCam={x:e.clientX,y:e.clientY,tx:cameraState.tx,ty:cameraState.ty};
+    ofc.classList.add('dragging');
+    world.setPointerCapture(e.pointerId);
+});
+world.addEventListener('pointermove',function(e){
+    if(!dragCam)return;
+    applyCamera(dragCam.tx+e.clientX-dragCam.x,dragCam.ty+e.clientY-dragCam.y,cameraState.z);
+});
+world.addEventListener('pointerup',function(e){
+    dragCam=null;ofc.classList.remove('dragging');
+    try{world.releasePointerCapture(e.pointerId)}catch(_){}
+});
+world.addEventListener('pointercancel',function(){dragCam=null;ofc.classList.remove('dragging')});
+ofc.addEventListener('wheel',function(e){
+    if(cameraState.z<=1.02)return;
+    e.preventDefault();
+    var z=clamp(cameraState.z+(e.deltaY < 0 ? .08 : -.08),1.08,1.9);
+    applyCamera(cameraState.tx,cameraState.ty,z);
+},{passive:false});
 
 /* ── Touch support ── */
 document.querySelectorAll('.p').forEach(function(el){
