@@ -317,7 +317,7 @@
         .p:focus-visible{outline:2px solid var(--g);outline-offset:4px;border-radius:8px}
         .p.active .mc{filter:drop-shadow(0 8px 10px rgba(27,94,59,.22))}
         .p.active .tg{color:var(--g);background:rgba(27,94,59,.1)}
-        .p.dim{opacity:.18!important;filter:grayscale(.35)}
+        .p.dim{opacity:0!important;filter:grayscale(1) blur(1px);pointer-events:none}
 
         /* ── Minecraft Sprite ── */
         .mc{
@@ -381,8 +381,11 @@
             border-radius:3px;pointer-events:none;animation:targetPulse 1.2s ease-in-out infinite;
         }
         .p.focused .tg,.p.active .tg{color:#fff;background:rgba(10,10,10,.72)}
-        .office.filtering .p.dim{opacity:.22;filter:grayscale(1) blur(.2px)}
-        .office.filtering .p:not(.dim){filter:saturate(1.25);text-shadow:0 0 10px rgba(27,94,59,.18)}
+        .office.filtering .p.dim{display:none;opacity:0!important;filter:grayscale(1) blur(1px);pointer-events:none}
+        .office.filtering .p.dim .tg{display:none}
+        .office.filtering .p:not(.dim){filter:saturate(1.35) drop-shadow(0 10px 18px rgba(27,94,59,.18));text-shadow:0 0 10px rgba(27,94,59,.18)}
+        .office.filtering .p:not(.dim) .mc{animation:focusBob 1.4s ease-in-out infinite}
+        .office.filtering .p:not(.dim) .tg{color:#fff;background:rgba(10,10,10,.78);box-shadow:0 5px 16px rgba(0,0,0,.16)}
         .tg[data-ar]::after{
             content:attr(data-ar);display:none;font-family:var(--arabic);direction:rtl;
             letter-spacing:0;text-transform:none;font-size:.42rem;line-height:1.1;color:#526057;
@@ -503,6 +506,10 @@
         @keyframes targetPulse{
             0%,100%{transform:translate(-50%,-42%) scale(.92);opacity:.75}
             50%{transform:translate(-50%,-42%) scale(1.08);opacity:1}
+        }
+        @keyframes focusBob{
+            0%,100%{transform:translateY(0)}
+            50%{transform:translateY(-5px)}
         }
 
         /* ── Responsive ── */
@@ -844,6 +851,15 @@ apps:{en:'This is product work: usable interfaces, mobile or desktop surfaces, a
 craft:{en:'This keeps the portfolio grounded in physical work: measurements, material, pricing, and shop reality.',ar:'هذا يربط المنظومة بالعمل اليدوي: قياسات، مواد، تسعير، وواقع الورشة.'}
 };
 
+var FILTER_COPY={
+all:{n:'Musa the Carpenter',a:'موسى النجار',en:'Arabic AI systems, local tools, agency operations, Islamic apps, and physical craft in one working map.',ar:'أنظمة ذكاء عربية، أدوات محلية، تشغيل وكالة، تطبيقات إسلامية، وحرفة يدوية في خريطة واحدة.',src:'Source: portfolio note + GitHub metadata'},
+arabic:{n:'Arabic Systems',a:'أنظمة عربية',en:'Projects where Arabic is part of the product logic: RTL, dialects, Islamic context, voice, benchmarks, and tooling.',ar:'مشاريع تدخل العربية في صلب المنتج: اتجاه، لهجات، سياق إسلامي، صوت، اختبارات، وأدوات.',src:'Filter: Arabic-first projects'},
+ai:{n:'AI Infrastructure',a:'بنية الذكاء',en:'Model-facing systems: agents, receipts, routing, local inference, benchmarks, and reliability primitives.',ar:'أنظمة تواجه النماذج: وكلاء، إيصالات، توجيه، تشغيل محلي، اختبارات، ولبنات موثوقية.',src:'Filter: AI systems'},
+agency:{n:'Agency Operations',a:'تشغيل الوكالة',en:'Business systems for PMAX work: local SEO, reporting, content operations, evidence, and client-ready workflows.',ar:'أنظمة عمل للوكالة: سيو محلي، تقارير، تشغيل محتوى، أدلة، وسير عمل جاهز للعملاء.',src:'Filter: agency systems'},
+apps:{n:'Apps & Interfaces',a:'تطبيقات وواجهات',en:'Things people touch directly: macOS tools, mobile apps, Islamic assistants, learning, voice, and games.',ar:'منتجات يلمسها المستخدم مباشرة: أدوات ماك، تطبيقات جوال، مساعدات إسلامية، تعلّم، صوت، وألعاب.',src:'Filter: apps and interfaces'},
+craft:{n:'Craft Work',a:'الحرفة',en:'The physical side of the portfolio: carpentry, measuring, material choices, pricing, and workshop execution.',ar:'الجانب اليدوي من المنظومة: نجارة، قياس، اختيار مواد، تسعير، وتنفيذ ورشة.',src:'Filter: craft work'}
+};
+
 /* ── Waypoints: [x%, y%, stayMs] ── */
 /* Layout: Alpha 3-25%x14-40% | Beta 3-25%x44-70% | OpenDesks 28-50%x28-66% */
 /* ConfA 56-96%x6-34% | ConfB 56-96%x38-60% | Coffee 28-44%x8-24% */
@@ -1023,6 +1039,18 @@ function updateMission(k){
     });
 }
 
+function updateFilterMission(cat,count){
+    var f=FILTER_COPY[cat]||FILTER_COPY.all;
+    mn.textContent=f.n;
+    ma.textContent=f.a;
+    me.textContent=f.en;
+    mar.textContent=f.ar;
+    msrc.textContent=cat==='all'?f.src:'Spotlight: '+count+' system'+(count===1?'':'s')+' / '+f.src;
+    document.querySelectorAll('.mission-meter i').forEach(function(i,idx){
+        i.classList.toggle('on',cat==='all'?idx<3:idx<5);
+    });
+}
+
 function openP(k){
     var p=D[k];if(!p)return;
     var c=COPY[k]||{};
@@ -1081,13 +1109,17 @@ function hidePreview(){pv.classList.remove('show')}
 function setFilter(cat){
     activeFilter=cat;
     ofc.classList.toggle('filtering',cat!=='all');
+    ofc.dataset.filter=cat;
+    document.querySelectorAll('.p.active,.p.focused').forEach(function(el){el.classList.remove('active','focused')});
+    var count=0;
     document.querySelectorAll('.dock button').forEach(function(btn){btn.classList.toggle('active',btn.dataset.filter===cat)});
     document.querySelectorAll('.p').forEach(function(el){
         var cats=CATS[el.dataset.p]||[];
-        el.classList.toggle('dim',cat!=='all'&&!cats.includes(cat));
+        var match=cat==='all'||cats.includes(cat);
+        if(match && cat!=='all')count++;
+        el.classList.toggle('dim',!match);
     });
-    if(cat==='all')msrc.textContent='Source: portfolio note + GitHub metadata';
-    else msrc.textContent='Filter: '+cat+' / projects dim unless tagged';
+    updateFilterMission(cat,count);
 }
 document.querySelectorAll('.dock button').forEach(function(btn){
     btn.addEventListener('click',function(){setFilter(btn.dataset.filter)});
@@ -1119,6 +1151,8 @@ checkLayout();
 window.addEventListener('resize',checkLayout);
 window.addEventListener('orientationchange',function(){setTimeout(checkLayout,100)});
 window.addEventListener('hashchange',function(){var k=location.hash.slice(1);if(k)openP(k)});
+var initialFilter=new URLSearchParams(location.search).get('filter');
+if(initialFilter&&FILTER_COPY[initialFilter])setFilter(initialFilter);
 if(location.hash.slice(1))openP(location.hash.slice(1));
 </script>
 
