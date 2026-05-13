@@ -100,6 +100,39 @@
         .dock button.active{background:var(--g);color:#fff;box-shadow:0 2px 8px rgba(27,94,59,.22)}
         .dock button b{font-family:var(--arabic);font-weight:500;letter-spacing:0;margin-left:4px}
 
+        .mission{
+            position:absolute;right:2.5%;top:10%;z-index:65;width:24%;
+            min-width:190px;max-width:265px;padding:12px 13px;
+            background:rgba(14,18,16,.78);color:#f7f7f2;
+            border:1px solid rgba(255,255,255,.16);border-radius:12px;
+            box-shadow:0 18px 45px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.08);
+            backdrop-filter:blur(22px) saturate(1.1);-webkit-backdrop-filter:blur(22px) saturate(1.1);
+            transform:translateZ(0);
+        }
+        .mission::before{
+            content:'';position:absolute;inset:7px;border:1px solid rgba(255,255,255,.07);
+            border-radius:8px;pointer-events:none;
+        }
+        .mission-k{
+            display:flex;align-items:center;justify-content:space-between;gap:8px;
+            font-family:'IBM Plex Mono',monospace;font-size:clamp(.33rem,.5vw,.43rem);
+            letter-spacing:.12em;text-transform:uppercase;color:#9fb2a6;margin-bottom:7px;
+        }
+        .mission-k b{font-family:var(--arabic);direction:rtl;letter-spacing:0;text-transform:none;font-weight:500;color:#d9e3dc}
+        .mission h2{font-size:clamp(.72rem,1.15vw,.98rem);font-weight:600;letter-spacing:.02em;line-height:1.1;margin-bottom:4px}
+        .mission h3{font-family:var(--arabic);direction:rtl;text-align:right;font-size:clamp(.82rem,1.2vw,1.05rem);font-weight:600;line-height:1.25;color:#fff;margin-bottom:6px}
+        .mission p{font-size:clamp(.47rem,.65vw,.56rem);line-height:1.45;color:#d6ddd8;margin-bottom:5px}
+        .mission .ar{font-family:var(--arabic);direction:rtl;text-align:right;font-size:clamp(.63rem,.82vw,.76rem);line-height:1.55;color:#f2f5f1}
+        .mission-src{
+            margin-top:8px;padding-top:7px;border-top:1px solid rgba(255,255,255,.1);
+            font-family:'IBM Plex Mono',monospace;font-size:clamp(.32rem,.45vw,.39rem);
+            line-height:1.45;letter-spacing:.07em;text-transform:uppercase;color:#91a399;
+        }
+        .mission-meter{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;margin-top:8px}
+        .mission-meter i{display:block;height:4px;background:rgba(255,255,255,.16);border-radius:1px}
+        .mission-meter i.on{background:#dfe8e2;box-shadow:0 0 10px rgba(223,232,226,.45)}
+        .office.panel-open .mission{opacity:0;transform:translateX(10px);pointer-events:none}
+
         /* ── Footer ── */
         .ftr{position:absolute;bottom:2%;left:2.8%;font-size:clamp(.32rem,.5vw,.42rem);color:var(--m);letter-spacing:.06em;z-index:50}
         .ftr a{color:var(--g);text-decoration:none;transition:opacity .2s}
@@ -278,13 +311,13 @@
             transform:translate(-50%,-85%);
             -webkit-tap-highlight-color:transparent;
             padding:3px 5px;
-            opacity:0;transition:opacity .5s;
+            opacity:.96;transition:opacity .5s,filter .25s;
         }
         .p:hover{z-index:90!important}
         .p:focus-visible{outline:2px solid var(--g);outline-offset:4px;border-radius:8px}
         .p.active .mc{filter:drop-shadow(0 8px 10px rgba(27,94,59,.22))}
         .p.active .tg{color:var(--g);background:rgba(27,94,59,.1)}
-        .p.dimmed{opacity:.18!important;filter:grayscale(.35)}
+        .p.dim{opacity:.18!important;filter:grayscale(.35)}
 
         /* ── Minecraft Sprite ── */
         .mc{
@@ -341,10 +374,20 @@
             text-align:center;transition:all .25s;
         }
         .p:hover .tg{color:var(--g);background:rgba(27,94,59,.08)}
+        .p.active::before,.p.focused::before{
+            content:'';position:absolute;left:50%;top:50%;width:38px;height:38px;
+            transform:translate(-50%,-42%);border:2px solid rgba(27,94,59,.8);
+            box-shadow:0 0 0 4px rgba(27,94,59,.12),0 0 26px rgba(27,94,59,.32);
+            border-radius:3px;pointer-events:none;animation:targetPulse 1.2s ease-in-out infinite;
+        }
+        .p.focused .tg,.p.active .tg{color:#fff;background:rgba(10,10,10,.72)}
+        .office.filtering .p.dim{opacity:.22;filter:grayscale(1) blur(.2px)}
+        .office.filtering .p:not(.dim){filter:saturate(1.25);text-shadow:0 0 10px rgba(27,94,59,.18)}
         .tg[data-ar]::after{
-            content:attr(data-ar);display:block;font-family:var(--arabic);direction:rtl;
+            content:attr(data-ar);display:none;font-family:var(--arabic);direction:rtl;
             letter-spacing:0;text-transform:none;font-size:.42rem;line-height:1.1;color:#526057;
         }
+        .p:hover .tg[data-ar]::after,.p.focused .tg[data-ar]::after,.p.active .tg[data-ar]::after{display:block;color:#f6fbf7}
 
         /* Badge */
         .bg{
@@ -457,6 +500,10 @@
             50%{opacity:1}
             62%,100%{transform:translateX(72%);opacity:0}
         }
+        @keyframes targetPulse{
+            0%,100%{transform:translate(-50%,-42%) scale(.92);opacity:.75}
+            50%{transform:translate(-50%,-42%) scale(1.08);opacity:1}
+        }
 
         /* ── Responsive ── */
 
@@ -471,6 +518,7 @@
             .hdr h1{font-size:.6rem}
             .hdr p{font-size:.3rem}
             .hud{top:auto;right:3%;bottom:5%;max-width:58%}
+            .mission{right:2.8%;top:11%;width:28%;min-width:165px;padding:10px}
             .dock{bottom:2.4%;max-width:82%;gap:3px}
             .ftr{font-size:.3rem}
             .mc-h{width:15px;height:3px}
@@ -493,6 +541,10 @@
             .hdr p{font-size:.28rem}
             .hud{bottom:4%;right:3%;max-width:70%;gap:4px}
             .hud{display:none}
+            .mission{left:3%;right:auto;top:10%;width:47%;min-width:0;padding:8px}
+            .mission p{display:none}
+            .mission-src{font-size:.28rem;margin-top:5px;padding-top:5px}
+            .mission-meter{display:none}
             .dock{left:50%;bottom:3.5%;max-width:76%;padding:4px}
             .dock button{font-size:.3rem;padding:4px 5px}
             .dock button b{display:none}
@@ -550,10 +602,20 @@
     <div class="hdr"><h1>Musa the Carpenter</h1><p>AI Engineer &middot; Digital Marketer &middot; Founder</p><p class="ar">صانع أنظمة عربية، وكلاء محليين، ومنتجات حقيقية</p></div>
 
     <div class="hud" aria-label="Portfolio summary">
-        <span>31 playable systems</span>
-        <span>Native Arabic</span>
-        <span>Live systems map</span>
+        <span>31 systems</span>
+        <span>Source-checked May 13, 2026</span>
+        <span>Arabic-first copy</span>
     </div>
+
+    <section class="mission" id="mission" aria-live="polite">
+        <div class="mission-k"><span>Inspect Mode</span><b>وضع الفحص</b></div>
+        <h2 id="mn">Musa the Carpenter</h2>
+        <h3 id="ma">موسى النجار</h3>
+        <p id="me">Arabic AI systems, local tools, agency operations, Islamic apps, and physical craft in one working map.</p>
+        <p class="ar" id="mar">أنظمة ذكاء عربية، أدوات محلية، تشغيل وكالة، تطبيقات إسلامية، وحرفة يدوية في خريطة واحدة.</p>
+        <div class="mission-src" id="msrc">Source: portfolio note + GitHub metadata</div>
+        <div class="mission-meter" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div>
+    </section>
 
     <nav class="dock" aria-label="Project focus controls">
         <button class="active" data-filter="all">All <b>الكل</b></button>
@@ -629,8 +691,8 @@
 
     <!-- ── Characters ── -->
     <div class="p" id="c0"  data-p="pmax"><div class="mc" style="--o:#2d6a4f;--p:#1b4332;--s:#d4a373;--h:#2c2c2c"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Performance MAX</div></div>
-    <div class="p" id="c1"  data-p="mkhlab"><div class="mc" style="--o:#1b4332;--p:#0d2818;--s:#c69c72;--h:#1a1a1a;position:relative"><span class="bg">25&#9733;</span><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Mkhlab</div></div>
-    <div class="p" id="c2"  data-p="tarminal"><div class="mc" style="--o:#1a1a1a;--p:#111;--s:#f0d5a8;--h:#4a3728;position:relative"><span class="bg">7&#9733;</span><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Tarminal</div></div>
+    <div class="p" id="c1"  data-p="mkhlab"><div class="mc" style="--o:#1b4332;--p:#0d2818;--s:#c69c72;--h:#1a1a1a;position:relative"><span class="bg">60</span><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Mkhlab</div></div>
+    <div class="p" id="c2"  data-p="tarminal"><div class="mc" style="--o:#1a1a1a;--p:#111;--s:#f0d5a8;--h:#4a3728;position:relative"><span class="bg">RTL</span><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Tarminal</div></div>
     <div class="p" id="c3"  data-p="nashir"><div class="mc" style="--o:#264653;--p:#1a2f38;--s:#d4a373;--h:#2c2c2c"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Nashir</div></div>
     <div class="p" id="c4"  data-p="aamil"><div class="mc" style="--o:#606c38;--p:#3a4220;--s:#c69c72;--h:#1a1a1a"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Aamil</div></div>
     <div class="p" id="c5"  data-p="yalla"><div class="mc" style="--o:#d4760a;--p:#9e5808;--s:#f0d5a8;--h:#4a3728"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Yalla Ads</div></div>
@@ -641,11 +703,11 @@
     <div class="p" id="c10" data-p="majana"><div class="mc" style="--o:#5a189a;--p:#3a0f66;--s:#d4a373;--h:#4a3728"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Majana</div></div>
     <div class="p" id="c11" data-p="woodpecker"><div class="mc" style="--o:#6f4e37;--p:#4a3425;--s:#a47148;--h:#2c2c2c"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Woodpecker</div></div>
     <div class="p" id="c12" data-p="alyce"><div class="mc" style="--o:#8e5572;--p:#6a3f55;--s:#f0d5a8;--h:#4a3728"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Alyce</div></div>
-    <div class="p" id="c13" data-p="amaan"><div class="mc" style="--o:#2a6f97;--p:#1d4e6b;--s:#c69c72;--h:#1a1a1a"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Amaan</div></div>
+    <div class="p" id="c13" data-p="khwarizmi"><div class="mc" style="--o:#2a6f97;--p:#1d4e6b;--s:#c69c72;--h:#1a1a1a"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Khwarizmi</div></div>
     <div class="p" id="c14" data-p="nlp"><div class="mc" style="--o:#40916c;--p:#2d6a4f;--s:#d4a373;--h:#2c2c2c;position:relative"><span class="bg">&times;13</span><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">NLP Suite</div></div>
     <div class="p" id="c15" data-p="toolproof"><div class="mc" style="--o:#3a86a8;--p:#28607a;--s:#d4a373;--h:#2c2c2c"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">ToolProof</div></div>
     <div class="p" id="c16" data-p="aae"><div class="mc" style="--o:#bc6c25;--p:#8a4f1a;--s:#f0d5a8;--h:#1a1a1a"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Arabic Eval</div></div>
-    <div class="p" id="c17" data-p="agentbiz"><div class="mc" style="--o:#023047;--p:#011627;--s:#c69c72;--h:#4a3728"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Agent Biz</div></div>
+    <div class="p" id="c17" data-p="caseeval"><div class="mc" style="--o:#023047;--p:#011627;--s:#c69c72;--h:#4a3728"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Case Eval</div></div>
     <div class="p" id="c18" data-p="hurmoz"><div class="mc" style="--o:#7209b7;--p:#4a0578;--s:#d4a373;--h:#1a1a1a;position:relative"><span class="bg">63</span><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Hurmoz</div></div>
     <div class="p" id="c19" data-p="wasl"><div class="mc" style="--o:#0077b6;--p:#005a8c;--s:#f0d5a8;--h:#2c2c2c;position:relative"><span class="bg">30</span><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Wasl</div></div>
     <div class="p" id="c20" data-p="lisan"><div class="mc" style="--o:#6a4c93;--p:#4a2d70;--s:#d4a373;--h:#2c2c2c"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Lisan</div></div>
@@ -683,84 +745,84 @@
 <script>
 /* ── Project Data ── */
 var D={
-pmax:{n:'Performance MAX',d:'Dept. of Growth',c:'Full-service digital marketing agency. Google Ads, SEO, local search. 950+ accounts managed, $23M+ in ad spend.',s:'Astro 6, GitHub Actions, Hostinger',t:'Live',l:'https://performancemaxagency.com'},
-mkhlab:{n:'Mkhlab',d:'Dept. of Language',c:'First Arabic OpenClaw plugin. 31 skills — Islamic tools, NLP, media, education. WhatsApp + Telegram channels. 9 CLI tools on PyPI. 20 GitHub stars.',s:'TypeScript, OpenClaw, Python',t:'Phase 5 complete',l:'https://github.com/Moshe-ship/mkhlab'},
-tarminal:{n:'Tarminal',d:'Dept. of Interface',c:'First macOS terminal with proper Arabic RTL. BiDi overlay via Core Text, connected letters, iTerm2-style tabs, search, drag-and-drop.',s:'Swift, SwiftUI, SwiftTerm, Core Text',t:'Phase 3 complete',l:'https://github.com/Moshe-ship/Tarminal'},
-nashir:{n:'Nashir',d:'Dept. of Broadcast',c:'SaaS social media platform + AI content pipeline. Scans news, drafts Saudi dialect threads, generates dark-theme graphics for @Mosescreates.',s:'Next.js 15, FastAPI, PostgreSQL, Claude',t:'MVP live',l:''},
-aamil:{n:'Aamil',d:'Dept. of Intelligence',c:'Offline Arabic-English AI assistant. Now native on iOS AND macOS — same brain, two shells. Custom fine-tuned LoRA on Apple Silicon (E4B 83%), 6 tools, camera VLM, Saudi guides. F5-TTS + Vocos ported to Swift+MLX for voice.',s:'Swift, SwiftUI, Core ML, MLX, LoRA, F5-TTS Swift, Vocos Swift',t:'iOS + native macOS',l:''},
-yalla:{n:'Yalla Ads',d:'Dept. of Reach',c:'Arabic-first digital marketing agency for the Middle East. Full RTL. Google Ads, social media, lead gen. Shami + Khaleeji dialect.',s:'Astro 6, Arabic RTL, Hostinger',t:'Built',l:'https://yalla-ads.com'},
-faris:{n:'Faris AI',d:'Dept. of Outreach',c:'AI-powered sales outreach platform for Saudi Arabia. Multi-tenant SaaS with Arabic-first UX.',s:'React, Vite, FastAPI, PostgreSQL',t:'Early stage',l:'https://github.com/Moshe-ship/faris-ai-saas'},
-maraah:{n:'Maraah',d:'Dept. of Land',c:'Livestock management app for farmers. Herd tracking, health records, breeding schedules. Built for Arabic-speaking agricultural communities.',s:'React Native, Supabase',t:'Phase 2.3',l:''},
-tiltbrew:{n:'TiltBrew',d:'Dept. of Play',c:'Tilt your MacBook. Spill the coffee. 100% of revenue goes to children in Gaza.',s:'Swift, macOS',t:'Published',l:'https://github.com/Moshe-ship/TiltBrew'},
-athan:{n:'Athan',d:'Dept. of Faith',c:'Quran recitation YouTube channel + prayer times mobile app with compass, notifications, and adhan playback.',s:'Python, Pillow, React Native, Expo',t:'Live',l:''},
-majana:{n:'Majana',d:'Dept. of Thought',c:'Arabic AI marketing blog. Origin of Majana LLC. Active since 2020, spun into startup 2026.',s:'WordPress, Python',t:'Active since 2020',l:'https://majana.blog'},
-woodpecker:{n:'Woodpecker Carpentry',d:'Dept. of Craft',c:'Custom woodwork, furniture, and builds. The analog counterpart to all the digital work.',s:'Wood, tools, hands',t:'Active',l:''},
-alyce:{n:'Learn English with Alyce',d:'Dept. of Learning',c:'English learning platform — web + mobile. Lessons, progress tracking, payments. For Arabic speakers.',s:'Next.js, React Native, Supabase, Stripe',t:'In progress',l:''},
-amaan:{n:'Amaan',d:'Dept. of Trust',c:'Secure messaging app with Arabic i18n, onboarding, and real-time chat.',s:'React Native, TypeScript',t:'In progress',l:''},
-toolproof:{n:'ToolProof',d:'Dept. of Verification',c:'Agent tool verification — catches hallucinated tool calls with signed execution receipts. SHA-256 HMAC, evidence_hash, trust scoring. v0.5 added an MTG bridge for Arabic tool-call integrity receipts + cross-repo integration with Hurmoz and MTG.',s:'Python, rich, httpx, click, MTG bridge',t:'v0.5.2 live',l:'https://github.com/Moshe-ship/toolproof'},
-aae:{n:'Arabic Agent Eval',d:'Dept. of Measurement',c:'First Arabic function-calling benchmark. 51 items, 6 categories, 5 dialects, 22 Arabic-context functions. No other Arabic tool-calling benchmark exists.',s:'Python, CLI (aae), 11 providers',t:'v0.1.0 built',l:''},
-agentbiz:{n:'AI Agent Business',d:'Dept. of Commerce',c:'Managed AI agent service with Tarek under Majana LLC. Mac Studio M4 Max + Hostinger + AnythingLLM + WhatsApp. Pricing $99-$1,500/mo. Saudi market focus.',s:'vLLM-MLX, AnythingLLM, n8n, Evolution API',t:'Planning — hardware ordered',l:''},
-hurmoz:{n:'Hurmoz',d:'Dept. of Skills',c:'63 Arabic AI skills for Hermes Agent — the first and largest Arabic skills collection for any AI agent platform. Islamic tools, NLP, media, education, dev tools.',s:'Shell, YAML, Hermes v0.7.0',t:'Live on GitHub — 6 stars',l:'https://github.com/Moshe-ship/hurmoz'},
-wasl:{n:'Wasl',d:'Dept. of Protocol',c:'The first comprehensive Arabic MCP server. 30 tools — prayer times, Quran, Hadith, translation, dialect detection, zakat, weather, Tadawul stocks, NLP, news. Works with every MCP client.',s:'Python, MCP Protocol, 30 tools',t:'Live on GitHub — 4 stars',l:'https://github.com/Moshe-ship/wasl'},
-nlp:{n:'Arabic NLP Suite',d:'Dept. of Words',c:'13 open-source Arabic NLP tools on PyPI. Token analysis, benchmarks, moderation, RTL testing, data generation. 62+ combined GitHub stars.',s:'Python, PyPI, CLI',t:'All published',l:'https://github.com/Moshe-ship',
+pmax:{n:'Performance MAX',d:'Dept. of Growth',c:'Digital marketing agency work: local search, SEO, ads, reporting, and automation. Kept public at capability level because client operations are private.',s:'Agency site, local SEO workflows, reporting systems',t:'Active agency',l:'https://performancemaxagency.com',src:'local PMAX note + public site'},
+mkhlab:{n:'Mkhlab',d:'Dept. of Language',c:'Arabic-first OpenClaw plugin with Arabic skills, local-first assistant behavior, dialect awareness, Islamic context, and Arabic NLP tooling.',s:'TypeScript, OpenClaw, Python tools',t:'Public repo active May 2026',l:'https://github.com/Moshe-ship/mkhlab',src:'README + GitHub metadata'},
+tarminal:{n:'Tarminal',d:'Dept. of Interface',c:'Native macOS terminal focused on proper Arabic shaping, Metal rendering, Touch ID, tab groups, themes, search, restore, and developer comfort.',s:'Swift, SwiftUI, SwiftTerm, Core Text, Metal',t:'Public repo active May 2026',l:'https://github.com/Moshe-ship/Tarminal',src:'README + GitHub metadata'},
+nashir:{n:'Nashir',d:'Dept. of Broadcast',c:'AI content and publishing workspace. The public claim is the system direction: scan, organize, draft, and publish Arabic-first content with stronger context.',s:'Next.js 15, React 19, TypeScript',t:'Private/local product work',l:'',src:'local package + portfolio note'},
+aamil:{n:'Aamil',d:'Dept. of Intelligence',c:'Islamic AI assistant with local LLM work, camera understanding, App Intents, Saudi guides, accessibility, and an active Q2 2026 roadmap.',s:'Swift, local LLM, camera VLM, App Intents',t:'Q2 2026 active',l:'',src:'mousa-vault Aamil note'},
+yalla:{n:'Yalla Ads',d:'Dept. of Reach',c:'Arabic digital marketing brand and RTL agency site for Middle East ads, social media, and lead generation.',s:'Astro, Arabic RTL, web publishing',t:'Public site active',l:'https://yalla-ads.com',src:'GitHub metadata + public site'},
+faris:{n:'Faris AI',d:'Dept. of Outreach',c:'Multi-tenant SaaS concept for AI-powered sales outreach in Saudi Arabia, with Arabic-first workflow direction.',s:'React/Vite, FastAPI, PostgreSQL direction',t:'Public repo',l:'https://github.com/Moshe-ship/faris-ai-saas',src:'GitHub metadata'},
+maraah:{n:'Maraah',d:'Dept. of Land',c:'Livestock-management app work for farmers: herd records, health tracking, breeding, and Arabic-friendly operations.',s:'React Native, Supabase direction',t:'Local app work',l:'',src:'local project README'},
+tiltbrew:{n:'TiltBrew',d:'Dept. of Play',c:'Small macOS game: tilt the MacBook and spill the coffee. A playful project with a simple donation-driven premise.',s:'Swift, macOS motion input',t:'Public repo',l:'https://github.com/Moshe-ship/TiltBrew',src:'GitHub metadata'},
+athan:{n:'Athan',d:'Dept. of Faith',c:'Free prayer-times app work with Qibla compass, notifications, calculation methods, and authentic adhan sound support.',s:'React Native, Expo, TypeScript, adhan library',t:'Local app work',l:'',src:'local README'},
+majana:{n:'Majana',d:'Dept. of Thought',c:'Arabic AI and marketing publishing home. Public-facing writing and experiments live here without exposing private infrastructure.',s:'WordPress, writing, AI marketing content',t:'Public site',l:'https://majana.blog',src:'public site + portfolio note'},
+woodpecker:{n:'Woodpecker Carpentry',d:'Dept. of Craft',c:'The physical craft side: custom carpentry, measuring, materials, pricing, and real shop work beside the software systems.',s:'Wood, tools, design, estimates',t:'Active craft track',l:'',src:'woodpecker note'},
+alyce:{n:'Learn English with Alyce',d:'Dept. of Learning',c:'English-learning product for Arabic speakers, covering lessons, progress, mobile/web surfaces, and payments direction.',s:'Next.js, mobile app direction, Supabase/Stripe direction',t:'Private repo',l:'',src:'GitHub private repo metadata'},
+khwarizmi:{n:'Khwarizmi Stack',d:'Dept. of Reasoning',c:'New agent reliability primitives: al-jabr, al-muqabalah, qadiya, and a Hermes preflight plugin for restoring context and catching contradictions before model calls.',s:'Python, Hermes plugin, eval harnesses',t:'Public repos active May 2026',l:'https://github.com/Moshe-ship/khwarizmi-hermes-plugin',src:'GitHub metadata'},
+toolproof:{n:'ToolProof',d:'Dept. of Verification',c:'Agent tool verification with pre-execution gating, signed receipts, claim checking, imports from agent logs, and trust reports.',s:'Python, Click, Rich, signed JSONL receipts',t:'Public repo',l:'https://github.com/Moshe-ship/toolproof',src:'README + GitHub metadata'},
+aae:{n:'Arabic Agent Eval',d:'Dept. of Measurement',c:'Arabic function-calling benchmark with dialect splits and real tool-use cases for measuring agent behavior in Arabic contexts.',s:'Python evals, model result bundles',t:'Public repo',l:'https://github.com/Moshe-ship/arabic-agent-eval',src:'GitHub metadata'},
+caseeval:{n:'Case Eval',d:'Dept. of Evidence',c:'Empirical evaluation comparing raw prompts against jabr, muqabalah, and qadiya preprocessing across ambiguous tool prompts.',s:'Python, 272-prompt eval design',t:'Public repo active May 2026',l:'https://github.com/Moshe-ship/case-eval',src:'GitHub metadata'},
+hurmoz:{n:'Hurmoz',d:'Dept. of Skills',c:'Arabic skill collection for Hermes Agent: Islamic tools, language work, NLP, media, Saudi business utilities, education, and integrations.',s:'Shell/YAML skills for Hermes Agent',t:'Public repo',l:'https://github.com/Moshe-ship/hurmoz',src:'README + GitHub metadata'},
+wasl:{n:'Wasl',d:'Dept. of Protocol',c:'Arabic MCP server with 30 tools across prayer, Quran, Hadith, Hijri dates, dialects, zakat, weather, stocks, NLP, and news.',s:'Python, MCP protocol, free APIs',t:'Public repo',l:'https://github.com/Moshe-ship/wasl',src:'README + GitHub metadata'},
+nlp:{n:'Arabic NLP Suite',d:'Dept. of Words',c:'Open-source Arabic CLI tools covering token cost, audio quality, summarization, BiDi security, docs, datasets, moderation, scraping, RTL tests, model conversion, and benchmarks.',s:'Python, PyPI-style CLIs, offline-first tooling',t:'Public tool suite',l:'https://github.com/Moshe-ship',
 tools:[
-{n:'artok',a:'عرتوك',d:'Token Tax Calculator',x:14},
-{n:'samt',a:'صمت',d:'Audio/TTS Quality Checker',x:12},
-{n:'mukhtasar',a:'مختصر',d:'Text Summarizer',x:10},
-{n:'bidi-guard',a:'',d:'BiDi Security Scanner',x:5},
-{n:'qalam',a:'قلم',d:'Code Doc Generator',x:4},
-{n:'majal',a:'مجال',d:'Dataset Inspector',x:3},
-{n:'arabench',a:'عربنش',d:'LLM Benchmark',x:2},
-{n:'sarih',a:'صريح',d:'Content Moderator',x:2},
-{n:'safha',a:'صفحة',d:'Web Scraper for ML',x:2},
-{n:'raqeeb',a:'رقيب',d:'RTL Testing CLI',x:2},
-{n:'naql',a:'نقل',d:'Model Converter',x:2},
-{n:'khalas',a:'خلص',d:'Prompt Optimizer',x:2},
-{n:'jadwal',a:'جدول',d:'Synthetic Data Gen',x:2}
-]},
-lisan:{n:'Lisan',d:'Dept. of Voice',c:'Arabic-first local dictation for macOS. Whisper.cpp + Metal GPU. Your voice never leaves your Mac. First Arabic-native macOS dictation tool.',s:'Swift, Whisper.cpp, Metal GPU, MLX',t:'Live on GitHub — 2 stars',l:'https://github.com/Moshe-ship/Lisan'},
-mtg:{n:'MTG',d:'Dept. of Guards',c:'Morphological Type Guards — typed reliability layer for multilingual tool-call arguments. Arabic/Persian script detection, BiDi/RTL security, UTS #39 slot-gated confusable checks, prompt-injection heuristics, trace grading.',s:'Python, pydantic, typed invariants',t:'Live on GitHub',l:'https://github.com/Moshe-ship/mtg'},
-gurucode:{n:'Guru-Code',d:'Dept. of Routing',c:'Locked routing shim in front of OpenRouter + local oMLX. Cascade: Kimi K2.5 → MiniMax M2.7 → DeepSeek V3.2 → Gemma 4-31B (offline). Hard $15 spend cap. Idempotency replay. Every call logged to SQLite receipts.',s:'Python, stdlib HTTP, SQLite, YAML routing table',t:'v1 locked'},
-localbiz:{n:'LocalBiz',d:'Dept. of Directory',c:'localbiz.app — Performance MAX\'s own business directory. Next.js + Supabase + Google Places. Tier-1 source for the PMAX citation auditor (stronger evidence than the SEMrush/Yext-style trio).',s:'Next.js, Supabase, Google Places API',t:'Live at localbiz.app',l:'https://localbiz.app'},
-nashirwiki:{n:'Nashir Wiki',d:'Dept. of Memory',c:'Karpathy-style LLM-managed knowledge base inside Nashir. Scan → ingest → compile → draft. 31 articles, auto-grows. Threads use wiki context for deeper, factual drafts instead of model memory.',s:'Python, markdown, scan+compile pipeline',t:'31 articles, auto-growing'},
-speedyway:{n:'SpeedyWay SEO',d:'Dept. of Content',c:'Full SEO article generation pipeline for SpeedyWay Auto Transport. Python port of the n8n workflow — story-driven car-shipping content, scheduled by launchd, auto-published.',s:'Python, OpenRouter, launchd, Markdown',t:'Shipping client content'},
-diwan:{n:'Diwan',d:'Dept. of Deliberation',c:'Arabic: ديوان — a council. Deliberation operating system for multi-agent sessions. Role topology + freshness-gated evidence + typed disagreement + deterministic moderation + replayable sealed archives. Not chat; a decision-or-open-risk machine.',s:'Python, typed artifacts, pydantic specs',t:'Spec aligned, pilot sessions running'},
-pmaxlocalops:{n:'PMAX Local Ops',d:'Dept. of Local SEO',c:'Built with Tarek. A self-hosted SEMrush replacement for local SEO. 9 skills over one typed core — localops-audit (citations, tiered A/B/C/D evidence), localops-rank (DataForSEO grid), localops-schema (LocalBusiness JSON-LD), localops-drift (scraper+rank drift), localops-actions (action queue → client-facing report). LocalBiz feeds Tier-A.',s:'Python, DataForSEO, LocalBiz, Hermes skills',t:'Skill split shipped, clients using'},
-hermesfleet:{n:'Hermes Fleet',d:'Dept. of Ops',c:'Six-profile AI fleet on Hermes v0.10 — pmax-mousa (WhatsApp+Email+GWS), pmax-tarek (Telegram+Email), pmax-dareen (WA live), pmax-coder (CLI, MiniMax M2.7), pmax-content, pmax-ops-observer. Unified mem0 memory across every tool. Mac Studio + MacBook with oMLX local fallback (Qwen3.6-35B). Custom CLI: coder, coder-q, coder-c, coder-ls.',s:'Hermes v0.10, OpenRouter, oMLX, mem0, launchd',t:'6 profiles live'},
-tarek:{n:'Tarek',d:'Dept. of Partnership',c:'Co-builder on the PMAX local-ops system. Helps turn audits, rank grids, citation evidence, and action queues into client-facing operating work.',s:'PMAX ops, local SEO, client reporting',t:'Active collaborator'},
-orin:{n:'Orin Stack',d:'Dept. of Local AI',c:'Personal local inference layer: Jetson AGX Orin, always-on coder/think/vision model servers, Hermes profiles, pmem memory, and private workflows for research and building.',s:'Jetson Orin, llama.cpp, Hermes, pmem',t:'Operational'}
+{n:'artok',a:'عرتوك',d:'Arabic token cost calculator'},
+{n:'samt',a:'صمت',d:'Arabic audio/TTS quality checker'},
+{n:'mukhtasar',a:'مختصر',d:'Arabic summarizer'},
+{n:'bidi-guard',a:'',d:'BiDi security scanner'},
+{n:'qalam',a:'قلم',d:'Arabic code docs'},
+{n:'majal',a:'مجال',d:'Arabic dataset inspector'},
+{n:'arabench',a:'عربنش',d:'Arabic LLM benchmark'},
+{n:'sarih',a:'صريح',d:'Arabic content moderator'},
+{n:'safha',a:'صفحة',d:'Arabic web scraper'},
+{n:'raqeeb',a:'رقيب',d:'RTL testing CLI'},
+{n:'naql',a:'نقل',d:'Arabic model converter'},
+{n:'khalas',a:'خلص',d:'Arabic prompt optimizer'},
+{n:'jadwal',a:'جدول',d:'Synthetic Arabic data'}
+],src:'GitHub metadata + local READMEs'},
+lisan:{n:'Lisan',d:'Dept. of Voice',c:'Arabic-first local dictation for macOS. It extends a local dictation pipeline with Arabic language modes, vocabulary packs, Arabic cleanup, and punctuation.',s:'Swift, whisper-cli, Metal, Arabic cleanup services',t:'Public repo',l:'https://github.com/Moshe-ship/Lisan',src:'README + GitHub metadata'},
+mtg:{n:'MTG',d:'Dept. of Guards',c:'Morphological Type Guards for multilingual tool arguments: Arabic/Persian script detection, BiDi safety, confusable checks, injection heuristics, and trace grading.',s:'Python, typed validators, multilingual guards',t:'Public repo',l:'https://github.com/Moshe-ship/mtg',src:'GitHub metadata'},
+gurucode:{n:'Guru-Code',d:'Dept. of Routing',c:'Local model-routing work for choosing model paths, fallback behavior, spend controls, and receipts without publishing private routing internals.',s:'Python, SQLite receipts, routing policy',t:'Local infrastructure',l:'',src:'local project context'},
+localbiz:{n:'LocalBiz',d:'Dept. of Directory',c:'Business directory platform for local businesses, used as an evidence source for local SEO and citation workflows.',s:'Next.js 15, Supabase, Google Places, Stripe',t:'Private repo',l:'https://localbiz.app',src:'GitHub metadata + PMAX memory'},
+nashirwiki:{n:'Nashir Wiki',d:'Dept. of Memory',c:'Knowledge-base layer for writing workflows: collect, organize, compile, and draft with project context instead of loose model memory.',s:'Markdown, scan/compile workflow, content memory',t:'Local content system',l:'',src:'portfolio note'},
+speedyway:{n:'SpeedyWay SEO',d:'Dept. of Content',c:'Client SEO content pipeline work for SpeedyWay Auto Transport. Public copy stays high level to avoid exposing client-private internals.',s:'SEO research, drafts, scheduling, publishing workflow',t:'Client pipeline',l:'',src:'PMAX memory'},
+diwan:{n:'Diwan',d:'Dept. of Deliberation',c:'Multi-agent deliberation concept for evidence, disagreement, moderation, and replayable decisions.',s:'Python, typed artifacts, evidence logs',t:'Local/spec work',l:'',src:'local project context'},
+pmaxlocalops:{n:'PMAX Local Ops',d:'Dept. of Local SEO',c:'Local SEO operating system direction: audits, rank grids, schema, drift checks, action queues, and client-ready reporting.',s:'Python, local SEO evidence, reports',t:'Active agency ops',l:'',src:'PMAX memory'},
+hermesfleet:{n:'Hermes Fleet',d:'Dept. of Ops',c:'PMAX agent fleet at public-safe level: channel agents, memory, routing, coding support, and local fallback without exposing private endpoints.',s:'Hermes profiles, memory, channels, routing',t:'Operational',l:'',src:'memory runbook'},
+tarek:{n:'Tarek',d:'Dept. of Partnership',c:'Co-builder role for PMAX operating work: turning audits, evidence, and action queues into client-facing progress.',s:'PMAX ops, local SEO, client reporting',t:'Active collaborator',l:'',src:'PMAX memory'},
+orin:{n:'Orin Stack',d:'Dept. of Local AI',c:'Personal local inference layer: Orin model servers, Hermes personal profiles, pmem memory, and private workflows for research and building.',s:'Jetson Orin, llama.cpp, Hermes, pmem',t:'Operational',l:'',src:'personal runbook'}
 };
 
 var COPY={
-pmax:{a:'بيرفورمنس ماكس',kind:'Agency OS',en:'Growth agency operations: Google Ads, SEO, local search, reporting, and automation.',ar:'منظومة وكالة نمو: إعلانات جوجل، سيو، بحث محلي، تقارير، وأتمتة عملية.'},
-mkhlab:{a:'مخلب',kind:'Arabic OpenClaw',en:'Arabic OpenClaw plugin and channels for practical Arabic AI utilities.',ar:'إضافة عربية لأوبن كلو مع قنوات تجمع أدوات ذكاء اصطناعي عربية قابلة للاستخدام.'},
-tarminal:{a:'ترمينال',kind:'Arabic Terminal',en:'macOS terminal work focused on real Arabic RTL rendering and developer comfort.',ar:'طرفية ماك تركز على عرض العربية باتجاه صحيح وحروف متصلة وتجربة مريحة للمطور.'},
-nashir:{a:'ناشر',kind:'Content Engine',en:'AI content system for news scanning, Saudi-dialect drafting, and social graphics.',ar:'نظام محتوى يمسح الأخبار، يكتب باللهجة السعودية، وينتج منشورات بصرية.'},
-aamil:{a:'عامل',kind:'Islamic Assistant',en:'Arabic-English Islamic assistant for iOS and macOS with local models, tools, voice, and camera understanding.',ar:'مساعد إسلامي عربي-إنجليزي على iOS وماك، بنماذج محلية وأدوات وصوت وفهم بالكاميرا.'},
-yalla:{a:'يلا آدز',kind:'Arabic Marketing',en:'Arabic-first marketing brand for Middle East ads, social media, and lead generation.',ar:'علامة تسويق عربية للشرق الأوسط: إعلانات، سوشال، وجلب عملاء محتملين.'},
+pmax:{a:'بيرفورمنس ماكس',kind:'Agency OS',en:'Agency systems for growth, local search, reporting, and automation.',ar:'نظام وكالة للنمو والبحث المحلي والتقارير والأتمتة، بلا كشف تفاصيل العملاء.'},
+mkhlab:{a:'مخلب',kind:'Arabic OpenClaw',en:'Arabic assistant layer for OpenClaw with skills, dialects, and practical tools.',ar:'طبقة عربية لأوبن كلو: مهارات، لهجات، وأدوات يومية مبنية للعربي.'},
+tarminal:{a:'ترمنال',kind:'Arabic Terminal',en:'A Mac terminal where Arabic is shaped correctly and developer features still matter.',ar:'طرفية ماك تعرض العربية بشكل صحيح من غير ما تتنازل عن أدوات المطور.'},
+nashir:{a:'ناشر',kind:'Content Engine',en:'Content workspace for collecting context and turning it into better Arabic-first drafts.',ar:'مساحة محتوى تجمع السياق وتحوّله إلى مسودات عربية أنضج.'},
+aamil:{a:'عامل',kind:'Islamic Assistant',en:'Islamic assistant work with local models, camera understanding, tools, and Saudi guides.',ar:'مساعد إسلامي بنماذج محلية وفهم بالكاميرا وأدوات وأدلة سعودية.'},
+yalla:{a:'يلا آدز',kind:'Arabic Marketing',en:'Arabic RTL marketing brand for Middle East campaigns and lead generation.',ar:'علامة تسويق عربية بواجهة RTL لحملات الشرق الأوسط وجلب العملاء.'},
 faris:{a:'فارس',kind:'Sales SaaS',en:'Arabic-first sales outreach platform for Saudi teams and multi-tenant workflows.',ar:'منصة تواصل مبيعات عربية للفرق السعودية وسير عمل متعدد العملاء.'},
 maraah:{a:'مرعى',kind:'Farm App',en:'Livestock management app for herd records, health, breeding, and farm operations.',ar:'تطبيق لإدارة المواشي: سجلات القطيع، الصحة، التزاوج، وتشغيل المزرعة.'},
 tiltbrew:{a:'تلت برو',kind:'macOS Game',en:'A tiny Mac game: tilt the laptop, spill the coffee, donate the proceeds.',ar:'لعبة ماك صغيرة: حرّك الجهاز، اسكب القهوة، واذهب الريع للتبرع.'},
-athan:{a:'أذان',kind:'Faith App',en:'Prayer and Quran work: app, compass, notifications, adhan playback, and recitation media.',ar:'عمل الأذان والقرآن: تطبيق، قبلة، تنبيهات، تشغيل الأذان، ومواد تلاوة.'},
+athan:{a:'أذان',kind:'Faith App',en:'Prayer app work with Qibla, notifications, calculation methods, and adhan audio.',ar:'تطبيق صلاة فيه قبلة وتنبيهات وطرق حساب وأصوات أذان.'},
 majana:{a:'مجانة',kind:'AI Media',en:'Arabic AI marketing blog and company base for experiments, writing, and services.',ar:'مدونة وتسويق عربي بالذكاء الاصطناعي، وقاعدة للشركة والتجارب والخدمات.'},
 woodpecker:{a:'وودبيكر',kind:'Craft',en:'Custom carpentry and shop work; the physical craft side of the portfolio.',ar:'نجارة وتفصيل وعمل ورشة حقيقي؛ الجانب الحرفي من المنظومة.'},
 alyce:{a:'أليس',kind:'Learning App',en:'English learning platform for Arabic speakers across web, mobile, progress, and payments.',ar:'منصة تعلم إنجليزي للعرب على الويب والجوال مع تقدم ودفع ودروس.'},
-amaan:{a:'أمان',kind:'Messaging',en:'Secure messaging app with Arabic onboarding, i18n, and real-time chat.',ar:'تطبيق مراسلة آمن بواجهة عربية، تهيئة أولية، ومحادثة فورية.'},
+khwarizmi:{a:'الخوارزمي',kind:'Agent Primitives',en:'Reasoning primitives for restoring context, normalizing contradictions, and routing cases.',ar:'لبنات للوكلاء: ترميم السياق، كشف التعارض، وتصنيف المسألة قبل التنفيذ.'},
 nlp:{a:'حزمة اللغة العربية',kind:'13 Tools',en:'Arabic NLP tool suite on PyPI: tokens, moderation, RTL testing, scraping, and datasets.',ar:'حزمة أدوات عربية على PyPI: توكنات، إشراف، فحص RTL، كشط، وبيانات.'},
 toolproof:{a:'تول بروف',kind:'Verification',en:'Signed receipts for agent tool calls, so tool use is proven instead of claimed.',ar:'إيصالات موقعة لاستدعاءات أدوات الوكلاء حتى يكون التنفيذ مثبتاً لا مجرد ادعاء.'},
 aae:{a:'تقييم الوكلاء العرب',kind:'Benchmark',en:'Arabic function-calling benchmark with dialects, real contexts, and tool-use failure cases.',ar:'اختبار عربي لاستدعاء الدوال باللهجات والسياقات الحقيقية ومواطن فشل الأدوات.'},
-agentbiz:{a:'عمل الوكلاء',kind:'AI Service',en:'Managed AI-agent service package for business workflows and Saudi-market operations.',ar:'خدمة وكلاء ذكاء اصطناعي مُدارة لسير عمل الشركات والسوق السعودي.'},
-hurmoz:{a:'هرمز',kind:'Skill Pack',en:'Large Arabic skill pack for Hermes agents: Islamic tools, NLP, media, education, and dev work.',ar:'حزمة مهارات عربية لهرمس: أدوات إسلامية، لغة، وسائط، تعليم، وتطوير.'},
+caseeval:{a:'اختبار القضايا',kind:'Eval Harness',en:'Eval work for checking whether prompt preprocessing improves tool decisions.',ar:'تجارب تقيس هل معالجة الطلب قبل النموذج تحسّن قرارات الأدوات أم لا.'},
+hurmoz:{a:'هرمز',kind:'Skill Pack',en:'Arabic skill pack for Hermes agents: Islamic tools, NLP, media, education, and dev work.',ar:'حزمة مهارات عربية لهرمس: أدوات إسلامية، لغة، وسائط، تعليم، وتطوير.'},
 wasl:{a:'وصل',kind:'MCP Server',en:'Arabic MCP server with 30 tools across prayer, Quran, Hadith, finance, weather, NLP, and news.',ar:'خادم MCP عربي فيه 30 أداة للصلاة والقرآن والحديث والمال والطقس واللغة والأخبار.'},
-lisan:{a:'لسان',kind:'Voice',en:'Arabic-first local dictation for macOS. Speech stays on the Mac.',ar:'إملاء عربي محلي على ماك؛ الصوت يبقى على الجهاز.'},
+lisan:{a:'لسان',kind:'Voice',en:'Arabic-first local dictation for macOS with cleanup, vocabulary, and language modes.',ar:'إملاء عربي محلي على ماك مع تنظيف نصي وقواميس وأنماط لغة.'},
 mtg:{a:'حراس الصرف',kind:'Typed Guards',en:'Type guards for multilingual tool arguments: Arabic script, BiDi safety, and injection checks.',ar:'حراس نوعية لمدخلات الأدوات متعددة اللغات: كتابة عربية، أمان الاتجاه، وفحص الحقن.'},
-gurucode:{a:'غورو كود',kind:'Router',en:'Model router with spend caps, fallback paths, offline routes, and SQLite call receipts.',ar:'موجّه نماذج بحد إنفاق، مسارات احتياطية، تشغيل محلي، وإيصالات SQLite.'},
+gurucode:{a:'غورو كود',kind:'Router',en:'Model router work for fallbacks, spend controls, offline paths, and receipts.',ar:'موجّه نماذج لمسارات احتياط وحدود إنفاق وتشغيل محلي وإيصالات.'},
 localbiz:{a:'لوكال بز',kind:'Directory',en:'Business directory and evidence source feeding local SEO audits and citation workflows.',ar:'دليل أعمال ومصدر أدلة يغذي تدقيق السيو المحلي والاستشهادات.'},
 nashirwiki:{a:'ويكي ناشر',kind:'Knowledge Base',en:'LLM-managed knowledge base for deeper drafts: scan, ingest, compile, write.',ar:'قاعدة معرفة تديرها النماذج لمسودات أعمق: مسح، إدخال، تجميع، وكتابة.'},
-speedyway:{a:'سبيدي واي سيو',kind:'Client Pipeline',en:'SEO content pipeline for SpeedyWay Auto Transport, scheduled and publish-ready.',ar:'خط محتوى سيو لسبيدي واي أوتو ترانسبورت، مجدول وجاهز للنشر.'},
+speedyway:{a:'سبيدي واي سيو',kind:'Client Pipeline',en:'Public-safe view of a client SEO content workflow for car-shipping content.',ar:'عرض عام وآمن لخط محتوى سيو خاص بشحن السيارات.'},
 diwan:{a:'ديوان',kind:'Deliberation OS',en:'Multi-agent deliberation system for evidence, disagreement, moderation, and replayable decisions.',ar:'نظام تشاور متعدد الوكلاء للأدلة والخلاف والتحكيم وقرارات قابلة للإعادة.'},
 pmaxlocalops:{a:'عمليات PMAX المحلية',kind:'Local SEO Engine',en:'Self-hosted local SEO engine: audits, rank grids, schema, drift, actions, and reports.',ar:'محرك سيو محلي ذاتي: تدقيق، خرائط ترتيب، سكيمة، مراقبة تغير، إجراءات، وتقارير.'},
-hermesfleet:{a:'أسطول هرمس',kind:'Agent Fleet',en:'Six-profile PMAX agent fleet with memory, channels, routing, and local fallback.',ar:'أسطول وكلاء PMAX بست ملفات تشغيل مع ذاكرة وقنوات وتوجيه واحتياط محلي.'},
+hermesfleet:{a:'أسطول هرمس',kind:'Agent Fleet',en:'Agent fleet view: channels, memory, routing, coding support, and local fallback.',ar:'صورة عامة لأسطول الوكلاء: قنوات، ذاكرة، توجيه، دعم برمجي، واحتياط محلي.'},
 tarek:{a:'طارق',kind:'Co-builder',en:'Co-builder sprite for the PMAX local-ops work: evidence, actions, and client-ready reporting.',ar:'شخصية الشريك في بناء عمليات PMAX المحلية: أدلة، إجراءات، وتقارير جاهزة للعملاء.'},
 orin:{a:'منظومة أورن',kind:'Local AI',en:'Personal local AI layer: Orin model servers, Hermes profiles, pmem memory, and private workflows.',ar:'طبقة ذكاء محلي شخصية: خوادم نماذج أورن، ملفات هرمس، ذاكرة pmem، وسير عمل خاص.'}
 };
@@ -768,8 +830,8 @@ orin:{a:'منظومة أورن',kind:'Local AI',en:'Personal local AI layer: Ori
 var CATS={
 pmax:['agency'],mkhlab:['arabic','ai'],tarminal:['arabic','apps'],nashir:['agency','ai'],aamil:['arabic','ai','apps'],
 yalla:['agency','arabic'],faris:['agency','apps','arabic'],maraah:['apps','arabic'],tiltbrew:['apps'],athan:['apps','arabic'],
-majana:['agency','arabic'],woodpecker:['craft'],alyce:['apps','arabic'],amaan:['apps','arabic'],nlp:['arabic','ai'],
-toolproof:['ai','arabic'],aae:['arabic','ai'],agentbiz:['agency','ai'],hurmoz:['arabic','ai'],wasl:['arabic','ai'],
+majana:['agency','arabic'],woodpecker:['craft'],alyce:['apps','arabic'],khwarizmi:['arabic','ai'],nlp:['arabic','ai'],
+toolproof:['ai','arabic'],aae:['arabic','ai'],caseeval:['ai'],hurmoz:['arabic','ai'],wasl:['arabic','ai'],
 lisan:['arabic','apps'],mtg:['arabic','ai'],gurucode:['ai'],localbiz:['agency'],nashirwiki:['agency','ai'],
 speedyway:['agency'],diwan:['ai','arabic'],pmaxlocalops:['agency','ai'],hermesfleet:['agency','ai'],tarek:['agency'],orin:['ai']
 };
@@ -938,12 +1000,27 @@ var pd=document.getElementById('pd'),pn=document.getElementById('pn'),pa=documen
 var pc=document.getElementById('pc'),pac=document.getElementById('pac'),ps=document.getElementById('ps');
 var pt=document.getElementById('pt'),ptl=document.getElementById('ptl');
 var pl=document.getElementById('pl'),pch=document.getElementById('pch'),pi=document.getElementById('pi'),pv=document.getElementById('pv');
+var ofc=document.getElementById('ofc'),mn=document.getElementById('mn'),ma=document.getElementById('ma');
+var me=document.getElementById('me'),mar=document.getElementById('mar'),msrc=document.getElementById('msrc');
 var activeFilter='all';
 
 function projectImpact(k){
     var cats=CATS[k]||[];
     var key=cats[0]||'ai';
     return IMPACT[key]||IMPACT.ai;
+}
+
+function updateMission(k){
+    var p=D[k],c=COPY[k]||{};
+    if(!p)return;
+    mn.textContent=p.n;
+    ma.textContent=c.a||p.n;
+    me.textContent=c.en||p.c;
+    mar.textContent=c.ar||'';
+    msrc.textContent='Source: '+(p.src||'local project context');
+    document.querySelectorAll('.mission-meter i').forEach(function(i,idx){
+        i.classList.toggle('on',idx < Math.min(5,(CATS[k]||[]).length+2));
+    });
 }
 
 function openP(k){
@@ -955,21 +1032,23 @@ function openP(k){
     pch.innerHTML=[c.kind,p.t].concat(CATS[k]||[]).filter(Boolean).map(function(x){return '<span class="pnl-chip">'+x+'</span>'}).join('');
     pi.innerHTML='<strong>Why it matters / لماذا يهم</strong><p>'+impact.en+'</p><p class="ar">'+impact.ar+'</p>';
     ps.innerHTML='Stack: <span>'+p.s+'</span>';
-    pt.innerHTML='Status: <span>'+p.t+'</span>';
+    pt.innerHTML='Status: <span>'+p.t+'</span><br>Source: <span>'+(p.src||'local project context')+'</span>';
     if(p.tools){
         ptl.style.display='block';
         ptl.innerHTML='<br>'+p.tools.map(function(t){
-            return '<b>'+t.n+(t.a?' '+t.a:'')+'</b> — '+t.d+' ('+t.x+'&#9733;)';
+            return '<b>'+t.n+(t.a?' '+t.a:'')+'</b> — '+t.d;
         }).join('<br>');
     }else ptl.style.display='none';
     if(p.l){pl.href=p.l;pl.classList.remove('hide')}
     else pl.classList.add('hide');
     document.querySelectorAll('.p.active').forEach(function(el){el.classList.remove('active')});
     document.querySelectorAll('.p[data-p="'+k+'"]').forEach(function(el){el.classList.add('active')});
+    updateMission(k);
+    ofc.classList.add('panel-open');
     pnl.classList.add('open');ov.classList.add('open');
     if(location.hash.slice(1)!==k)history.replaceState(null,'','#'+k);
 }
-function closeP(){pnl.classList.remove('open');ov.classList.remove('open');document.querySelectorAll('.p.active').forEach(function(el){el.classList.remove('active')});if(location.hash)history.replaceState(null,'',location.pathname)}
+function closeP(){pnl.classList.remove('open');ov.classList.remove('open');ofc.classList.remove('panel-open');document.querySelectorAll('.p.active').forEach(function(el){el.classList.remove('active')});if(location.hash)history.replaceState(null,'',location.pathname)}
 
 document.querySelectorAll('.p').forEach(function(el){
     var c=COPY[el.dataset.p]||{};
@@ -982,9 +1061,9 @@ document.querySelectorAll('.p').forEach(function(el){
     el.addEventListener('keydown',function(e){
         if(e.key==='Enter'||e.key===' '){e.preventDefault();openP(el.dataset.p)}
     });
-    el.addEventListener('mouseenter',function(e){showPreview(el,e)});
+    el.addEventListener('mouseenter',function(e){el.classList.add('focused');updateMission(el.dataset.p);showPreview(el,e)});
     el.addEventListener('mousemove',function(e){movePreview(e)});
-    el.addEventListener('mouseleave',hidePreview);
+    el.addEventListener('mouseleave',function(){el.classList.remove('focused');hidePreview()});
 });
 
 function showPreview(el,e){
@@ -1001,11 +1080,14 @@ function hidePreview(){pv.classList.remove('show')}
 
 function setFilter(cat){
     activeFilter=cat;
+    ofc.classList.toggle('filtering',cat!=='all');
     document.querySelectorAll('.dock button').forEach(function(btn){btn.classList.toggle('active',btn.dataset.filter===cat)});
     document.querySelectorAll('.p').forEach(function(el){
         var cats=CATS[el.dataset.p]||[];
-        el.classList.toggle('dimmed',cat!=='all'&&!cats.includes(cat));
+        el.classList.toggle('dim',cat!=='all'&&!cats.includes(cat));
     });
+    if(cat==='all')msrc.textContent='Source: portfolio note + GitHub metadata';
+    else msrc.textContent='Filter: '+cat+' / projects dim unless tagged';
 }
 document.querySelectorAll('.dock button').forEach(function(btn){
     btn.addEventListener('click',function(){setFilter(btn.dataset.filter)});
@@ -1037,7 +1119,7 @@ checkLayout();
 window.addEventListener('resize',checkLayout);
 window.addEventListener('orientationchange',function(){setTimeout(checkLayout,100)});
 window.addEventListener('hashchange',function(){var k=location.hash.slice(1);if(k)openP(k)});
-if(location.hash.slice(1)){setTimeout(function(){openP(location.hash.slice(1))},450)}
+if(location.hash.slice(1))openP(location.hash.slice(1));
 </script>
 
 </body>
