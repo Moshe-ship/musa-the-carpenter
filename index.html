@@ -306,6 +306,13 @@
             box-shadow:2px -3px 0 #40916c,-2px -2px 0 #74c69d;
         }
 
+        .step{
+            position:absolute;width:5px;height:3px;border-radius:1px;
+            background:rgba(27,94,59,.18);z-index:4;pointer-events:none;
+            transform:translate(-50%,-50%) rotate(45deg);
+            animation:stepFade 1.6s ease-out forwards;
+        }
+
         /* ── Character (person wrapper) ── */
         .p{
             position:absolute;
@@ -521,6 +528,10 @@
         @keyframes focusBob{
             0%,100%{transform:translateY(0)}
             50%{transform:translateY(-5px)}
+        }
+        @keyframes stepFade{
+            0%{opacity:.8;transform:translate(-50%,-50%) rotate(45deg) scale(1)}
+            100%{opacity:0;transform:translate(-50%,-80%) rotate(45deg) scale(.65)}
         }
 
         /* ── Responsive ── */
@@ -948,9 +959,16 @@ var HOME=[
 ];
 
 function homePath(x,y,i){
-    var dx=((i%3)-1)*.65;
-    var dy=(i%2?.42:-.42);
-    return [[x,y,7000+(i%5)*550],[x+dx,y+dy,1300],[x,y,8200+(i%4)*500],[x-dx*.65,y+dy*.5,1200]];
+    var sx=((i%3)-1)*1.8;
+    if(Math.abs(sx)<.2)sx=i%2?1.8:-1.8;
+    var sy=i%2?1.25:-1.25;
+    return [
+        [x,y,1200+(i%4)*180],
+        [x+sx,y+sy,520],
+        [x+sx*.35,y-sy,900+(i%3)*160],
+        [x-sx*.8,y+sy*.35,520],
+        [x,y,1000+(i%5)*150]
+    ];
 }
 
 /* ── Easing ── */
@@ -965,6 +983,7 @@ function Walker(el,wp,spd){
     this.ox=0;this.oy=0;
     this.fx=this.x;this.fy=this.y;
     this.wt=wp[0][2]||2000;
+    this.lastStep=0;
 }
 Walker.prototype.tick=function(dt){
     if(this.wt>0){
@@ -1026,6 +1045,18 @@ function resolveCrowd(){
     visible.forEach(function(w){w.draw()});
 }
 
+function leaveStep(w,now){
+    if(!w.el.classList.contains('w')||w.el.classList.contains('dim')||now-w.lastStep<340)return;
+    w.lastStep=now;
+    var s=document.createElement('i');
+    s.className='step';
+    s.style.left=(w.x+(w.ox||0))+'%';
+    s.style.top=(w.y+(w.oy||0)+1.9)+'%';
+    s.style.zIndex=Math.max(4,Math.floor(w.y)-1);
+    ofc.appendChild(s);
+    setTimeout(function(){s.remove()},1700);
+}
+
 /* ── Init Walkers ── */
 var walkers=[];
 var people=document.querySelectorAll('.p');
@@ -1033,7 +1064,7 @@ for(var i=0;i<people.length;i++){
     var el=document.getElementById('c'+i);
     if(!el || (!W[i]&&!HOME[i]))continue;
     var wp=HOME[i]?homePath(HOME[i][0],HOME[i][1],i):W[i];
-    var wk=new Walker(el,wp,SP[i]*.85);
+    var wk=new Walker(el,wp,Math.max(2.3,SP[i]*1.45));
     wk.draw();
     walkers.push(wk);
     // Staggered fade-in
@@ -1049,6 +1080,7 @@ function loop(now){
     last=now;
     for(var j=0;j<walkers.length;j++)walkers[j].tick(dt);
     resolveCrowd();
+    for(var k=0;k<walkers.length;k++)leaveStep(walkers[k],now);
     requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
