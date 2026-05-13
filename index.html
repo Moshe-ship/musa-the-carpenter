@@ -47,6 +47,20 @@
                 0 32px 64px rgba(0,0,0,.04);
             overflow:hidden;
         }
+        .office::before{
+            content:'';position:absolute;inset:0;z-index:2;pointer-events:none;
+            background:
+                linear-gradient(115deg,transparent 0 18%,rgba(255,255,255,.18) 30%,transparent 42%),
+                repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 1px,transparent 1px 6px);
+            transform:translateX(-62%);
+            animation:scan 12s ease-in-out infinite;
+            mix-blend-mode:screen;
+        }
+        .office::after{
+            content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
+            box-shadow:inset 0 0 90px rgba(27,94,59,.07), inset 0 -50px 80px rgba(0,0,0,.03);
+        }
+        .office>*{z-index:3}
 
         /* ── Header ── */
         .hdr{position:absolute;top:2.5%;left:2.8%;z-index:50}
@@ -70,6 +84,21 @@
             backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
             border-radius:999px;padding:4px 7px;box-shadow:0 1px 5px rgba(0,0,0,.035);
         }
+
+        .dock{
+            position:absolute;left:50%;bottom:2.1%;transform:translateX(-50%);z-index:70;
+            display:flex;gap:5px;align-items:center;justify-content:center;flex-wrap:wrap;
+            padding:5px;background:rgba(255,255,255,.62);border:1px solid rgba(255,255,255,.75);
+            border-radius:12px;box-shadow:0 6px 22px rgba(0,0,0,.055);
+            backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+        }
+        .dock button{
+            border:0;background:transparent;color:#5b675f;cursor:pointer;
+            font-family:'IBM Plex Mono',monospace;font-size:clamp(.32rem,.48vw,.42rem);
+            letter-spacing:.06em;text-transform:uppercase;padding:5px 7px;border-radius:8px;
+        }
+        .dock button.active{background:var(--g);color:#fff;box-shadow:0 2px 8px rgba(27,94,59,.22)}
+        .dock button b{font-family:var(--arabic);font-weight:500;letter-spacing:0;margin-left:4px}
 
         /* ── Footer ── */
         .ftr{position:absolute;bottom:2%;left:2.8%;font-size:clamp(.32rem,.5vw,.42rem);color:var(--m);letter-spacing:.06em;z-index:50}
@@ -108,6 +137,9 @@
             position:absolute;top:5px;left:8px;
             font-size:clamp(.28rem,.42vw,.36rem);font-weight:500;letter-spacing:.1em;
             text-transform:uppercase;color:rgba(27,94,59,.35);
+        }
+        .zone span b,.rm>span b,.cf-zone>span b,.game-zone>span b,.bil-zone>span b{
+            display:block;font-family:var(--arabic);direction:rtl;letter-spacing:0;text-transform:none;font-weight:500;color:rgba(27,94,59,.42);
         }
 
         /* ── Meeting Rooms ── */
@@ -252,6 +284,7 @@
         .p:focus-visible{outline:2px solid var(--g);outline-offset:4px;border-radius:8px}
         .p.active .mc{filter:drop-shadow(0 8px 10px rgba(27,94,59,.22))}
         .p.active .tg{color:var(--g);background:rgba(27,94,59,.1)}
+        .p.dimmed{opacity:.18!important;filter:grayscale(.35)}
 
         /* ── Minecraft Sprite ── */
         .mc{
@@ -308,6 +341,10 @@
             text-align:center;transition:all .25s;
         }
         .p:hover .tg{color:var(--g);background:rgba(27,94,59,.08)}
+        .tg[data-ar]::after{
+            content:attr(data-ar);display:block;font-family:var(--arabic);direction:rtl;
+            letter-spacing:0;text-transform:none;font-size:.42rem;line-height:1.1;color:#526057;
+        }
 
         /* Badge */
         .bg{
@@ -360,6 +397,14 @@
         .pnl-meta span{color:var(--t)}
         .pnl-chips{display:flex;flex-wrap:wrap;gap:5px;margin:.2rem 0 .7rem}
         .pnl-chip{font-family:'IBM Plex Mono',monospace;font-size:.42rem;letter-spacing:.07em;text-transform:uppercase;color:#31513d;background:rgba(27,94,59,.075);border:1px solid rgba(27,94,59,.13);border-radius:999px;padding:.23rem .45rem}
+        .pnl-impact{
+            margin:.15rem 0 .85rem;padding:.7rem .75rem;border-radius:10px;
+            background:rgba(255,255,255,.48);border:1px solid rgba(255,255,255,.62);
+            box-shadow:0 1px 8px rgba(0,0,0,.035);
+        }
+        .pnl-impact strong{display:block;font-family:'IBM Plex Mono',monospace;font-size:.42rem;letter-spacing:.11em;text-transform:uppercase;color:#708076;margin-bottom:.3rem}
+        .pnl-impact p{font-size:.6rem;line-height:1.55;color:#334038}
+        .pnl-impact .ar{font-family:var(--arabic);direction:rtl;text-align:right;font-size:.74rem;line-height:1.7;color:#203d2d;margin-top:.35rem}
         .pnl-tools{
             font-family:'IBM Plex Mono',monospace;
             font-size:.48rem;font-weight:300;line-height:1.8;color:var(--m);margin-top:.5rem;
@@ -384,6 +429,18 @@
         }
         .hint b{display:block;font-family:var(--arabic);direction:rtl;letter-spacing:0;font-weight:500;color:#59685e;margin-top:2px}
 
+        .preview{
+            position:fixed;z-index:120;pointer-events:none;opacity:0;transform:translateY(6px) scale(.98);
+            min-width:170px;max-width:230px;padding:10px 11px;border-radius:12px;
+            background:rgba(248,248,245,.9);border:1px solid rgba(255,255,255,.72);
+            box-shadow:0 12px 36px rgba(0,0,0,.12);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+            transition:opacity .16s,transform .16s;
+        }
+        .preview.show{opacity:1;transform:translateY(0) scale(1)}
+        .preview small{display:block;font-family:'IBM Plex Mono',monospace;font-size:.45rem;letter-spacing:.1em;text-transform:uppercase;color:var(--g);margin-bottom:3px}
+        .preview strong{display:block;font-size:.76rem;color:#111;margin-bottom:2px}
+        .preview .ar{font-family:var(--arabic);direction:rtl;text-align:right;color:#274331;font-size:.82rem;line-height:1.45}
+
         /* ── Keyframes ── */
         @keyframes lL{0%,100%{transform:rotateZ(0)}50%{transform:rotateZ(22deg)}}
         @keyframes lR{0%,100%{transform:rotateZ(0)}50%{transform:rotateZ(-22deg)}}
@@ -394,6 +451,11 @@
             60%{transform:translateY(0) scaleY(.96)}
             80%{transform:translateY(-3px)}
             100%{transform:translateY(0)}
+        }
+        @keyframes scan{
+            0%,38%{transform:translateX(-72%);opacity:0}
+            50%{opacity:1}
+            62%,100%{transform:translateX(72%);opacity:0}
         }
 
         /* ── Responsive ── */
@@ -409,6 +471,7 @@
             .hdr h1{font-size:.6rem}
             .hdr p{font-size:.3rem}
             .hud{top:auto;right:3%;bottom:5%;max-width:58%}
+            .dock{bottom:2.4%;max-width:82%;gap:3px}
             .ftr{font-size:.3rem}
             .mc-h{width:15px;height:3px}
             .mc-d{width:15px;height:13px}
@@ -429,7 +492,10 @@
             .hdr h1{font-size:.55rem;letter-spacing:.2em}
             .hdr p{font-size:.28rem}
             .hud{bottom:4%;right:3%;max-width:70%;gap:4px}
-            .hud span{padding:3px 5px}
+            .hud{display:none}
+            .dock{left:50%;bottom:3.5%;max-width:76%;padding:4px}
+            .dock button{font-size:.3rem;padding:4px 5px}
+            .dock button b{display:none}
             .ftr{bottom:1%;font-size:.28rem}
             .hint{display:none}
             .mc-h{width:12px;height:3px}
@@ -489,6 +555,15 @@
         <span>Live systems map</span>
     </div>
 
+    <nav class="dock" aria-label="Project focus controls">
+        <button class="active" data-filter="all">All <b>الكل</b></button>
+        <button data-filter="arabic">Arabic <b>عربي</b></button>
+        <button data-filter="ai">AI <b>ذكاء</b></button>
+        <button data-filter="agency">Agency <b>وكالة</b></button>
+        <button data-filter="apps">Apps <b>تطبيقات</b></button>
+        <button data-filter="craft">Craft <b>حرفة</b></button>
+    </nav>
+
     <!-- Footer -->
     <div class="ftr"><a href="https://x.com/Mosescreates">@Mosescreates</a> &middot; <a href="https://github.com/Moshe-ship">GitHub</a> &middot; <a href="https://majana.blog">Majana.Blog</a></div>
 
@@ -497,9 +572,9 @@
 
     <!-- ── Floor Zones (no overlaps) ── -->
     <!-- Left: 3-24%  |  Center: 28-52%  |  Right: 56-97%  |  Bottom: 28-97%, 72-96% -->
-    <div class="zone" style="left:3%;top:14%;width:22%;height:26%"><span>Team Alpha</span></div>
-    <div class="zone" style="left:3%;top:44%;width:22%;height:26%"><span>Team Beta</span></div>
-    <div class="zone" style="left:28%;top:28%;width:22%;height:38%"><span>Open Desks</span></div>
+    <div class="zone" style="left:3%;top:14%;width:22%;height:26%"><span>Team Alpha<b>فريق المنتجات</b></span></div>
+    <div class="zone" style="left:3%;top:44%;width:22%;height:26%"><span>Team Beta<b>فريق التطبيقات</b></span></div>
+    <div class="zone" style="left:28%;top:28%;width:22%;height:38%"><span>Open Desks<b>مكتب الأنظمة</b></span></div>
 
     <!-- ── Desks ── -->
     <!-- Cluster A (inside Team Alpha: 3-25%, 14-40%) -->
@@ -523,26 +598,26 @@
 
     <!-- ── Meeting Rooms (right side, 56-97%) ── -->
     <div class="rm" style="left:56%;top:6%;width:40%;height:28%">
-        <span>Conference A</span><div class="ct"></div>
+        <span>Conference A<b>غرفة القرار</b></span><div class="ct"></div>
     </div>
     <div class="rm" style="left:56%;top:38%;width:40%;height:22%">
-        <span>Conference B</span><div class="ct"></div>
+        <span>Conference B<b>غرفة التشغيل</b></span><div class="ct"></div>
     </div>
 
     <!-- ── Break Room (center-top, above open desks) ── -->
     <div class="cf-zone" style="left:28%;top:8%;width:16%;height:16%">
-        <span>Break Room</span>
+        <span>Break Room<b>استراحة القهوة</b></span>
     </div>
     <div class="cf" style="left:33%;top:13%"></div>
 
     <!-- ── Recreation Wing (bottom, full width, side by side) ── -->
     <div class="game-zone" style="left:28%;top:74%;width:22%;height:22%">
-        <span>Gaming Lounge</span>
+        <span>Gaming Lounge<b>ركن اللعب</b></span>
         <div class="tv"></div>
         <div class="couch"></div>
     </div>
     <div class="bil-zone" style="left:54%;top:74%;width:22%;height:22%">
-        <span>Billiard Room</span>
+        <span>Billiard Room<b>غرفة البلياردو</b></span>
         <div class="pool"></div>
     </div>
 
@@ -597,11 +672,13 @@
     <div class="pnl-chips" id="pch"></div>
     <p class="pnl-desc" id="pc"></p>
     <p class="pnl-desc ar" id="pac"></p>
+    <div class="pnl-impact" id="pi"></div>
     <p class="pnl-meta" id="ps"></p>
     <p class="pnl-meta" id="pt"></p>
     <div class="pnl-tools" id="ptl"></div>
     <a class="pnl-link" id="pl" href="#" target="_blank" rel="noopener">Visit</a>
 </aside>
+<div class="preview" id="pv"></div>
 
 <script>
 /* ── Project Data ── */
@@ -686,6 +763,23 @@ pmaxlocalops:{a:'عمليات PMAX المحلية',kind:'Local SEO Engine',en:'S
 hermesfleet:{a:'أسطول هرمس',kind:'Agent Fleet',en:'Six-profile PMAX agent fleet with memory, channels, routing, and local fallback.',ar:'أسطول وكلاء PMAX بست ملفات تشغيل مع ذاكرة وقنوات وتوجيه واحتياط محلي.'},
 tarek:{a:'طارق',kind:'Co-builder',en:'Co-builder sprite for the PMAX local-ops work: evidence, actions, and client-ready reporting.',ar:'شخصية الشريك في بناء عمليات PMAX المحلية: أدلة، إجراءات، وتقارير جاهزة للعملاء.'},
 orin:{a:'منظومة أورن',kind:'Local AI',en:'Personal local AI layer: Orin model servers, Hermes profiles, pmem memory, and private workflows.',ar:'طبقة ذكاء محلي شخصية: خوادم نماذج أورن، ملفات هرمس، ذاكرة pmem، وسير عمل خاص.'}
+};
+
+var CATS={
+pmax:['agency'],mkhlab:['arabic','ai'],tarminal:['arabic','apps'],nashir:['agency','ai'],aamil:['arabic','ai','apps'],
+yalla:['agency','arabic'],faris:['agency','apps','arabic'],maraah:['apps','arabic'],tiltbrew:['apps'],athan:['apps','arabic'],
+majana:['agency','arabic'],woodpecker:['craft'],alyce:['apps','arabic'],amaan:['apps','arabic'],nlp:['arabic','ai'],
+toolproof:['ai','arabic'],aae:['arabic','ai'],agentbiz:['agency','ai'],hurmoz:['arabic','ai'],wasl:['arabic','ai'],
+lisan:['arabic','apps'],mtg:['arabic','ai'],gurucode:['ai'],localbiz:['agency'],nashirwiki:['agency','ai'],
+speedyway:['agency'],diwan:['ai','arabic'],pmaxlocalops:['agency','ai'],hermesfleet:['agency','ai'],tarek:['agency'],orin:['ai']
+};
+
+var IMPACT={
+arabic:{en:'Arabic is not an afterthought here. The system has native Arabic names, RTL-safe UI, and language-specific tooling.',ar:'العربية ليست ترجمة لاحقة هنا؛ لها أسماء أصلية، واجهة آمنة للاتجاه، وأدوات مبنية للغة نفسها.'},
+ai:{en:'This connects models to real work: tools, memory, receipts, local inference, and repeatable operating loops.',ar:'هذا يربط النماذج بالعمل الحقيقي: أدوات، ذاكرة، إيصالات، تشغيل محلي، وحلقات عمل قابلة للإعادة.'},
+agency:{en:'This is operational work: client delivery, evidence, reporting, automations, and business systems.',ar:'هذا عمل تشغيلي: تسليم للعملاء، أدلة، تقارير، أتمتة، وأنظمة أعمال.'},
+apps:{en:'This is product work: usable interfaces, mobile or desktop surfaces, and workflows people can actually touch.',ar:'هذا عمل منتجات: واجهات قابلة للاستخدام، أسطح جوال أو سطح مكتب، وسير عمل يلمسه المستخدم فعلياً.'},
+craft:{en:'This keeps the portfolio grounded in physical work: measurements, material, pricing, and shop reality.',ar:'هذا يربط المنظومة بالعمل اليدوي: قياسات، مواد، تسعير، وواقع الورشة.'}
 };
 
 /* ── Waypoints: [x%, y%, stayMs] ── */
@@ -843,14 +937,23 @@ var pnl=document.getElementById('pnl'),ov=document.getElementById('ov');
 var pd=document.getElementById('pd'),pn=document.getElementById('pn'),pa=document.getElementById('pa');
 var pc=document.getElementById('pc'),pac=document.getElementById('pac'),ps=document.getElementById('ps');
 var pt=document.getElementById('pt'),ptl=document.getElementById('ptl');
-var pl=document.getElementById('pl'),pch=document.getElementById('pch');
+var pl=document.getElementById('pl'),pch=document.getElementById('pch'),pi=document.getElementById('pi'),pv=document.getElementById('pv');
+var activeFilter='all';
+
+function projectImpact(k){
+    var cats=CATS[k]||[];
+    var key=cats[0]||'ai';
+    return IMPACT[key]||IMPACT.ai;
+}
 
 function openP(k){
     var p=D[k];if(!p)return;
     var c=COPY[k]||{};
+    var impact=projectImpact(k);
     pd.textContent=p.d;pn.textContent=p.n;pa.textContent=c.a||'';
     pc.textContent=c.en||p.c;pac.textContent=c.ar||'';
-    pch.innerHTML=[c.kind,p.t].filter(Boolean).map(function(x){return '<span class="pnl-chip">'+x+'</span>'}).join('');
+    pch.innerHTML=[c.kind,p.t].concat(CATS[k]||[]).filter(Boolean).map(function(x){return '<span class="pnl-chip">'+x+'</span>'}).join('');
+    pi.innerHTML='<strong>Why it matters / لماذا يهم</strong><p>'+impact.en+'</p><p class="ar">'+impact.ar+'</p>';
     ps.innerHTML='Stack: <span>'+p.s+'</span>';
     pt.innerHTML='Status: <span>'+p.t+'</span>';
     if(p.tools){
@@ -869,6 +972,9 @@ function openP(k){
 function closeP(){pnl.classList.remove('open');ov.classList.remove('open');document.querySelectorAll('.p.active').forEach(function(el){el.classList.remove('active')});if(location.hash)history.replaceState(null,'',location.pathname)}
 
 document.querySelectorAll('.p').forEach(function(el){
+    var c=COPY[el.dataset.p]||{};
+    var tag=el.querySelector('.tg');
+    if(tag && c.a)tag.setAttribute('data-ar',c.a);
     el.setAttribute('role','button');
     el.setAttribute('tabindex','0');
     el.setAttribute('aria-label','Open '+(D[el.dataset.p]?D[el.dataset.p].n:'project'));
@@ -876,6 +982,33 @@ document.querySelectorAll('.p').forEach(function(el){
     el.addEventListener('keydown',function(e){
         if(e.key==='Enter'||e.key===' '){e.preventDefault();openP(el.dataset.p)}
     });
+    el.addEventListener('mouseenter',function(e){showPreview(el,e)});
+    el.addEventListener('mousemove',function(e){movePreview(e)});
+    el.addEventListener('mouseleave',hidePreview);
+});
+
+function showPreview(el,e){
+    var k=el.dataset.p,p=D[k],c=COPY[k]||{};if(!p)return;
+    pv.innerHTML='<small>'+(c.kind||p.d)+'</small><strong>'+p.n+'</strong><div class="ar">'+(c.a||'')+'</div>';
+    pv.classList.add('show');movePreview(e);
+}
+function movePreview(e){
+    var x=Math.min(window.innerWidth-250,e.clientX+16);
+    var y=Math.min(window.innerHeight-110,e.clientY+16);
+    pv.style.left=x+'px';pv.style.top=y+'px';
+}
+function hidePreview(){pv.classList.remove('show')}
+
+function setFilter(cat){
+    activeFilter=cat;
+    document.querySelectorAll('.dock button').forEach(function(btn){btn.classList.toggle('active',btn.dataset.filter===cat)});
+    document.querySelectorAll('.p').forEach(function(el){
+        var cats=CATS[el.dataset.p]||[];
+        el.classList.toggle('dimmed',cat!=='all'&&!cats.includes(cat));
+    });
+}
+document.querySelectorAll('.dock button').forEach(function(btn){
+    btn.addEventListener('click',function(){setFilter(btn.dataset.filter)});
 });
 document.getElementById('px').addEventListener('click',closeP);
 ov.addEventListener('click',closeP);
