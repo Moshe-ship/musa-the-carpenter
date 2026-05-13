@@ -1,362 +1,623 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#080808">
-  <title>Mousa Abumazin — Systems Builder</title>
-  <meta name="description" content="Mousa Abumazin builds local AI systems, Arabic agent tooling, Islamic apps, business automation, and physical craft workflows.">
-  <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{
-      --bg:#080808;--panel:#101010;--panel2:#151515;--text:#f4f4f4;--muted:#9a9a9a;
-      --dim:#626262;--line:#2b2b2b;--line2:#3a3a3a;--white:#fff;--soft:rgba(255,255,255,.06);
-      --font:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",sans-serif;
-      --mono:"SF Mono","IBM Plex Mono","Cascadia Code",monospace;
-      --arabic:"Geeza Pro","SF Arabic","Noto Naskh Arabic",Tahoma,sans-serif;
-    }
-    html{background:var(--bg);color:var(--text);font-family:var(--font);scroll-behavior:smooth}
-    body{
-      min-height:100vh;overflow-x:hidden;
-      background:
-        linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
-        linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px),
-        #080808;
-      background-size:48px 48px;
-    }
-    body::before{
-      content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
-      background:repeating-linear-gradient(0deg,transparent 0 9px,rgba(255,255,255,.015) 10px);
-      opacity:.6;
-    }
-    a{color:inherit;text-decoration:none}
-    button,input{font:inherit}
-    .shell{position:relative;z-index:1;min-height:100vh;padding:22px}
-    .topbar{
-      display:grid;grid-template-columns:1fr auto;gap:18px;align-items:start;
-      border:1px solid var(--line);background:rgba(10,10,10,.74);backdrop-filter:blur(22px);
-      padding:18px;border-radius:8px;position:sticky;top:14px;z-index:20;
-    }
-    .brand h1{font-size:clamp(1.4rem,3.8vw,4.1rem);font-weight:650;line-height:.95}
-    .brand p{color:var(--muted);font-size:clamp(.78rem,1.1vw,.98rem);line-height:1.6;margin-top:10px;max-width:850px}
-    .brand .ar{font-family:var(--arabic);direction:rtl;text-align:left;color:#d9d9d9;margin-top:4px}
-    .nav{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;max-width:560px}
-    .chip,.lang{
-      border:1px solid var(--line2);background:#0b0b0b;color:var(--text);border-radius:8px;
-      padding:8px 10px;font-family:var(--mono);font-size:.72rem;cursor:pointer;white-space:nowrap;
-    }
-    .chip.active,.lang.active{background:var(--text);color:var(--bg);border-color:var(--text)}
-    .hero{
-      display:grid;grid-template-columns:minmax(280px,1.05fr) minmax(360px,1.35fr);
-      gap:18px;margin-top:18px;min-height:calc(100vh - 142px);
-    }
-    .brief,.map,.panel,.list{border:1px solid var(--line);background:rgba(12,12,12,.78);border-radius:8px}
-    .brief{padding:20px;display:flex;flex-direction:column;justify-content:space-between;gap:20px}
-    .eyebrow{font-family:var(--mono);font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
-    .brief h2{font-size:clamp(1.3rem,2.5vw,2.7rem);line-height:1.08;font-weight:620;max-width:640px}
-    .brief h2 .arline{font-family:var(--arabic);font-weight:520;direction:rtl;display:block;margin-top:10px;color:#dcdcdc}
-    .brief-copy{display:grid;gap:12px;color:#c8c8c8;line-height:1.65;font-size:.94rem}
-    .brief-copy .ar{font-family:var(--arabic);direction:rtl;text-align:right;font-size:1.04rem}
-    .metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-    .metric{border:1px solid var(--line);background:var(--soft);border-radius:8px;padding:12px}
-    .metric b{display:block;font-size:1.45rem;line-height:1;font-weight:650}
-    .metric span{display:block;margin-top:8px;color:var(--muted);font-family:var(--mono);font-size:.65rem}
-    .links{display:flex;gap:8px;flex-wrap:wrap}
-    .links a{border:1px solid var(--line2);border-radius:8px;padding:9px 11px;font-family:var(--mono);font-size:.72rem;color:#ddd}
-    .links a:hover{background:#fff;color:#000}
-    .map{position:relative;min-height:640px;overflow:hidden;padding:16px}
-    .map-head{display:flex;justify-content:space-between;gap:12px;align-items:center;position:relative;z-index:2}
-    .map-title{font-family:var(--mono);font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
-    .search{
-      width:min(260px,42vw);border:1px solid var(--line2);background:#080808;color:#fff;
-      border-radius:8px;padding:8px 10px;font-family:var(--mono);font-size:.72rem;
-    }
-    .axis{position:absolute;inset:64px 18px 18px 18px;border:1px solid var(--line);border-radius:8px}
-    .axis::before,.axis::after{content:"";position:absolute;background:var(--line)}
-    .axis::before{left:50%;top:0;bottom:0;width:1px}
-    .axis::after{top:50%;left:0;right:0;height:1px}
-    .quadrant{
-      position:absolute;font-family:var(--mono);font-size:.6rem;color:#666;text-transform:uppercase;letter-spacing:.08em;
-    }
-    .q1{left:12px;top:10px}.q2{right:12px;top:10px}.q3{left:12px;bottom:10px}.q4{right:12px;bottom:10px}
-    .beam{position:absolute;inset:0;pointer-events:none}
-    .node{
-      position:absolute;z-index:3;transform:translate(-50%,-50%);
-      width:44px;height:44px;border-radius:8px;border:1px solid #777;background:#111;
-      display:grid;place-items:center;cursor:pointer;transition:transform .18s,border-color .18s,background .18s,opacity .18s;
-      box-shadow:0 8px 24px rgba(0,0,0,.35);
-    }
-    .node::before{content:attr(data-code);font-family:var(--mono);font-size:.65rem;color:#fff}
-    .node:hover,.node.active{transform:translate(-50%,-50%) scale(1.15);background:#fff;border-color:#fff}
-    .node:hover::before,.node.active::before{color:#000}
-    .node.dimmed{opacity:.18}
-    .node-label{
-      position:absolute;top:48px;left:50%;transform:translateX(-50%);
-      width:max-content;max-width:140px;text-align:center;color:#bbb;font-size:.65rem;line-height:1.25;
-    }
-    .node-label em{display:block;font-family:var(--arabic);font-style:normal;color:#8f8f8f;direction:rtl}
-    .side{
-      display:grid;grid-template-rows:auto minmax(0,1fr);gap:18px;
-    }
-    .panel{padding:18px;min-height:300px}
-    .panel-kicker{font-family:var(--mono);font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
-    .panel h3{font-size:clamp(1.35rem,2.2vw,2.1rem);margin-top:8px;font-weight:620}
-    .panel .ar-title{font-family:var(--arabic);direction:rtl;text-align:right;font-size:1.3rem;color:#ddd;margin-top:2px}
-    .panel .desc{margin-top:14px;color:#d4d4d4;line-height:1.7;font-size:.95rem}
-    .panel .desc.ar{font-family:var(--arabic);direction:rtl;text-align:right;font-size:1.05rem;color:#e3e3e3}
-    .facts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
-    .fact{border:1px solid var(--line);border-radius:8px;padding:10px;background:#0b0b0b}
-    .fact small{display:block;font-family:var(--mono);font-size:.6rem;color:#777;text-transform:uppercase}
-    .fact span{display:block;color:#eee;font-size:.78rem;margin-top:6px;line-height:1.4}
-    .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
-    .tag{font-family:var(--mono);font-size:.62rem;border:1px solid var(--line2);padding:5px 7px;border-radius:8px;color:#cfcfcf}
-    .action{display:inline-block;margin-top:16px;border:1px solid #fff;border-radius:8px;padding:9px 12px;font-family:var(--mono);font-size:.72rem}
-    .action:hover{background:#fff;color:#000}
-    .list{padding:14px;overflow:hidden}
-    .list-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
-    .list-head h2{font-size:.9rem;font-weight:600}
-    .count{font-family:var(--mono);font-size:.68rem;color:var(--muted)}
-    .items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-height:360px;overflow:auto;padding-right:4px}
-    .item{
-      border:1px solid var(--line);background:#0b0b0b;border-radius:8px;padding:11px;cursor:pointer;min-height:118px;
-      display:flex;flex-direction:column;gap:7px;transition:background .16s,border-color .16s;
-    }
-    .item:hover,.item.active{background:#f3f3f3;color:#050505;border-color:#f3f3f3}
-    .item strong{font-size:.82rem;line-height:1.2}
-    .item .ar{font-family:var(--arabic);direction:rtl;text-align:right;font-size:.9rem;color:inherit;opacity:.82}
-    .item p{color:inherit;opacity:.68;font-size:.72rem;line-height:1.45}
-    .sections{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}
-    .section{
-      border:1px solid var(--line);background:rgba(12,12,12,.78);border-radius:8px;padding:14px;min-height:150px;
-    }
-    .section h3{font-size:.88rem;margin-bottom:8px}
-    .section p{font-size:.78rem;color:#bdbdbd;line-height:1.55}
-    .section .ar{font-family:var(--arabic);direction:rtl;text-align:right;color:#d7d7d7;margin-top:8px;font-size:.9rem}
-    .ticker{margin-top:18px;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#0b0b0b}
-    .ticker-track{display:flex;gap:28px;white-space:nowrap;padding:11px 0;animation:marquee 38s linear infinite}
-    .ticker span{font-family:var(--mono);font-size:.7rem;color:#aaa}
-    @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-    @media(max-width:1100px){
-      .hero{grid-template-columns:1fr;min-height:auto}
-      .map{min-height:560px}
-      .sections{grid-template-columns:repeat(2,1fr)}
-    }
-    @media(max-width:720px){
-      .shell{padding:12px}.topbar{position:relative;top:0;grid-template-columns:1fr}.nav{justify-content:flex-start}
-      .hero{gap:12px;margin-top:12px}.brief,.map,.panel,.list{border-radius:8px}
-      .metrics{grid-template-columns:1fr 1fr}.map{min-height:620px;padding:12px}
-      .axis{inset:64px 10px 10px 10px}.node{width:38px;height:38px}.node-label{font-size:.58rem;max-width:95px}
-      .items{grid-template-columns:1fr;max-height:420px}.facts{grid-template-columns:1fr}.sections{grid-template-columns:1fr}
-      .search{width:100%}.map-head{align-items:stretch;flex-direction:column}
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#fafaf7">
+    <title>Musa the Carpenter</title>
+    <meta name="description" content="AI Engineer, Digital Marketer, Founder — building tools for the Arabic-speaking world.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        :root{--g:#2d6a4f;--bg:#fafaf7;--t:#0a0a0a;--m:#8a8a8a}
+
+        body{
+            font-family:'IBM Plex Mono',monospace;
+            background:var(--bg);color:var(--t);
+            height:100vh;height:100dvh;overflow:hidden;
+            display:flex;align-items:center;justify-content:center;
+            background-image:
+                linear-gradient(rgba(0,0,0,.03) 1px,transparent 1px),
+                linear-gradient(90deg,rgba(0,0,0,.03) 1px,transparent 1px);
+            background-size:48px 48px;
+        }
+        body::after{
+            content:'';position:fixed;inset:0;
+            background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.005) 3px,rgba(0,0,0,.005) 6px);
+            pointer-events:none;z-index:999;
+        }
+
+        /* ── Office Container ── */
+        .office{
+            position:relative;
+            width:min(96vw, calc(68vh * 16/9));
+            aspect-ratio:16/9;
+            background:rgba(45,106,79,.008);
+            border:1px solid rgba(45,106,79,.06);
+        }
+
+        /* ── Header ── */
+        .hdr{position:absolute;top:2.5%;left:2.5%;z-index:50}
+        .hdr h1{font-size:clamp(.65rem,1.3vw,1rem);font-weight:600;letter-spacing:.3em;text-transform:uppercase}
+        .hdr p{font-size:clamp(.35rem,.55vw,.45rem);font-weight:300;letter-spacing:.15em;color:var(--g);text-transform:uppercase;margin-top:1px}
+
+        /* ── Footer ── */
+        .ftr{position:absolute;bottom:2%;left:2.5%;font-size:clamp(.32rem,.5vw,.42rem);color:var(--m);letter-spacing:.08em;z-index:50}
+        .ftr a{color:var(--g);text-decoration:none}
+
+        /* ── Desks ── */
+        .dk{
+            position:absolute;width:5.8%;height:7.5%;
+            background:#c9b896;border:1px solid #b0a07a;z-index:1;
+        }
+        .dk::after{
+            content:'';position:absolute;
+            width:38%;height:28%;background:#252525;border:1px solid #1a1a1a;
+            top:12%;left:50%;transform:translateX(-50%);
+        }
+        .dk.s::after{top:auto;bottom:12%}
+
+        /* ── Floor Zones ── */
+        .zone{
+            position:absolute;
+            background:rgba(45,106,79,.025);
+            border:1px dashed rgba(45,106,79,.08);
+            z-index:0;
+        }
+        .zone span{
+            position:absolute;top:3px;left:6px;
+            font-size:clamp(.28rem,.42vw,.36rem);font-weight:400;letter-spacing:.12em;
+            text-transform:uppercase;color:rgba(45,106,79,.3);
+        }
+
+        /* ── Meeting Rooms ── */
+        .rm{
+            position:absolute;
+            border:2px solid rgba(45,106,79,.3);
+            background:rgba(45,106,79,.035);z-index:0;
+        }
+        .rm>span{
+            position:absolute;top:5px;left:8px;
+            font-size:clamp(.32rem,.52vw,.42rem);font-weight:500;letter-spacing:.14em;
+            text-transform:uppercase;color:rgba(45,106,79,.5);
+        }
+        .ct{
+            position:absolute;
+            background:#c4b094;border:1px solid #a89878;border-radius:3px;
+            left:50%;top:50%;transform:translate(-50%,-50%);
+            width:50%;height:26%;
+        }
+        /* Chairs around table */
+        .ct::before{
+            content:'';position:absolute;
+            width:8px;height:8px;border-radius:50%;
+            background:rgba(80,80,80,.3);
+            top:-12px;left:20%;
+            box-shadow:0 0 0 0 transparent,
+                        calc(60% + 4px) 0 0 rgba(80,80,80,.3),
+                        0 calc(100% + 16px) 0 rgba(80,80,80,.3),
+                        calc(60% + 4px) calc(100% + 16px) 0 rgba(80,80,80,.3);
+        }
+
+        /* ── Coffee / Break Room ── */
+        .cf-zone{
+            position:absolute;
+            background:rgba(127,85,57,.04);
+            border:1px dashed rgba(127,85,57,.12);
+            z-index:0;
+        }
+        .cf-zone>span{
+            position:absolute;top:4px;left:6px;
+            font-size:clamp(.3rem,.48vw,.38rem);font-weight:500;letter-spacing:.12em;
+            text-transform:uppercase;color:rgba(127,85,57,.4);white-space:nowrap;
+        }
+        .cf{
+            position:absolute;width:5%;height:6.5%;
+            background:#5c3d28;border:1px solid #4a3020;z-index:1;
+        }
+        /* coffee cup icon */
+        .cf::before{
+            content:'';position:absolute;
+            width:35%;height:40%;background:var(--bg);
+            border-radius:1px;top:30%;left:32%;
+        }
+
+        /* ── Plants ── */
+        .pl{
+            position:absolute;width:7px;height:7px;
+            background:#52b788;border-radius:50%;z-index:1;
+            box-shadow:2px -3px 0 #40916c,-2px -2px 0 #74c69d;
+        }
+
+        /* ── Character (person wrapper) ── */
+        .p{
+            position:absolute;
+            display:flex;flex-direction:column;align-items:center;
+            cursor:pointer;z-index:10;
+            transform:translate(-50%,-85%);
+            -webkit-tap-highlight-color:transparent;
+            padding:3px 5px;
+            opacity:0;transition:opacity .5s;
+        }
+        .p:hover{z-index:90!important}
+
+        /* ── Minecraft Sprite ── */
+        .mc{
+            display:flex;flex-direction:column;align-items:center;
+            transition:transform .15s;
+        }
+        .mc-h{width:18px;height:4px;background:var(--h,#1a1a1a);z-index:3}
+        .mc-d{
+            width:18px;height:16px;background:var(--s,#d4a373);
+            position:relative;z-index:2;
+        }
+        .mc-d::after{
+            content:'';position:absolute;
+            width:3px;height:3px;background:#111;
+            top:5px;left:3px;box-shadow:8px 0 0 #111;
+        }
+        .mc-b{
+            width:18px;height:14px;background:var(--o,#2d6a4f);
+            position:relative;z-index:1;
+        }
+        .mc-b::before{
+            content:'';position:absolute;
+            top:1px;left:-5px;width:5px;height:11px;
+            background:var(--o,#2d6a4f);
+            box-shadow:23px 0 0 var(--o,#2d6a4f);
+            transform-origin:top center;
+        }
+        .mc-l{display:flex;gap:3px}
+        .mc-l i{
+            display:block;width:7px;height:11px;
+            background:var(--p,#1b4332);
+            transform-origin:top center;
+        }
+
+        /* Walk animation */
+        .p.w .mc-l i:first-child{animation:lL .42s ease-in-out infinite}
+        .p.w .mc-l i:last-child{animation:lR .42s ease-in-out infinite}
+        .p.w .mc-b::before{animation:aS .42s ease-in-out infinite}
+        .p:not(.w) .mc-l i,.p:not(.w) .mc-b::before{animation:none}
+
+        /* Hover jump */
+        .p:hover .mc{animation:hop .35s ease}
+
+        /* ── Nametag (always visible) ── */
+        .tg{
+            margin-top:2px;
+            font-size:clamp(.28rem,.45vw,.36rem);font-weight:500;letter-spacing:.06em;
+            text-transform:uppercase;color:var(--m);
+            white-space:nowrap;pointer-events:none;
+            text-align:center;transition:color .2s;
+        }
+        .p:hover .tg{color:var(--g)}
+
+        /* Badge */
+        .bg{
+            position:absolute;top:-2px;right:-6px;
+            background:var(--g);color:var(--bg);
+            font-size:.3rem;font-weight:600;padding:0 3px;
+            z-index:20;pointer-events:none;
+        }
+
+        /* ── Detail Panel ── */
+        .ov{
+            position:fixed;inset:0;background:rgba(10,10,10,.06);
+            z-index:100;opacity:0;pointer-events:none;transition:opacity .3s;
+        }
+        .ov.open{opacity:1;pointer-events:all}
+
+        .pnl{
+            position:fixed;top:0;right:0;
+            width:min(360px,80vw);height:100vh;height:100dvh;
+            background:var(--bg);border-left:1px solid rgba(0,0,0,.05);
+            padding:2rem 1.5rem;z-index:101;
+            transform:translateX(100%);
+            transition:transform .4s cubic-bezier(.22,1,.36,1);
+            display:flex;flex-direction:column;overflow-y:auto;
+        }
+        .pnl.open{transform:translateX(0)}
+
+        .pnl-x{position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1rem;color:var(--m);cursor:pointer;font-family:inherit}
+        .pnl-x:hover{color:var(--g)}
+        .pnl-dept{font-size:.46rem;font-weight:300;letter-spacing:.18em;text-transform:uppercase;color:var(--g);margin-bottom:.3rem}
+        .pnl-name{font-size:1rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.7rem}
+        .pnl-desc{font-size:.62rem;font-weight:300;line-height:1.7;margin-bottom:.8rem}
+        .pnl-meta{font-size:.5rem;color:var(--m);letter-spacing:.05em;margin-bottom:.2rem}
+        .pnl-meta span{color:var(--t)}
+        .pnl-tools{font-size:.5rem;font-weight:300;line-height:1.8;color:var(--m);margin-top:.4rem}
+        .pnl-tools b{color:var(--t);font-weight:500}
+        .pnl-link{
+            margin-top:auto;display:inline-block;
+            font-size:.52rem;font-weight:500;letter-spacing:.1em;
+            text-transform:uppercase;color:var(--g);text-decoration:none;
+            border:1.5px solid var(--g);padding:.4rem .8rem;transition:all .2s;
+        }
+        .pnl-link:hover{background:var(--g);color:var(--bg)}
+        .pnl-link.hide{display:none}
+
+        /* ── Keyframes ── */
+        @keyframes lL{0%,100%{transform:rotateZ(0)}50%{transform:rotateZ(22deg)}}
+        @keyframes lR{0%,100%{transform:rotateZ(0)}50%{transform:rotateZ(-22deg)}}
+        @keyframes aS{0%,100%{transform:rotateZ(0)}50%{transform:rotateZ(8deg)}}
+        @keyframes hop{
+            0%{transform:translateY(0)}
+            30%{transform:translateY(-12px) scaleY(1.04)}
+            60%{transform:translateY(0) scaleY(.96)}
+            80%{transform:translateY(-3px)}
+            100%{transform:translateY(0)}
+        }
+
+        /* ── Responsive ── */
+
+        /* Tablet landscape */
+        @media(max-width:1024px){
+            .dk{width:5.2%;height:6.5%}
+        }
+
+        /* Tablet portrait / large phone landscape */
+        @media(max-width:768px){
+            .office{width:min(98vw, calc(72vh * 16/9))}
+            .hdr h1{font-size:.6rem}
+            .hdr p{font-size:.3rem}
+            .ftr{font-size:.3rem}
+            .mc-h{width:15px;height:3px}
+            .mc-d{width:15px;height:13px}
+            .mc-d::after{width:2px;height:2px;top:4px;left:3px;box-shadow:7px 0 0 #111}
+            .mc-b{width:15px;height:12px}
+            .mc-b::before{width:4px;height:10px;left:-4px;box-shadow:19px 0 0 var(--o)}
+            .mc-l{gap:2px}
+            .mc-l i{width:6px;height:9px}
+            .dk{width:5%;height:6%}
+            .tg{font-size:.3rem}
+            .bg{font-size:.25rem}
+        }
+
+        /* Phone portrait */
+        @media(max-width:480px){
+            .office{width:98vw;aspect-ratio:9/16}
+            .hdr{top:1.5%;left:3%}
+            .hdr h1{font-size:.55rem;letter-spacing:.2em}
+            .hdr p{font-size:.28rem}
+            .ftr{bottom:1%;font-size:.28rem}
+            .mc-h{width:12px;height:3px}
+            .mc-d{width:12px;height:11px}
+            .mc-d::after{width:2px;height:2px;top:3px;left:2px;box-shadow:6px 0 0 #111}
+            .mc-b{width:12px;height:10px}
+            .mc-b::before{width:3px;height:8px;left:-3px;box-shadow:15px 0 0 var(--o)}
+            .mc-l{gap:2px}
+            .mc-l i{width:5px;height:8px}
+            .dk{width:7%;height:4%}
+            .dk::after{width:35%;height:25%}
+            .cf{width:6.5%;height:3.5%}
+            .rm span{font-size:.22rem}
+            .pl{width:5px;height:5px;box-shadow:2px -2px 0 #40916c,-1px -2px 0 #74c69d}
+            .tg{font-size:.28rem}
+            .bg{font-size:.22rem;padding:0 2px}
+            .p{padding:6px 8px} /* bigger tap target */
+        }
+
+        /* Very small phones */
+        @media(max-width:360px){
+            .hdr h1{font-size:.48rem}
+            .mc-h{width:10px;height:2px}
+            .mc-d{width:10px;height:9px}
+            .mc-b{width:10px;height:8px}
+            .mc-b::before{width:3px;height:6px;left:-3px;box-shadow:13px 0 0 var(--o)}
+            .mc-l i{width:4px;height:6px}
+        }
+
+        /* Short landscape phones */
+        @media(max-height:500px){
+            .office{width:min(98vw, calc(90vh * 16/9))}
+        }
+
+        /* Prevent text selection on tap */
+        .p{-webkit-user-select:none;user-select:none}
+
+        /* Touch hover states */
+        @media(hover:none){
+            .p:active .mc{animation:hop .35s ease}
+        }
+    </style>
 </head>
 <body>
-  <main class="shell">
-    <header class="topbar">
-      <div class="brand">
-        <h1>Mousa Abumazin</h1>
-        <p>Systems builder working across local AI, Arabic agent infrastructure, Islamic apps, business automation, and physical craft.</p>
-        <p class="ar">موسى أبو مازن — أبني أنظمة ذكاء اصطناعي محلية، أدوات عربية للوكلاء، تطبيقات إسلامية، وأتمتة عملية للأعمال.</p>
-      </div>
-      <nav class="nav" aria-label="Portfolio filters">
-        <button class="chip active" data-filter="all">All</button>
-        <button class="chip" data-filter="ai">AI Systems</button>
-        <button class="chip" data-filter="arabic">Arabic OSS</button>
-        <button class="chip" data-filter="apps">Apps</button>
-        <button class="chip" data-filter="business">Business</button>
-        <button class="lang active" data-lang="both">EN + AR</button>
-      </nav>
-    </header>
 
-    <section class="hero">
-      <article class="brief">
-        <div>
-          <div class="eyebrow">Portfolio / Systems Map</div>
-          <h2>Not a list of projects. A working map of tools, agents, products, and craft.<span class="arline">ليست قائمة مشاريع فقط؛ هذه خريطة عمل لأنظمة وأدوات ومنتجات وحِرفة.</span></h2>
-        </div>
-        <div class="brief-copy">
-          <p>I build practical systems that survive contact with real work: local AI stacks, Arabic-first tooling, Islamic assistants, client operations, and woodworking workflows.</p>
-          <p class="ar">أبني أنظمة عملية تعيش في الاستخدام الحقيقي: ذكاء اصطناعي محلي، أدوات عربية، مساعدين إسلاميين، عمليات عملاء، وسير عمل للنجارة.</p>
-        </div>
-        <div class="metrics">
-          <div class="metric"><b>30+</b><span>public projects and operating systems</span></div>
-          <div class="metric"><b>13</b><span>Arabic NLP tools published</span></div>
-          <div class="metric"><b>63</b><span>Arabic Hermes skills</span></div>
-          <div class="metric"><b>1</b><span>local personal AI stack</span></div>
-        </div>
-        <div class="links">
-          <a href="https://github.com/Moshe-ship" target="_blank" rel="noopener">GitHub</a>
-          <a href="https://x.com/Mosescreates" target="_blank" rel="noopener">X / Mosescreates</a>
-          <a href="https://majana.blog" target="_blank" rel="noopener">Majana Blog</a>
-        </div>
-      </article>
+<div class="office" id="ofc">
 
-      <section class="map" aria-label="Interactive systems map">
-        <div class="map-head">
-          <div class="map-title">Live systems graph</div>
-          <input id="search" class="search" type="search" placeholder="Search / ابحث">
-        </div>
-        <div class="axis">
-          <span class="quadrant q1">Arabic infrastructure</span>
-          <span class="quadrant q2">Local AI + agents</span>
-          <span class="quadrant q3">Apps + products</span>
-          <span class="quadrant q4">Business + craft</span>
-          <svg class="beam" id="beam" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
-          <div id="nodes"></div>
-        </div>
-      </section>
+    <!-- Header -->
+    <div class="hdr"><h1>Musa the Carpenter</h1><p>AI Engineer &middot; Digital Marketer &middot; Founder</p></div>
 
-      <aside class="side">
-        <article class="panel" id="panel" aria-live="polite"></article>
-        <section class="list">
-          <div class="list-head"><h2>Index / الفهرس</h2><span class="count" id="count"></span></div>
-          <div class="items" id="items"></div>
-        </section>
-      </aside>
-    </section>
+    <!-- Footer -->
+    <div class="ftr"><a href="https://x.com/Mosescreates">@Mosescreates</a> &middot; <a href="https://github.com/Moshe-ship">GitHub</a> &middot; <a href="https://majana.blog">Majana.Blog</a></div>
 
-    <section class="sections">
-      <article class="section">
-        <h3>Local AI as infrastructure</h3>
-        <p>Personal agents, memory, model routing, polishing tools, and vault-backed workflows run as one private operating layer.</p>
-        <p class="ar">الذكاء الاصطناعي المحلي عندي ليس تجربة؛ هو طبقة تشغيل خاصة فيها ذاكرة وأدوات وتوجيه للنماذج وسير عمل واضح.</p>
-      </article>
-      <article class="section">
-        <h3>Arabic agent ecosystem</h3>
-        <p>Benchmarks, skills, MCP servers, RTL tools, dictation, and verification primitives for Arabic-first AI.</p>
-        <p class="ar">منظومة عربية للوكلاء: اختبارات، مهارات، خوادم MCP، أدوات RTL، إملاء صوتي، وطبقات تحقق.</p>
-      </article>
-      <article class="section">
-        <h3>Products with real users</h3>
-        <p>Athan, Aamil, PMAX operations, LocalBiz, Nashir, and client-facing automation systems.</p>
-        <p class="ar">منتجات ليست عروضاً فقط: أذان، عامل، عمليات PMAX، لوكال بز، ناشر، وأنظمة أتمتة للعملاء.</p>
-      </article>
-      <article class="section">
-        <h3>Digital and physical craft</h3>
-        <p>Woodpecker keeps the analog side honest: pricing, templates, proposals, and real shop work.</p>
-        <p class="ar">وودبيكر يربط الجانب الرقمي بالحِرفة: تسعير، قوالب، عروض، وعمل نجارة حقيقي.</p>
-      </article>
-    </section>
+    <!-- Hint -->
+    <div style="position:absolute;bottom:2%;right:2.5%;font-size:clamp(.3rem,.45vw,.38rem);color:var(--m);letter-spacing:.08em;z-index:50;opacity:.6">Click any character to learn more</div>
 
-    <div class="ticker" aria-hidden="true">
-      <div class="ticker-track" id="ticker"></div>
+    <!-- ── Floor Zones ── -->
+    <div class="zone" style="left:3%;top:14%;width:21%;height:28%"><span>Team Alpha</span></div>
+    <div class="zone" style="left:3%;top:52%;width:21%;height:28%"><span>Team Beta</span></div>
+    <div class="zone" style="left:30%;top:36%;width:20%;height:28%"><span>Open Desks</span></div>
+    <div class="zone" style="left:30%;top:68%;width:20%;height:18%"></div>
+
+    <!-- ── Desks ── -->
+    <!-- Cluster A -->
+    <div class="dk" style="left:6%;top:18%"></div>
+    <div class="dk" style="left:14%;top:18%"></div>
+    <div class="dk s" style="left:6%;top:30%"></div>
+    <div class="dk s" style="left:14%;top:30%"></div>
+
+    <!-- Cluster B -->
+    <div class="dk" style="left:6%;top:56%"></div>
+    <div class="dk" style="left:14%;top:56%"></div>
+    <div class="dk s" style="left:6%;top:68%"></div>
+    <div class="dk s" style="left:14%;top:68%"></div>
+
+    <!-- Center Desks -->
+    <div class="dk" style="left:33%;top:40%"></div>
+    <div class="dk" style="left:42%;top:40%"></div>
+    <div class="dk s" style="left:33%;top:52%"></div>
+    <div class="dk s" style="left:42%;top:52%"></div>
+    <div class="dk" style="left:33%;top:72%"></div>
+
+    <!-- ── Meeting Rooms ── -->
+    <div class="rm" style="left:64%;top:6%;width:32%;height:36%">
+        <span>Conference A</span><div class="ct"></div>
     </div>
-  </main>
+    <div class="rm" style="left:64%;top:56%;width:32%;height:38%">
+        <span>Conference B</span><div class="ct"></div>
+    </div>
 
-  <script>
-    const projects=[
-      {id:"stack",code:"AI",cat:["ai"],x:72,y:22,n:"Personal AI Stack",ar:"منظومة الذكاء الشخصي",dept:"Local agents",status:"Active",stack:"Jetson Orin, Hermes, local memory, Obsidian, model routing",link:"",
-       en:"A private AI operating layer: local models, memory, Obsidian workspace, command-line tools, Discord access, and utility endpoints that stay under Mousa's control.",
-       aa:"طبقة تشغيل شخصية للذكاء الاصطناعي: نماذج محلية، ذاكرة، أوبسيديان، أدوات سطر أوامر، وصول من ديسكورد، وخدمات صغيرة تبقى تحت سيطرة موسى."},
-      {id:"aamil",code:"AM",cat:["apps","ai"],x:64,y:42,n:"Aamil",ar:"عامل",dept:"Islamic assistant",status:"Q2 active",stack:"SwiftUI, local LLM, camera VLM, App Intents, MLX",link:"",
-       en:"Arabic-English Islamic assistant with local intelligence, camera understanding, Saudi guides, app intents, and a path toward tool chains and agent tasks.",
-       aa:"مساعد إسلامي عربي-إنجليزي بذكاء محلي، فهم بالكاميرا، أدلة سعودية، اختصارات تطبيق، وخطة نحو أدوات متسلسلة ومهام وكيلية."},
-      {id:"athan",code:"AT",cat:["apps"],x:56,y:67,n:"Athan / Free Athan",ar:"أذان",dept:"Faith apps",status:"Live",stack:"SwiftUI, Quran media pipeline, YouTube automation",link:"https://www.youtube.com/@freeathanapp",
-       en:"Prayer and Quran work spanning a mobile app, Quran media generation, and a publishing pipeline with hundreds of recitation videos.",
-       aa:"عمل في الأذان والقرآن يشمل تطبيقاً للجوال، توليد مواد قرآنية، وخط نشر فيه مئات مقاطع التلاوة."},
-      {id:"woodpecker",code:"WD",cat:["business"],x:80,y:76,n:"Woodpecker Carpentry",ar:"وودبيكر للنجارة",dept:"Craft OS",status:"Active",stack:"Pricing rules, quote templates, material data, shop workflow",link:"",
-       en:"A carpentry business system for pricing, quotes, material rules, proposals, and eventually a simulator that connects design to shop work.",
-       aa:"نظام عمل للنجارة: تسعير، عروض أسعار، قواعد مواد، قوالب مقترحات، ولاحقاً محاكاة تربط التصميم بالورشة."},
-      {id:"pmax",code:"PX",cat:["business"],x:83,y:56,n:"Performance MAX",ar:"بيرفورمنس ماكس",dept:"Agency ops",status:"Live",stack:"SEO, paid media, local operations, reporting agents",link:"https://performancemaxagency.com",
-       en:"Digital marketing and local SEO operations with automation, reporting systems, and client workflows. Public story only; client infrastructure stays private.",
-       aa:"عمليات تسويق رقمي وسيو محلي مع أتمتة وتقارير وسير عمل للعملاء. المعروض هنا عام، أما بنية العملاء فتبقى خاصة."},
-      {id:"localops",code:"LO",cat:["business","ai"],x:89,y:45,n:"Local SEO Engine",ar:"محرك سيو محلي",dept:"Local search platform",status:"In use",stack:"Python, evidence tiers, rank grids, action queues",link:"",
-       en:"A self-hosted local SEO platform for audits, rank grids, schema, drift checks, and action queues built around evidence instead of generic reports.",
-       aa:"منصة سيو محلي ذاتية التشغيل للتدقيق، خرائط الترتيب، السكيمة، مراقبة الانحراف، وقوائم العمل المبنية على الدليل."},
-      {id:"toolproof",code:"TP",cat:["arabic","ai"],x:38,y:22,n:"ToolProof",ar:"تول بروف",dept:"Verification",status:"v0.5 live",stack:"Python, signed receipts, evidence hashes, trust scoring",link:"https://github.com/Moshe-ship/toolproof",
-       en:"Verification layer for agent tool calls: signed execution receipts, evidence hashes, and trust scoring so agents cannot just claim a tool ran.",
-       aa:"طبقة تحقق لاستدعاءات أدوات الوكلاء: إيصالات تنفيذ موقعة، بصمات دليل، وتقييم ثقة حتى لا يكتفي الوكيل بادعاء أنه شغّل الأداة."},
-      {id:"hurmoz",code:"HZ",cat:["arabic"],x:22,y:24,n:"Hurmoz",ar:"هرمز",dept:"Arabic skills",status:"Live",stack:"63 Arabic Hermes skills",link:"https://github.com/Moshe-ship/hurmoz",
-       en:"The largest Arabic skill pack for Hermes-style agents: Islamic utilities, NLP, media, education, and developer workflows.",
-       aa:"أكبر حزمة مهارات عربية لوكلاء شبيهين بهرمس: أدوات إسلامية، معالجة لغة، وسائط، تعليم، وسير عمل للمطورين."},
-      {id:"wasl",code:"WS",cat:["arabic"],x:18,y:36,n:"Wasl",ar:"وصل",dept:"Arabic MCP",status:"Live",stack:"Python, MCP, 30 tools",link:"https://github.com/Moshe-ship/wasl",
-       en:"Arabic MCP server with prayer, Quran, Hadith, translation, dialect detection, zakat, weather, NLP, news, and finance tools.",
-       aa:"خادم MCP عربي فيه أدوات للصلاة والقرآن والحديث والترجمة واللهجات والزكاة والطقس واللغة والأخبار والمال."},
-      {id:"aae",code:"AE",cat:["arabic"],x:31,y:38,n:"Arabic Agent Eval",ar:"تقييم الوكلاء العرب",dept:"Measurement",status:"Published",stack:"51 eval items, 6 categories, 5 dialects",link:"",
-       en:"Arabic function-calling benchmark designed around real Arabic contexts, dialects, and tool-use failures that generic evals miss.",
-       aa:"اختبار عربي لاستدعاء الدوال مبني على سياقات عربية حقيقية ولهجات ومواطن فشل لا تلتقطها الاختبارات العامة."},
-      {id:"mtg",code:"MG",cat:["arabic","ai"],x:42,y:36,n:"MTG",ar:"حراس الصرف",dept:"Typed guards",status:"Live",stack:"Pydantic, RTL safety, script detection",link:"https://github.com/Moshe-ship/mtg",
-       en:"Morphological Type Guards for multilingual tool arguments: script checks, BiDi safety, confusable detection, and prompt-injection grading.",
-       aa:"حراس نوعية صرفية لمدخلات الأدوات متعددة اللغات: كشف الكتابة، أمان الاتجاه، الحروف المتشابهة، وتقدير حقن التعليمات."},
-      {id:"lisan",code:"LS",cat:["arabic","apps"],x:28,y:62,n:"Lisan",ar:"لسان",dept:"Voice",status:"Live",stack:"Swift, whisper.cpp, Metal, MLX",link:"https://github.com/Moshe-ship/Lisan",
-       en:"Arabic-first local dictation for macOS. Your voice stays on the Mac while Arabic speech becomes usable text.",
-       aa:"إملاء عربي محلي على ماك. صوتك يبقى على الجهاز ويتحول الكلام العربي إلى نص قابل للاستخدام."},
-      {id:"tarminal",code:"TR",cat:["arabic","apps"],x:18,y:55,n:"Tarminal",ar:"ترمينال",dept:"Interface",status:"Phase 3",stack:"SwiftUI, SwiftTerm, Core Text, BiDi overlay",link:"https://github.com/Moshe-ship/Tarminal",
-       en:"macOS terminal work focused on real Arabic RTL rendering, connected letters, tabs, search, and developer ergonomics.",
-       aa:"عمل على طرفية ماك تعرض العربية كما يجب: اتجاه صحيح، حروف متصلة، تبويبات، بحث، وتجربة مريحة للمطور."},
-      {id:"nlp",code:"13",cat:["arabic"],x:23,y:45,n:"Arabic NLP Suite",ar:"حزمة أدوات اللغة العربية",dept:"CLI tools",status:"Published",stack:"13 PyPI tools for Arabic and RTL workflows",link:"https://github.com/Moshe-ship",
-       en:"A suite of Arabic NLP and RTL utilities: token analysis, moderation, summarization, scraping, benchmarks, RTL testing, and dataset work.",
-       aa:"مجموعة أدوات عربية وRTL: تحليل توكنات، إشراف محتوى، تلخيص، كشط، اختبارات، فحص اتجاه، وتجهيز بيانات."},
-      {id:"nashir",code:"NR",cat:["business","ai"],x:68,y:58,n:"Nashir",ar:"ناشر",dept:"Content engine",status:"MVP",stack:"Next.js, FastAPI, knowledge base, Saudi dialect drafting",link:"",
-       en:"AI content pipeline for scanning news, growing a knowledge base, drafting Saudi dialect threads, and producing visual social posts.",
-       aa:"خط إنتاج محتوى بالذكاء الاصطناعي: يمسح الأخبار، يبني قاعدة معرفة، يكتب خيوطاً باللهجة السعودية، ويولّد منشورات بصرية."},
-      {id:"diwan",code:"DW",cat:["ai","arabic"],x:47,y:16,n:"Diwan",ar:"ديوان",dept:"Deliberation",status:"Spec aligned",stack:"Typed artifacts, disagreement protocol, replayable sessions",link:"",
-       en:"A deliberation operating system for multi-agent sessions: role topology, evidence freshness, typed disagreement, and replayable archives.",
-       aa:"نظام تشاور لجلسات متعددة الوكلاء: أدوار واضحة، حداثة الدليل، خلاف مكتوب بنوع، وأرشيف قابل لإعادة التشغيل."},
-      {id:"localbiz",code:"LB",cat:["business"],x:75,y:66,n:"LocalBiz",ar:"لوكال بز",dept:"Directory",status:"Live",stack:"Next.js, Supabase, Google Places",link:"https://localbiz.app",
-       en:"Business directory and evidence source for local SEO operations, built to strengthen local citations and reporting workflows.",
-       aa:"دليل أعمال ومصدر أدلة لعمليات السيو المحلي، مبني لتقوية الاستشهادات المحلية وسير التقارير."},
-      {id:"mkhlab",code:"MK",cat:["arabic"],x:35,y:52,n:"Mkhlab",ar:"مخلب",dept:"OpenClaw Arabic",status:"Live",stack:"TypeScript, Python, OpenClaw plugin",link:"https://github.com/Moshe-ship/mkhlab",
-       en:"Arabic OpenClaw plugin and channels that package practical Arabic AI utilities into a discoverable ecosystem.",
-       aa:"إضافة عربية لأوبن كلو وقنوات تجمع أدوات ذكاء اصطناعي عربية عملية في منظومة واضحة."}
-    ];
+    <!-- ── Break Room ── -->
+    <div class="cf-zone" style="left:46%;top:8%;width:14%;height:16%">
+        <span>Break Room</span>
+    </div>
+    <div class="cf" style="left:50%;top:14%"></div>
 
-    const filters=document.querySelectorAll(".chip");
-    const nodes=document.getElementById("nodes");
-    const items=document.getElementById("items");
-    const panel=document.getElementById("panel");
-    const count=document.getElementById("count");
-    const search=document.getElementById("search");
-    const beam=document.getElementById("beam");
-    const ticker=document.getElementById("ticker");
-    let active="stack",filter="all",query="";
+    <!-- Plants -->
+    <div class="pl" style="left:27%;top:10%"></div>
+    <div class="pl" style="left:58%;top:48%"></div>
+    <div class="pl" style="left:27%;top:90%"></div>
+    <div class="pl" style="left:97%;top:48%"></div>
 
-    function visible(p){
-      const inFilter=filter==="all"||p.cat.includes(filter);
-      const q=query.trim().toLowerCase();
-      const inSearch=!q||[p.n,p.ar,p.dept,p.en,p.aa,p.stack].join(" ").toLowerCase().includes(q);
-      return inFilter&&inSearch;
+    <!-- ── 15 Characters ── -->
+    <div class="p" id="c0"  data-p="pmax"><div class="mc" style="--o:#2d6a4f;--p:#1b4332;--s:#d4a373;--h:#2c2c2c"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Performance MAX</div></div>
+    <div class="p" id="c1"  data-p="mkhlab"><div class="mc" style="--o:#1b4332;--p:#0d2818;--s:#c69c72;--h:#1a1a1a;position:relative"><span class="bg">20&#9733;</span><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Mkhlab</div></div>
+    <div class="p" id="c2"  data-p="tarminal"><div class="mc" style="--o:#1a1a1a;--p:#111;--s:#f0d5a8;--h:#4a3728"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Tarminal</div></div>
+    <div class="p" id="c3"  data-p="nashir"><div class="mc" style="--o:#264653;--p:#1a2f38;--s:#d4a373;--h:#2c2c2c"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Nashir</div></div>
+    <div class="p" id="c4"  data-p="aamil"><div class="mc" style="--o:#606c38;--p:#3a4220;--s:#c69c72;--h:#1a1a1a"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Aamil</div></div>
+    <div class="p" id="c5"  data-p="yalla"><div class="mc" style="--o:#d4760a;--p:#9e5808;--s:#f0d5a8;--h:#4a3728"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Yalla Ads</div></div>
+    <div class="p" id="c6"  data-p="faris"><div class="mc" style="--o:#9b2226;--p:#6a171a;--s:#d4a373;--h:#2c2c2c"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Faris AI</div></div>
+    <div class="p" id="c7"  data-p="maraah"><div class="mc" style="--o:#588157;--p:#3a5a3a;--s:#a47148;--h:#1a1a1a"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Maraah</div></div>
+    <div class="p" id="c8"  data-p="tiltbrew"><div class="mc" style="--o:#7f5539;--p:#5c3d28;--s:#f0d5a8;--h:#4a3728"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">TiltBrew</div></div>
+    <div class="p" id="c9"  data-p="athan"><div class="mc" style="--o:#997b2f;--p:#6e5820;--s:#c69c72;--h:#2c2c2c"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Athan</div></div>
+    <div class="p" id="c10" data-p="majana"><div class="mc" style="--o:#5a189a;--p:#3a0f66;--s:#d4a373;--h:#4a3728"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Majana</div></div>
+    <div class="p" id="c11" data-p="woodpecker"><div class="mc" style="--o:#6f4e37;--p:#4a3425;--s:#a47148;--h:#2c2c2c"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Woodpecker</div></div>
+    <div class="p" id="c12" data-p="alyce"><div class="mc" style="--o:#8e5572;--p:#6a3f55;--s:#f0d5a8;--h:#4a3728"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Alyce</div></div>
+    <div class="p" id="c13" data-p="amaan"><div class="mc" style="--o:#2a6f97;--p:#1d4e6b;--s:#c69c72;--h:#1a1a1a"><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">Amaan</div></div>
+    <div class="p" id="c14" data-p="nlp"><div class="mc" style="--o:#40916c;--p:#2d6a4f;--s:#d4a373;--h:#2c2c2c;position:relative"><span class="bg">&times;13</span><div class="mc-h"></div><div class="mc-d"></div><div class="mc-b"></div><div class="mc-l"><i></i><i></i></div></div><div class="tg">NLP Suite</div></div>
+
+</div>
+
+<!-- Panel -->
+<div class="ov" id="ov"></div>
+<aside class="pnl" id="pnl">
+    <button class="pnl-x" id="px">&times;</button>
+    <div class="pnl-dept" id="pd"></div>
+    <h2 class="pnl-name" id="pn"></h2>
+    <p class="pnl-desc" id="pc"></p>
+    <p class="pnl-meta" id="ps"></p>
+    <p class="pnl-meta" id="pt"></p>
+    <div class="pnl-tools" id="ptl"></div>
+    <a class="pnl-link" id="pl" href="#" target="_blank" rel="noopener">Visit</a>
+</aside>
+
+<script>
+/* ── Project Data ── */
+var D={
+pmax:{n:'Performance MAX',d:'Dept. of Growth',c:'Full-service digital marketing agency. Google Ads, SEO, local search. 950+ accounts managed, $23M+ in ad spend.',s:'Astro 6, GitHub Actions, Hostinger',t:'Live',l:'https://performancemaxagency.com'},
+mkhlab:{n:'Mkhlab',d:'Dept. of Language',c:'First Arabic OpenClaw plugin. 31 skills — Islamic tools, NLP, media, education. WhatsApp + Telegram channels. 9 CLI tools on PyPI. 20 GitHub stars.',s:'TypeScript, OpenClaw, Python',t:'Phase 5 complete',l:'https://github.com/Moshe-ship/mkhlab'},
+tarminal:{n:'Tarminal',d:'Dept. of Interface',c:'First macOS terminal with proper Arabic RTL. BiDi overlay via Core Text, connected letters, iTerm2-style tabs, search, drag-and-drop.',s:'Swift, SwiftUI, SwiftTerm, Core Text',t:'Phase 3 complete',l:'https://github.com/Moshe-ship/Tarminal'},
+nashir:{n:'Nashir',d:'Dept. of Broadcast',c:'SaaS social media platform + AI content pipeline. Scans news, drafts Saudi dialect threads, generates dark-theme graphics for @Mosescreates.',s:'Next.js 15, FastAPI, PostgreSQL, Claude',t:'MVP live',l:''},
+aamil:{n:'Aamil',d:'Dept. of Intelligence',c:'Offline Arabic-English AI assistant iOS app. Custom fine-tuned LoRA models on Apple Silicon. Best model at 82% accuracy.',s:'Swift, SwiftUI, Core ML, MLX, LoRA',t:'Training complete',l:''},
+yalla:{n:'Yalla Ads',d:'Dept. of Reach',c:'Arabic-first digital marketing agency for the Middle East. Full RTL. Google Ads, social media, lead gen. Shami + Khaleeji dialect.',s:'Astro 6, Arabic RTL, Hostinger',t:'Built',l:'https://yalla-ads.com'},
+faris:{n:'Faris AI',d:'Dept. of Outreach',c:'AI-powered sales outreach platform for Saudi Arabia. Multi-tenant SaaS with Arabic-first UX.',s:'React, Vite, FastAPI, PostgreSQL',t:'Early stage',l:'https://github.com/Moshe-ship/faris-ai-saas'},
+maraah:{n:'Maraah',d:'Dept. of Land',c:'Livestock management app for farmers. Herd tracking, health records, breeding schedules. Built for Arabic-speaking agricultural communities.',s:'React Native, Supabase',t:'Phase 2.3',l:''},
+tiltbrew:{n:'TiltBrew',d:'Dept. of Play',c:'Tilt your MacBook. Spill the coffee. 100% of revenue goes to children in Gaza.',s:'Swift, macOS',t:'Published',l:'https://github.com/Moshe-ship/TiltBrew'},
+athan:{n:'Athan',d:'Dept. of Faith',c:'Quran recitation YouTube channel + prayer times mobile app with compass, notifications, and adhan playback.',s:'Python, Pillow, React Native, Expo',t:'In progress',l:''},
+majana:{n:'Majana',d:'Dept. of Thought',c:'Arabic AI marketing blog. Origin of Majana LLC. Active since 2020, spun into startup 2026.',s:'WordPress, Python',t:'Active since 2020',l:'https://majana.blog'},
+woodpecker:{n:'Woodpecker Carpentry',d:'Dept. of Craft',c:'Custom woodwork, furniture, and builds. The analog counterpart to all the digital work.',s:'Wood, tools, hands',t:'Active',l:''},
+alyce:{n:'Learn English with Alyce',d:'Dept. of Learning',c:'English learning platform — web + mobile. Lessons, progress tracking, payments. For Arabic speakers.',s:'Next.js, React Native, Supabase, Stripe',t:'In progress',l:''},
+amaan:{n:'Amaan',d:'Dept. of Trust',c:'Secure messaging app with Arabic i18n, onboarding, and real-time chat.',s:'React Native, TypeScript',t:'In progress',l:''},
+nlp:{n:'Arabic NLP Suite',d:'Dept. of Words',c:'13 open-source Arabic NLP tools on PyPI. Token analysis, benchmarks, moderation, RTL testing, data generation. 45+ combined GitHub stars.',s:'Python, PyPI, CLI',t:'All published',l:'https://github.com/Moshe-ship',
+tools:[
+{n:'artok',a:'عرتوك',d:'Token Tax Calculator',x:13},
+{n:'samt',a:'صمت',d:'Audio/TTS Quality Checker',x:11},
+{n:'mukhtasar',a:'مختصر',d:'Text Summarizer',x:8},
+{n:'bidi-guard',a:'',d:'BiDi Security Scanner',x:4},
+{n:'qalam',a:'قلم',d:'Code Doc Generator',x:3},
+{n:'majal',a:'مجال',d:'Dataset Inspector',x:2},
+{n:'arabench',a:'عربنش',d:'LLM Benchmark',x:1},
+{n:'sarih',a:'صريح',d:'Content Moderator',x:1},
+{n:'safha',a:'صفحة',d:'Web Scraper for ML',x:1},
+{n:'raqeeb',a:'رقيب',d:'RTL Testing CLI',x:1},
+{n:'naql',a:'نقل',d:'Model Converter',x:1},
+{n:'khalas',a:'خلص',d:'Prompt Optimizer',x:1},
+{n:'jadwal',a:'جدول',d:'Synthetic Data Gen',x:1}
+]}
+};
+
+/* ── Waypoints: [x%, y%, stayMs] ── */
+var W=[
+// 0  PMAX — desk worker, visits meeting 1 + coffee
+[[9,28,6000],[25,24,500],[52,20,2500],[30,20,500],[75,20,4000],[45,24,500],[9,28,5500]],
+// 1  Mkhlab — hyperactive, visits everywhere
+[[18,28,3000],[28,25,400],[75,18,3200],[55,40,400],[75,72,3200],[40,55,400],[18,28,3500]],
+// 2  Tarminal — deep focus, rare coffee
+[[9,40,13000],[22,35,500],[52,20,2200],[22,35,500],[9,40,14000]],
+// 3  Nashir — meeting 1 regular
+[[18,40,5000],[32,30,500],[75,22,4200],[32,30,500],[18,40,5500]],
+// 4  Aamil — desk + coffee runs
+[[36,52,6500],[42,35,500],[52,20,2500],[42,35,500],[36,52,7000]],
+// 5  Yalla — roamer, meetings + center
+[[75,18,3500],[55,30,600],[45,50,900],[58,60,400],[75,72,3500],[55,45,600],[35,25,800]],
+// 6  Faris — both meetings, fast
+[[45,52,4000],[55,38,400],[75,20,3500],[58,48,500],[75,72,3500],[55,48,400],[45,52,4500]],
+// 7  Maraah — calm, desk + rare coffee
+[[9,66,9000],[22,50,500],[52,20,2800],[22,50,500],[9,66,10000]],
+// 8  TiltBrew — coffee addict loop
+[[52,22,5000],[42,40,500],[75,72,2200],[42,55,500],[18,66,1800],[32,40,500],[52,22,4500]],
+// 9  Athan — desk + meeting 2
+[[18,66,6500],[32,65,500],[75,72,4200],[32,65,500],[18,66,7000]],
+// 10 Majana — desk + coffee + wander
+[[18,78,5500],[28,55,500],[52,20,2200],[40,48,800],[18,78,6000]],
+// 11 Woodpecker — barely moves
+[[9,78,16000],[13,78,1500],[9,78,16000]],
+// 12 Alyce — meeting hopper
+[[75,20,4200],[52,35,600],[42,48,1200],[58,60,400],[75,72,4200],[52,48,600]],
+// 13 Amaan — desk + meeting 2 + coffee
+[[36,82,5500],[42,65,500],[75,72,3200],[52,45,400],[52,20,2200],[40,60,500],[36,82,5500]],
+// 14 NLP — center roamer
+[[40,48,3200],[52,32,500],[75,22,2800],[55,48,400],[75,72,2800],[40,62,400]]
+];
+
+/* Speeds (% per second) */
+var SP=[1.8, 2.8, 1.0, 1.8, 1.8, 2.8, 2.5, 1.2, 2.0, 1.3, 1.8, 0.6, 2.2, 1.8, 2.0];
+
+/* ── Easing ── */
+function ease(t){return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2}
+
+/* ── Walker ── */
+function Walker(el,wp,spd){
+    this.el=el;this.mc=el.querySelector('.mc');
+    this.wp=wp;this.spd=spd;
+    this.i=0;this.p=0;
+    this.x=wp[0][0];this.y=wp[0][1];
+    this.fx=this.x;this.fy=this.y;
+    this.wt=wp[0][2]||2000;
+}
+Walker.prototype.tick=function(dt){
+    if(this.wt>0){
+        this.wt-=dt;
+        this.el.classList.remove('w');
+        if(this.wt<=0){
+            this.fx=this.x;this.fy=this.y;
+            this.i=(this.i+1)%this.wp.length;
+            this.p=0;
+        }
+        this.draw();return;
     }
-    function drawLines(list){
-      const center=projects.find(p=>p.id==="stack");
-      beam.innerHTML=list.filter(p=>p.id!==center.id).map(p=>`<line x1="${center.x}" y1="${center.y}" x2="${p.x}" y2="${p.y}" stroke="rgba(255,255,255,.12)" stroke-width=".15"/>`).join("");
+    var tx=this.wp[this.i][0],ty=this.wp[this.i][1];
+    var dx=tx-this.fx,dy=ty-this.fy;
+    var dist=Math.sqrt(dx*dx+dy*dy);
+    if(dist<.2){
+        this.x=tx;this.y=ty;
+        this.wt=this.wp[this.i][2]||2000;
+        this.el.classList.remove('w');
+        this.draw();return;
     }
-    function render(){
-      const list=projects.filter(visible);
-      if(!list.some(p=>p.id===active)&&list[0])active=list[0].id;
-      nodes.innerHTML=projects.map(p=>{
-        const show=visible(p),is=p.id===active;
-        return `<button class="node ${show?"":"dimmed"} ${is?"active":""}" style="left:${p.x}%;top:${p.y}%" data-id="${p.id}" data-code="${p.code}" aria-label="${p.n}">
-          <span class="node-label">${p.n}<em>${p.ar}</em></span>
-        </button>`;
-      }).join("");
-      items.innerHTML=list.map(p=>`<article class="item ${p.id===active?"active":""}" data-id="${p.id}">
-        <strong>${p.n}</strong><div class="ar">${p.ar}</div><p>${p.dept} · ${p.status}</p>
-      </article>`).join("");
-      count.textContent=`${list.length} shown`;
-      drawLines(list);
-      renderPanel(projects.find(p=>p.id===active)||list[0]||projects[0]);
-      document.querySelectorAll("[data-id]").forEach(el=>el.addEventListener("click",()=>{active=el.dataset.id;render()}));
+    var tt=(dist/this.spd)*1000;
+    this.p+=dt/tt;
+    if(this.p>=1){
+        this.x=tx;this.y=ty;
+        this.wt=this.wp[this.i][2]||2000;
+        this.el.classList.remove('w');
+    }else{
+        var t=ease(this.p);
+        this.x=this.fx+dx*t;
+        this.y=this.fy+dy*t;
+        this.el.classList.add('w');
+        if(Math.abs(dx)>.4)this.mc.style.transform=dx<0?'scaleX(-1)':'';
     }
-    function renderPanel(p){
-      panel.innerHTML=`<div class="panel-kicker">${p.dept}</div>
-        <h3>${p.n}</h3><div class="ar-title">${p.ar}</div>
-        <p class="desc">${p.en}</p><p class="desc ar">${p.aa}</p>
-        <div class="facts">
-          <div class="fact"><small>Status</small><span>${p.status}</span></div>
-          <div class="fact"><small>Stack</small><span>${p.stack}</span></div>
-        </div>
-        <div class="tags">${p.cat.map(c=>`<span class="tag">${c}</span>`).join("")}</div>
-        ${p.link?`<a class="action" href="${p.link}" target="_blank" rel="noopener">Open / افتح</a>`:""}`;
+    this.draw();
+};
+Walker.prototype.draw=function(){
+    this.el.style.left=this.x+'%';
+    this.el.style.top=this.y+'%';
+    this.el.style.zIndex=Math.floor(this.y)+10;
+};
+
+/* ── Init Walkers ── */
+var walkers=[];
+for(var i=0;i<15;i++){
+    var el=document.getElementById('c'+i);
+    var wk=new Walker(el,W[i],SP[i]);
+    wk.draw();
+    walkers.push(wk);
+    // Staggered fade-in
+    (function(e,delay){
+        setTimeout(function(){e.style.opacity=1},delay);
+    })(el,300+i*100);
+}
+
+/* ── Animation Loop ── */
+var last=performance.now();
+function loop(now){
+    var dt=Math.min(now-last,100);
+    last=now;
+    for(var j=0;j<walkers.length;j++)walkers[j].tick(dt);
+    requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+/* ── Panel ── */
+var pnl=document.getElementById('pnl'),ov=document.getElementById('ov');
+var pd=document.getElementById('pd'),pn=document.getElementById('pn');
+var pc=document.getElementById('pc'),ps=document.getElementById('ps');
+var pt=document.getElementById('pt'),ptl=document.getElementById('ptl');
+var pl=document.getElementById('pl');
+
+function openP(k){
+    var p=D[k];if(!p)return;
+    pd.textContent=p.d;pn.textContent=p.n;pc.textContent=p.c;
+    ps.innerHTML='Stack: <span>'+p.s+'</span>';
+    pt.innerHTML='Status: <span>'+p.t+'</span>';
+    if(p.tools){
+        ptl.style.display='block';
+        ptl.innerHTML='<br>'+p.tools.map(function(t){
+            return '<b>'+t.n+(t.a?' '+t.a:'')+'</b> — '+t.d+' ('+t.x+'&#9733;)';
+        }).join('<br>');
+    }else ptl.style.display='none';
+    if(p.l){pl.href=p.l;pl.classList.remove('hide')}
+    else pl.classList.add('hide');
+    pnl.classList.add('open');ov.classList.add('open');
+}
+function closeP(){pnl.classList.remove('open');ov.classList.remove('open')}
+
+document.querySelectorAll('.p').forEach(function(el){
+    el.addEventListener('click',function(){openP(el.dataset.p)});
+});
+document.getElementById('px').addEventListener('click',closeP);
+ov.addEventListener('click',closeP);
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeP()});
+
+/* ── Touch support ── */
+document.querySelectorAll('.p').forEach(function(el){
+    el.addEventListener('touchend',function(e){
+        e.preventDefault();
+        openP(el.dataset.p);
+    },{passive:false});
+});
+
+/* ── Mobile: swap to portrait layout ── */
+function checkLayout(){
+    var vw=window.innerWidth,vh=window.innerHeight;
+    var ofc=document.getElementById('ofc');
+    if(vw<=480 && vh>vw){
+        // Portrait phone: use 9:16 ratio, remap furniture positions handled by CSS
+        ofc.style.aspectRatio='9/16';
+    }else{
+        ofc.style.aspectRatio='16/9';
     }
-    filters.forEach(btn=>btn.addEventListener("click",()=>{
-      filters.forEach(b=>b.classList.remove("active"));
-      btn.classList.add("active");filter=btn.dataset.filter;render();
-    }));
-    search.addEventListener("input",()=>{query=search.value;render()});
-    ticker.innerHTML=[...projects,...projects].map(p=>`<span>${p.n} / ${p.ar}</span>`).join("");
-    render();
-  </script>
+}
+checkLayout();
+window.addEventListener('resize',checkLayout);
+window.addEventListener('orientationchange',function(){setTimeout(checkLayout,100)});
+</script>
+
 </body>
 </html>
