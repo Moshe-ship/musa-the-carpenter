@@ -46,6 +46,7 @@
                 0 8px 32px rgba(0,0,0,.06),
                 0 32px 64px rgba(0,0,0,.04);
             overflow:hidden;
+            perspective:900px;
         }
         .office::before{
             content:'';position:absolute;inset:0;z-index:2;pointer-events:none;
@@ -141,10 +142,10 @@
         /* ── Desks ── */
         .dk{
             position:absolute;width:5.8%;height:7.5%;
-            background:linear-gradient(135deg,#d4c4a0,#c0b08a);
+            background:linear-gradient(135deg,#dfd1ad 0%,#c4b28b 58%,#a89772 100%);
             border:1px solid rgba(160,140,110,.5);
             border-radius:3px;
-            box-shadow:0 1px 3px rgba(0,0,0,.08);
+            box-shadow:0 7px 0 rgba(135,112,76,.38),0 13px 18px rgba(0,0,0,.08),inset -7px -7px 0 rgba(80,62,34,.08);
             z-index:1;
         }
         .dk::after{
@@ -193,7 +194,7 @@
             background:linear-gradient(135deg,#ccc0a0,#b8a888);
             border:1px solid rgba(160,140,110,.4);
             border-radius:6px;
-            box-shadow:0 2px 6px rgba(0,0,0,.06);
+            box-shadow:0 8px 0 rgba(145,122,86,.32),0 15px 20px rgba(0,0,0,.08),inset -9px -8px 0 rgba(80,62,34,.07);
             left:50%;top:50%;transform:translate(-50%,-50%);
             width:50%;height:26%;
         }
@@ -228,7 +229,7 @@
             background:linear-gradient(135deg,#6b4530,#4a2e1c);
             border:1px solid rgba(74,48,32,.6);
             border-radius:3px;
-            box-shadow:0 2px 6px rgba(0,0,0,.1);
+            box-shadow:0 8px 0 rgba(55,32,18,.35),0 15px 20px rgba(0,0,0,.12),inset -7px -7px 0 rgba(0,0,0,.12);
             z-index:1;
         }
         .cf::before{
@@ -255,6 +256,7 @@
             position:absolute;width:55%;height:22%;
             background:#1a1a1a;border:2px solid #333;border-radius:2px;
             left:22%;top:15%;
+            box-shadow:0 6px 0 rgba(0,0,0,.28),0 12px 18px rgba(0,0,0,.1);
         }
         .tv::after{
             content:'';position:absolute;
@@ -265,6 +267,7 @@
             position:absolute;width:65%;height:20%;
             background:#4a4050;border:1px solid #3a3040;border-radius:3px;
             left:17%;bottom:12%;
+            box-shadow:0 8px 0 rgba(50,42,55,.42),0 14px 18px rgba(0,0,0,.09);
         }
 
         /* ── Billiard Room ── */
@@ -285,7 +288,7 @@
             position:absolute;
             background:linear-gradient(135deg,#1d7a44,#166b38);
             border:3px solid #7a4a1a;border-radius:5px;
-            box-shadow:0 2px 8px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.08);
+            box-shadow:0 9px 0 rgba(82,46,17,.48),0 17px 24px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.08);
             left:50%;top:50%;transform:translate(-50%,-50%);
             width:60%;height:55%;
         }
@@ -313,6 +316,12 @@
             padding:3px 5px;
             opacity:.96;transition:opacity .5s,filter .25s;
         }
+        .p::after{
+            content:'';position:absolute;left:50%;top:calc(100% - 5px);
+            width:24px;height:7px;transform:translateX(-50%);
+            background:radial-gradient(ellipse,rgba(0,0,0,.22) 0%,rgba(0,0,0,.08) 48%,transparent 72%);
+            pointer-events:none;z-index:-1;
+        }
         .p:hover{z-index:90!important}
         .p:focus-visible{outline:2px solid var(--g);outline-offset:4px;border-radius:8px}
         .p.active .mc{filter:drop-shadow(0 8px 10px rgba(27,94,59,.22))}
@@ -322,11 +331,11 @@
         /* ── Minecraft Sprite ── */
         .mc{
             display:flex;flex-direction:column;align-items:center;
-            transition:transform .15s;
+            transition:transform .15s;filter:drop-shadow(0 7px 4px rgba(0,0,0,.12));
         }
-        .mc-h{width:18px;height:4px;background:var(--h,#1a1a1a);z-index:3}
+        .mc-h{width:18px;height:4px;background:linear-gradient(90deg,var(--h,#1a1a1a),#0c0c0c);z-index:3}
         .mc-d{
-            width:18px;height:16px;background:var(--s,#d4a373);
+            width:18px;height:16px;background:linear-gradient(135deg,var(--s,#d4a373) 0%,var(--s,#d4a373) 56%,rgba(80,45,20,.28) 57% 100%);
             position:relative;z-index:2;
         }
         .mc-d::after{
@@ -335,7 +344,7 @@
             top:5px;left:3px;box-shadow:8px 0 0 #111;
         }
         .mc-b{
-            width:18px;height:14px;background:var(--o,#2d6a4f);
+            width:18px;height:14px;background:linear-gradient(135deg,var(--o,#2d6a4f) 0%,var(--o,#2d6a4f) 58%,rgba(0,0,0,.22) 59% 100%);
             position:relative;z-index:1;
         }
         .mc-b::before{
@@ -372,7 +381,9 @@
             padding:1px 5px;border-radius:6px;
             white-space:nowrap;pointer-events:none;
             text-align:center;transition:all .25s;
+            opacity:0;transform:translateY(-2px);
         }
+        .p:hover .tg,.p.focused .tg,.p.active .tg{opacity:1;transform:translateY(0)}
         .p:hover .tg{color:var(--g);background:rgba(27,94,59,.08)}
         .p.active::before,.p.focused::before{
             content:'';position:absolute;left:50%;top:50%;width:38px;height:38px;
@@ -385,7 +396,7 @@
         .office.filtering .p.dim .tg{display:none}
         .office.filtering .p:not(.dim){filter:saturate(1.35) drop-shadow(0 10px 18px rgba(27,94,59,.18));text-shadow:0 0 10px rgba(27,94,59,.18)}
         .office.filtering .p:not(.dim) .mc{animation:focusBob 1.4s ease-in-out infinite}
-        .office.filtering .p:not(.dim) .tg{color:#fff;background:rgba(10,10,10,.78);box-shadow:0 5px 16px rgba(0,0,0,.16)}
+        .office.filtering .p:not(.dim) .tg{opacity:1;transform:translateY(0);color:#fff;background:rgba(10,10,10,.78);box-shadow:0 5px 16px rgba(0,0,0,.16)}
         .tg[data-ar]::after{
             content:attr(data-ar);display:none;font-family:var(--arabic);direction:rtl;
             letter-spacing:0;text-transform:none;font-size:.42rem;line-height:1.1;color:#526057;
@@ -548,10 +559,7 @@
             .hdr p{font-size:.28rem}
             .hud{bottom:4%;right:3%;max-width:70%;gap:4px}
             .hud{display:none}
-            .mission{left:3%;right:auto;top:10%;width:47%;min-width:0;padding:8px}
-            .mission p{display:none}
-            .mission-src{font-size:.28rem;margin-top:5px;padding-top:5px}
-            .mission-meter{display:none}
+            .mission{display:none}
             .dock{left:50%;bottom:3.5%;max-width:76%;padding:4px}
             .dock button{font-size:.3rem;padding:4px 5px}
             .dock button b{display:none}
@@ -932,6 +940,19 @@ var W=[
 /* Speeds (% per second) */
 var SP=[1.8, 2.8, 1.0, 1.8, 1.8, 2.8, 2.5, 1.2, 2.0, 1.3, 1.8, 0.6, 2.2, 1.8, 2.0, 1.8, 2.2, 2.0, 2.6, 2.0, 1.5, 2.0, 1.8, 1.6, 1.2, 2.5, 1.4, 2.2, 2.8, 2.0, 1.9];
 
+var HOME=[
+[8,24],[17,24],[8,35],[17,35],[32,38],[61,20],[64,20],[8,54],
+[35,19],[17,54],[17,65],[8,65],[67,20],[32,64],[41,64],[32,54],
+[41,54],[64,49],[34,85],[64,86],[39,86],[67,49],[70,20],[41,38],
+[23,35],[23,25],[72,49],[50,54],[50,38],[53,54],[72,86]
+];
+
+function homePath(x,y,i){
+    var dx=((i%3)-1)*.65;
+    var dy=(i%2?.42:-.42);
+    return [[x,y,7000+(i%5)*550],[x+dx,y+dy,1300],[x,y,8200+(i%4)*500],[x-dx*.65,y+dy*.5,1200]];
+}
+
 /* ── Easing ── */
 function ease(t){return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2}
 
@@ -941,6 +962,7 @@ function Walker(el,wp,spd){
     this.wp=wp;this.spd=spd;
     this.i=0;this.p=0;
     this.x=wp[0][0];this.y=wp[0][1];
+    this.ox=0;this.oy=0;
     this.fx=this.x;this.fy=this.y;
     this.wt=wp[0][2]||2000;
 }
@@ -980,18 +1002,38 @@ Walker.prototype.tick=function(dt){
     this.draw();
 };
 Walker.prototype.draw=function(){
-    this.el.style.left=this.x+'%';
-    this.el.style.top=this.y+'%';
-    this.el.style.zIndex=Math.floor(this.y)+10;
+    this.el.style.left=(this.x+(this.ox||0))+'%';
+    this.el.style.top=(this.y+(this.oy||0))+'%';
+    this.el.style.zIndex=Math.floor(this.y+(this.oy||0))+10;
 };
+
+function resolveCrowd(){
+    var visible=walkers.filter(function(w){return !w.el.classList.contains('dim')});
+    visible.forEach(function(w){w.ox=0;w.oy=0});
+    for(var a=0;a<visible.length;a++){
+        for(var b=a+1;b<visible.length;b++){
+            var wa=visible[a],wb=visible[b];
+            var dx=(wa.x+wa.ox)-(wb.x+wb.ox),dy=(wa.y+wa.oy)-(wb.y+wb.oy);
+            if(Math.abs(dx)<3.8&&Math.abs(dy)<5.6){
+                var dir=dx<=0?-1:1;
+                wa.ox=Math.max(-3.2,Math.min(3.2,wa.ox+dir*1.25));
+                wb.ox=Math.max(-3.2,Math.min(3.2,wb.ox-dir*1.25));
+                wa.oy=Math.max(-2.2,Math.min(2.2,wa.oy-.55));
+                wb.oy=Math.max(-2.2,Math.min(2.2,wb.oy+.55));
+            }
+        }
+    }
+    visible.forEach(function(w){w.draw()});
+}
 
 /* ── Init Walkers ── */
 var walkers=[];
 var people=document.querySelectorAll('.p');
 for(var i=0;i<people.length;i++){
     var el=document.getElementById('c'+i);
-    if(!el || !W[i])continue;
-    var wk=new Walker(el,W[i],SP[i]);
+    if(!el || (!W[i]&&!HOME[i]))continue;
+    var wp=HOME[i]?homePath(HOME[i][0],HOME[i][1],i):W[i];
+    var wk=new Walker(el,wp,SP[i]*.85);
     wk.draw();
     walkers.push(wk);
     // Staggered fade-in
@@ -1006,6 +1048,7 @@ function loop(now){
     var dt=Math.min(now-last,100);
     last=now;
     for(var j=0;j<walkers.length;j++)walkers[j].tick(dt);
+    resolveCrowd();
     requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
